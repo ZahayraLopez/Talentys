@@ -367,11 +367,53 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:14px 0}
           <div class="fg"><label class="fl">Nuevo líder directo</label><select class="fc" id="cp-ldr"><option value="">Seleccionar...</option></select></div>
         </div>
         <div class="fg"><label class="fl">Notas</label><textarea class="fc" id="cp-notas" rows="3" placeholder="Plan de transición..."></textarea></div>
-        <div class="chip mb12">Al guardar se activará el período de 90 días y las evaluaciones automáticamente.</div>
-        <button class="btn btn-or" onclick="saveCambio()">Registrar cambio</button>
+
+      <hr class="div">
+      <div class="ctitle mb12">Crecimiento salarial en el cambio</div>
+      <div class="fg">
+        <label class="fl">¿Hay crecimiento salarial?</label>
+        <div class="fx g12 mt4">
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer"><input type="radio" name="cp-crec" id="cp-crec-si" value="si" onchange="toggleSalario(true)"> Sí, hay ajuste salarial</label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer"><input type="radio" name="cp-crec" id="cp-crec-no" value="no" checked onchange="toggleSalario(false)"> No, mismo salario</label>
+        </div>
       </div>
+      <div id="salario-fields" style="display:none">
+        <div class="g3" style="gap:12px">
+          <div class="fg"><label class="fl">Moneda</label>
+            <select class="fc" id="cp-moneda" onchange="calcSalarioFinal()">
+              <option value="MXN">MXN — Peso mexicano</option>
+              <option value="USD">USD — Dólar americano</option>
+              <option value="COP">COP — Peso colombiano</option>
+              <option value="ARS">ARS — Peso argentino</option>
+              <option value="CLP">CLP — Peso chileno</option>
+              <option value="PEN">PEN — Sol peruano</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Salario actual</label>
+            <input type="number" class="fc" id="cp-sal-actual" placeholder="0.00" min="0" step="0.01" oninput="calcSalarioFinal()">
+          </div>
+          <div class="fg"><label class="fl">% de crecimiento</label>
+            <input type="number" class="fc" id="cp-sal-pct" placeholder="Ej. 15" min="0" max="200" step="0.1" oninput="calcSalarioFinal()">
+          </div>
+        </div>
+        <div style="background:var(--grn-l);border:1px solid #9FD4A3;border-radius:10px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div class="th" style="font-size:11px;margin-bottom:3px">Sueldo al finalizar el período de prueba</div>
+            <div class="fw7" style="font-size:22px;color:var(--grn)"><span id="cp-sal-final-display">—</span> <span id="cp-sal-moneda-lbl" style="font-size:13px;font-weight:400;color:var(--mut)">MXN</span></div>
+          </div>
+          <div style="text-align:right">
+            <div class="th" style="font-size:11px;margin-bottom:3px">Incremento mensual</div>
+            <div id="cp-sal-incremento" class="fw7" style="font-size:16px;color:var(--grn)">+ $0.00</div>
+          </div>
+        </div>
+        <input type="hidden" id="cp-sal-final">
+      </div>
+
+      <div class="chip mb12" style="margin-top:4px">Al guardar se activará el período de 90 días y las evaluaciones automáticamente.</div>
+      <button class="btn btn-or" onclick="saveCambio()">Registrar cambio</button>
     </div>
   </div>
+</div>
 
   <!-- PLAN DE CARRERA -->
   <div id="pg-carrera" class="pg">
@@ -395,6 +437,205 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:14px 0}
           <div id="carrera-moves-content"></div>
         </div>
       </div>
+    </div>
+
+    <!-- CARGA MASIVA GOOGLE SHEETS -->
+    <div id="ta-f" class="tc">
+      <div class="ai">
+        <div class="ai-h"><span class="ai-b">SHEETS</span><span class="ai-t">Carga masiva desde Google Sheets</span></div>
+        <div class="ai-d">Importa áreas, puestos, líderes o colaboradores desde una hoja de Google Sheets publicada. El sistema mapea las columnas automáticamente y previsualiza los datos antes de importar.</div>
+      </div>
+
+      <div class="tabs" style="margin-bottom:16px">
+        <div class="tab on" onclick="stab(this,'tf-areas')">Áreas</div>
+        <div class="tab" onclick="stab(this,'tf-puestos')">Puestos</div>
+        <div class="tab" onclick="stab(this,'tf-lideres')">Líderes</div>
+        <div class="tab" onclick="stab(this,'tf-colabs')">Colaboradores</div>
+      </div>
+
+      <!-- ÁREAS -->
+      <div id="tf-areas" class="tc on">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet — Áreas</div>
+            <div class="fg">
+              <label class="fl">URL de la hoja de Google Sheets</label>
+              <input type="text" class="fc" id="gs-url-areas" placeholder="https://docs.google.com/spreadsheets/d/...">
+              <div class="th tsm mt4">La hoja debe ser pública o con acceso "Cualquiera con el enlace puede ver".</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Nombre de la hoja (pestaña)</label>
+              <input type="text" class="fc" id="gs-sheet-areas" placeholder="Ej. Areas (por defecto: Sheet1)">
+            </div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas en tu Sheet</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span class="tm">Nombre del área <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">B</span><span class="tm">Responsable</span>
+                <span class="bdg b-gy">C</span><span class="tm">País / Ubicación</span>
+                <span class="bdg b-gy">D</span><span class="tm">Descripción</span>
+              </div>
+            </div>
+            <div class="fx g8">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('areas')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('areas')" id="btn-import-areas" disabled style="opacity:.5">Importar áreas</button>
+            </div>
+            <div class="mt12">
+              <a href="#" onclick="downloadTemplate('areas');return false;" class="tsm" style="color:var(--blu)">⬇ Descargar plantilla CSV de ejemplo</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ctitle mb12">Vista previa</div>
+            <div id="preview-areas">
+              <div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona "Vista previa" para ver los datos antes de importar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUESTOS -->
+      <div id="tf-puestos" class="tc">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet — Puestos</div>
+            <div class="fg">
+              <label class="fl">URL de la hoja de Google Sheets</label>
+              <input type="text" class="fc" id="gs-url-puestos" placeholder="https://docs.google.com/spreadsheets/d/...">
+            </div>
+            <div class="fg">
+              <label class="fl">Nombre de la hoja (pestaña)</label>
+              <input type="text" class="fc" id="gs-sheet-puestos" placeholder="Ej. Puestos">
+            </div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas en tu Sheet</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span class="tm">Nombre del puesto <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">B</span><span class="tm">Nivel (L1, L2, L3...)</span>
+                <span class="bdg b-gy">C</span><span class="tm">Área</span>
+                <span class="bdg b-gy">D</span><span class="tm">Plazas</span>
+                <span class="bdg b-gy">E</span><span class="tm">Crecimiento vertical (separado por comas)</span>
+                <span class="bdg b-gy">F</span><span class="tm">Movimiento horizontal (separado por comas)</span>
+                <span class="bdg b-gy">G</span><span class="tm">Descripción</span>
+              </div>
+            </div>
+            <div class="fx g8">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('puestos')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('puestos')" id="btn-import-puestos" disabled style="opacity:.5">Importar puestos</button>
+            </div>
+            <div class="mt12">
+              <a href="#" onclick="downloadTemplate('puestos');return false;" class="tsm" style="color:var(--blu)">⬇ Descargar plantilla CSV de ejemplo</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ctitle mb12">Vista previa</div>
+            <div id="preview-puestos">
+              <div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona "Vista previa".</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LÍDERES -->
+      <div id="tf-lideres" class="tc">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet — Líderes</div>
+            <div class="fg">
+              <label class="fl">URL de la hoja de Google Sheets</label>
+              <input type="text" class="fc" id="gs-url-lideres" placeholder="https://docs.google.com/spreadsheets/d/...">
+            </div>
+            <div class="fg">
+              <label class="fl">Nombre de la hoja (pestaña)</label>
+              <input type="text" class="fc" id="gs-sheet-lideres" placeholder="Ej. Lideres">
+            </div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas en tu Sheet</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span class="tm">Nombre completo <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-bl">B</span><span class="tm">Correo electrónico <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">C</span><span class="tm">Cargo / Puesto</span>
+                <span class="bdg b-gy">D</span><span class="tm">País</span>
+                <span class="bdg b-gy">E</span><span class="tm">Área</span>
+                <span class="bdg b-gy">F</span><span class="tm">Teléfono</span>
+                <span class="bdg b-gy">G</span><span class="tm">Rol en sistema</span>
+              </div>
+            </div>
+            <div class="fx g8">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('lideres')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('lideres')" id="btn-import-lideres" disabled style="opacity:.5">Importar líderes</button>
+            </div>
+            <div class="mt12">
+              <a href="#" onclick="downloadTemplate('lideres');return false;" class="tsm" style="color:var(--blu)">⬇ Descargar plantilla CSV de ejemplo</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ctitle mb12">Vista previa</div>
+            <div id="preview-lideres">
+              <div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona "Vista previa".</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLABORADORES -->
+      <div id="tf-colabs" class="tc">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet — Colaboradores</div>
+            <div class="fg">
+              <label class="fl">URL de la hoja de Google Sheets</label>
+              <input type="text" class="fc" id="gs-url-colabs" placeholder="https://docs.google.com/spreadsheets/d/...">
+            </div>
+            <div class="fg">
+              <label class="fl">Nombre de la hoja (pestaña)</label>
+              <input type="text" class="fc" id="gs-sheet-colabs" placeholder="Ej. Colaboradores">
+            </div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas en tu Sheet</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span class="tm">Nombre completo <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-bl">B</span><span class="tm">Correo electrónico <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-bl">C</span><span class="tm">Fecha de ingreso (YYYY-MM-DD) <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">D</span><span class="tm">País</span>
+                <span class="bdg b-gy">E</span><span class="tm">Puesto</span>
+                <span class="bdg b-gy">F</span><span class="tm">Área</span>
+                <span class="bdg b-gy">G</span><span class="tm">Líder directo</span>
+                <span class="bdg b-gy">H</span><span class="tm">Proceso (90 dias / Cambio de puesto)</span>
+              </div>
+            </div>
+            <div class="fg">
+              <label class="fl">En caso de duplicados</label>
+              <select class="fc" id="gs-dup-colabs">
+                <option value="skip">Omitir duplicados (recomendado)</option>
+                <option value="replace">Reemplazar duplicados</option>
+                <option value="add">Agregar todos igualmente</option>
+              </select>
+            </div>
+            <div class="fx g8">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('colabs')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('colabs')" id="btn-import-colabs" disabled style="opacity:.5">Importar colaboradores</button>
+            </div>
+            <div class="mt12">
+              <a href="#" onclick="downloadTemplate('colabs');return false;" class="tsm" style="color:var(--blu)">⬇ Descargar plantilla CSV de ejemplo</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ctitle mb12">Vista previa</div>
+            <div id="preview-colabs">
+              <div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona "Vista previa".</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORIAL DE IMPORTACIONES -->
+      <div class="card mt16">
+        <div class="sh mb12"><div class="ctitle" style="margin:0">Historial de importaciones</div></div>
+        <div id="import-log">
+          <div class="th tsm" style="padding:12px 0;text-align:center">No hay importaciones registradas.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -903,6 +1144,7 @@ Accede aquí: {{link_plataforma}}</textarea></div>
       <div class="tab" onclick="stab(this,'ta-c')">Puestos</div>
       <div class="tab" onclick="stab(this,'ta-d')">Líderes</div>
       <div class="tab" onclick="stab(this,'ta-e')">Configuración</div>
+      <div class="tab" onclick="stab(this,'ta-f')">Carga masiva</div>
     </div>
 
     <!-- COLABORADORES -->
@@ -1301,7 +1543,7 @@ function saveColab() {
     lider: document.getElementById('col-lider').value||'',
     proceso: document.getElementById('col-proceso').value||'Primeros 90 dias',
     status: 'Activo',
-    dia: 1,
+    dia: calcDiasDesde(document.getElementById('col-fecha').value||''),
     initials: nombre.split(' ').filter(function(w){return w.length>0;}).slice(0,2).map(function(w){return w[0].toUpperCase();}).join('')
   };
   DB.colabs.push(colab);
@@ -1630,7 +1872,7 @@ function renderP90() {
   list.innerHTML = p90.map(function(c,i){
     var idx = DB.colabs.indexOf(c);
     var avc = avC[idx%avC.length];
-    var dia = c.dia||1;
+    var dia = calcDiasDesde(c.fecha||'');
     var pct = Math.min(Math.round(dia/90*100),100);
     return '<div class="card mb12"><div class="fx ic g12 mb12"><div class="av '+avc+'" style="width:40px;height:40px;font-size:14px">'+c.initials+'</div><div class="f1"><div class="pn fw6">'+c.nombre+'</div><div class="ps">'+(c.puesto||'-')+' - Lider: '+(c.lider||'-')+'</div></div><span class="bdg b-bl">Dia '+dia+' de 90</span></div><div class="fx ic jb mb4"><span class="tsm tm">Progreso del periodo</span><span class="fw6 tsm" style="color:var(--blu)">'+pct+'%</span></div><div class="pb" style="height:8px"><div class="pf pf-bl" style="width:'+pct+'%"></div></div></div>';
   }).join('');
@@ -1646,7 +1888,7 @@ function renderCambio() {
   if (cambios.length===0) { list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">No hay cambios de puesto activos.</div>'; return; }
   var avC=['av-bl','av-gn','av-pu','av-am','av-tl'];
   list.innerHTML = '<div class="card"><div class="tw"><table><thead><tr><th>Colaborador</th><th>Nuevo puesto</th><th>Lider</th><th>Dia</th><th>Progreso</th><th>Estatus</th></tr></thead><tbody>'+cambios.map(function(c,i){
-    var idx=DB.colabs.indexOf(c); var avc=avC[idx%avC.length]; var dia=c.dia||1; var pct=Math.min(Math.round(dia/90*100),100);
+    var idx=DB.colabs.indexOf(c); var avc=avC[idx%avC.length]; var dia=calcDiasDesde(c.fechaCambio||c.fecha||''); var pct=Math.min(Math.round(dia/90*100),100);
     return '<tr><td><div class="pc"><div class="av '+avc+'">'+c.initials+'</div><div class="pn">'+c.nombre+'</div></div></td><td>'+(c.puesto||'-')+'</td><td>'+(c.lider||'-')+'</td><td>'+dia+'</td><td><div class="pb" style="width:100px;margin:0"><div class="pf pf-tl" style="width:'+pct+'%"></div></div></td><td><span class="bdg b-gn">Activo</span></td></tr>';
   }).join('')+'</tbody></table></div></div>';
 }
@@ -1656,14 +1898,67 @@ function saveCambio() {
   if (idx==='') { toast('Selecciona un colaborador.'); return; }
   var nvo = document.getElementById('cp-nvo').value;
   if (!nvo) { toast('Selecciona el puesto nuevo.'); return; }
+  var fechaCambio = document.getElementById('cp-fecha').value || new Date().toISOString().slice(0,10);
   DB.colabs[parseInt(idx)].puesto = nvo;
   DB.colabs[parseInt(idx)].proceso = 'Cambio de puesto';
   DB.colabs[parseInt(idx)].lider = document.getElementById('cp-ldr').value || DB.colabs[parseInt(idx)].lider;
-  DB.colabs[parseInt(idx)].dia = 1;
+  DB.colabs[parseInt(idx)].fechaCambio = fechaCambio;
+  DB.colabs[parseInt(idx)].dia = calcDiasDesde(fechaCambio);
+  // Sueldo
+  DB.colabs[parseInt(idx)].salario = {
+    crecimiento: document.getElementById('cp-crec-si') && document.getElementById('cp-crec-si').checked,
+    salarioActual: parseFloat(document.getElementById('cp-sal-actual').value)||0,
+    porcentaje: parseFloat(document.getElementById('cp-sal-pct').value)||0,
+    salarioFinal: parseFloat(document.getElementById('cp-sal-final').value)||0,
+    moneda: document.getElementById('cp-moneda') ? document.getElementById('cp-moneda').value : 'MXN'
+  };
   renderDash();
   renderCambio();
   toast('Cambio de puesto registrado. Periodo de 90 dias activado.');
   addActividad('Cambio de puesto: '+DB.colabs[parseInt(idx)].nombre+' → '+nvo,'tel');
+}
+
+// ============================================================
+// CRECIMIENTO SALARIAL
+// ============================================================
+function toggleSalario(show) {
+  var fields = document.getElementById('salario-fields');
+  if (fields) fields.style.display = show ? 'block' : 'none';
+  if (!show) {
+    var act = document.getElementById('cp-sal-actual');
+    var pct = document.getElementById('cp-sal-pct');
+    if (act) act.value = '';
+    if (pct) pct.value = '';
+    var disp = document.getElementById('cp-sal-final-display');
+    var inc  = document.getElementById('cp-sal-incremento');
+    if (disp) disp.textContent = '—';
+    if (inc)  inc.textContent  = '+ $0.00';
+  }
+}
+
+function calcSalarioFinal() {
+  var act   = parseFloat(document.getElementById('cp-sal-actual').value) || 0;
+  var pct   = parseFloat(document.getElementById('cp-sal-pct').value)    || 0;
+  var mon   = document.getElementById('cp-moneda').value || 'MXN';
+  var inc   = act * (pct / 100);
+  var final = act + inc;
+  var fmt   = new Intl.NumberFormat('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}).format;
+  var disp  = document.getElementById('cp-sal-final-display');
+  var incEl = document.getElementById('cp-sal-incremento');
+  var monEl = document.getElementById('cp-sal-moneda-lbl');
+  var hidEl = document.getElementById('cp-sal-final');
+  if (disp)  disp.textContent  = act > 0 ? '$' + fmt(final) : '—';
+  if (incEl) incEl.textContent = act > 0 ? '+ $' + fmt(inc) : '+ $0.00';
+  if (monEl) monEl.textContent = mon;
+  if (hidEl) hidEl.value       = final;
+}
+
+// Also show salary info in renderCambio table
+function renderSalarioBadge(c) {
+  if (!c.salario || !c.salario.crecimiento) return '';
+  var mon = c.salario.moneda || 'MXN';
+  var fmt = new Intl.NumberFormat('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}).format;
+  return '<div class="tsm" style="color:var(--grn);font-weight:600;margin-top:3px">↑ ' + c.salario.porcentaje + '% — Sueldo final: $' + fmt(c.salario.salarioFinal) + ' ' + mon + '</div>';
 }
 
 // ============================================================
@@ -1728,11 +2023,11 @@ function renderAlertas() {
   var items=[];
   DB.colabs.forEach(function(c,i){
     if (c.proceso==='Primeros 90 dias') {
-      var dia=c.dia||1; var restantes=90-dia;
+      var dia=calcDiasDesde(c.fecha||''); var restantes=90-dia;
       if (restantes<=dias&&restantes>0) items.push({tipo:'critica prueba',txt:'<strong>'+c.nombre+'</strong> - periodo de prueba vence en '+restantes+' dias (Dia '+dia+' de 90).',btn:'Completar evaluacion',nav:'eval'});
     }
     if (c.proceso==='Cambio de puesto') {
-      var dia2=c.dia||1; var restantes2=90-dia2;
+      var dia2=calcDiasDesde(c.fechaCambio||c.fecha||''); var restantes2=90-dia2;
       if (restantes2<=(DB.config.cambio||10)&&restantes2>0) items.push({tipo:'critica cambio',txt:'<strong>'+c.nombre+'</strong> - evaluacion de cambio de puesto vence en '+restantes2+' dias.',btn:'Lanzar evaluacion',nav:'eval'});
     }
   });
@@ -1791,9 +2086,10 @@ function loadRepColab(idx) {
   if(bdg){
     var procC={'Primeros 90 dias':'b-bl','Cambio de puesto':'b-tl','Sin proceso activo':'b-gy'};
     var stC={'Activo':'b-gn','Inactivo':'b-gy'};
-    bdg.innerHTML='<span class="bdg '+(procC[c.proceso]||'b-gy')+'">'+(c.proceso||'-')+'</span><span class="bdg '+(stC[c.status]||'b-am')+'">'+c.status+'</span><span class="bdg b-gy">Dia '+(c.dia||1)+' de 90</span>'+(c.pais?'<span class="bdg b-gy">'+c.pais+'</span>':'')+(c.fecha?'<span class="bdg b-gy">Ingreso: '+c.fecha+'</span>':'');
+    bdg.innerHTML='<span class="bdg '+(procC[c.proceso]||'b-gy')+'">'+(c.proceso||'-')+'</span><span class="bdg '+(stC[c.status]||'b-am')+'">'+c.status+'</span><span class="bdg b-gy">Dia '+calcDiasDesde(c.proceso==="Cambio de puesto"?(c.fechaCambio||c.fecha||""):(c.fecha||""))+' de 90</span>'+(c.pais?'<span class="bdg b-gy">'+c.pais+'</span>':'')+(c.fecha?'<span class="bdg b-gy">Ingreso: '+c.fecha+'</span>':'');
   }
-  var dia=c.dia||1; var pct=Math.min(Math.round(dia/90*100),100);
+  var fechaBase = c.proceso==='Cambio de puesto' ? (c.fechaCambio||c.fecha||'') : (c.fecha||'');
+  var dia=calcDiasDesde(fechaBase); var pct=Math.min(Math.round(dia/90*100),100);
   setText('rep-pct',pct+'%');
   var bar=document.getElementById('rep-bar'); if(bar)bar.style.width=pct+'%';
   // timeline
@@ -2128,6 +2424,328 @@ function filtTbl(input, tableId) {
   document.querySelectorAll('#'+tableId+' tbody tr').forEach(function(row){
     row.style.display=row.textContent.toLowerCase().indexOf(val)!==-1?'':'none';
   });
+}
+
+// ============================================================
+// UTILIDADES DE FECHA
+// ============================================================
+function calcDiasDesde(fechaStr) {
+  // fechaStr = 'YYYY-MM-DD' (HTML date input value)
+  if (!fechaStr) return 1;
+  var inicio = new Date(fechaStr + 'T00:00:00');
+  var hoy = new Date();
+  hoy.setHours(0,0,0,0);
+  var diff = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24));
+  return Math.max(1, diff + 1); // at least day 1
+}
+
+function fechaVencimiento(fechaStr, duracion) {
+  if (!fechaStr) return '—';
+  var inicio = new Date(fechaStr + 'T00:00:00');
+  inicio.setDate(inicio.getDate() + (duracion||90));
+  return inicio.toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'});
+}
+
+function formatFecha(fechaStr) {
+  if (!fechaStr) return '—';
+  var d = new Date(fechaStr + 'T00:00:00');
+  return d.toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'});
+}
+
+// ============================================================
+// CARGA MASIVA GOOGLE SHEETS
+// ============================================================
+
+// Extract Sheet ID from URL
+function extractSheetId(url) {
+  var m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  return m ? m[1] : null;
+}
+
+// Build CSV export URL from Sheet
+function buildCsvUrl(url, sheetName) {
+  var id = extractSheetId(url);
+  if (!id) return null;
+  var base = 'https://docs.google.com/spreadsheets/d/' + id + '/gviz/tq?tqx=out:csv';
+  if (sheetName && sheetName.trim()) base += '&sheet=' + encodeURIComponent(sheetName.trim());
+  return base;
+}
+
+// Parse CSV text into array of arrays
+function parseCsv(text) {
+  var rows = [];
+  var lines = text.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    // Handle quoted fields
+    var cols = [];
+    var inQ = false, cur = '';
+    for (var j = 0; j < line.length; j++) {
+      var ch = line[j];
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += ch;
+    }
+    cols.push(cur.trim());
+    rows.push(cols);
+  }
+  return rows;
+}
+
+// Config for each type
+var SHEET_CFG = {
+  areas: {
+    urlId: 'gs-url-areas', sheetId: 'gs-sheet-areas',
+    previewId: 'preview-areas', btnId: 'btn-import-areas',
+    headers: ['Nombre', 'Responsable', 'Pais', 'Descripcion'],
+    required: [0],
+    map: function(row) {
+      return { nombre:(row[0]||'').trim(), resp:(row[1]||'').trim(), pais:(row[2]||'').trim(), desc:(row[3]||'').trim() };
+    },
+    validate: function(obj) { return obj.nombre.length > 0; },
+    insert: function(obj) {
+      if (!DB.areas.some(function(a){return a.nombre===obj.nombre;})) {
+        DB.areas.push(obj); return true;
+      }
+      return false;
+    }
+  },
+  puestos: {
+    urlId: 'gs-url-puestos', sheetId: 'gs-sheet-puestos',
+    previewId: 'preview-puestos', btnId: 'btn-import-puestos',
+    headers: ['Nombre', 'Nivel', 'Area', 'Plazas', 'Vertical', 'Horizontal', 'Descripcion'],
+    required: [0],
+    map: function(row) {
+      return { nombre:(row[0]||'').trim(), nivel:(row[1]||'').trim(), area:(row[2]||'').trim(), plazas:(row[3]||'').trim(), vertical:(row[4]||'').trim(), horizontal:(row[5]||'').trim(), desc:(row[6]||'').trim() };
+    },
+    validate: function(obj) { return obj.nombre.length > 0; },
+    insert: function(obj) {
+      if (!DB.puestos.some(function(p){return p.nombre===obj.nombre;})) {
+        DB.puestos.push(obj); return true;
+      }
+      return false;
+    }
+  },
+  lideres: {
+    urlId: 'gs-url-lideres', sheetId: 'gs-sheet-lideres',
+    previewId: 'preview-lideres', btnId: 'btn-import-lideres',
+    headers: ['Nombre', 'Correo', 'Cargo', 'Pais', 'Area', 'Tel', 'Rol'],
+    required: [0, 1],
+    map: function(row) {
+      var nombre = (row[0]||'').trim();
+      return { nombre:nombre, email:(row[1]||'').trim(), cargo:(row[2]||'').trim(), pais:(row[3]||'').trim(), area:(row[4]||'').trim(), tel:(row[5]||'').trim(), rol:(row[6]||'Lider (solo sus colaboradores)').trim(), initials: nombre.split(' ').filter(function(w){return w.length>0;}).slice(0,2).map(function(w){return w[0].toUpperCase();}).join('') };
+    },
+    validate: function(obj) { return obj.nombre.length > 0 && obj.email.length > 0; },
+    insert: function(obj) {
+      if (!DB.lideres.some(function(l){return l.email===obj.email;})) {
+        DB.lideres.push(obj); return true;
+      }
+      return false;
+    }
+  },
+  colabs: {
+    urlId: 'gs-url-colabs', sheetId: 'gs-sheet-colabs',
+    previewId: 'preview-colabs', btnId: 'btn-import-colabs',
+    headers: ['Nombre', 'Correo', 'Fecha ingreso', 'Pais', 'Puesto', 'Area', 'Lider', 'Proceso'],
+    required: [0, 1, 2],
+    map: function(row) {
+      var nombre = (row[0]||'').trim();
+      var proceso = (row[7]||'Primeros 90 dias').trim();
+      return { nombre:nombre, email:(row[1]||'').trim(), fecha:(row[2]||'').trim(), pais:(row[3]||'').trim(), puesto:(row[4]||'').trim(), area:(row[5]||'').trim(), lider:(row[6]||'').trim(), proceso:proceso, status:'Activo', dia:calcDiasDesde((row[2]||'').trim()), initials: nombre.split(' ').filter(function(w){return w.length>0;}).slice(0,2).map(function(w){return w[0].toUpperCase();}).join('') };
+    },
+    validate: function(obj) { return obj.nombre.length > 0 && obj.email.length > 0; },
+    insert: function(obj) {
+      var dup = document.getElementById('gs-dup-colabs');
+      var mode = dup ? dup.value : 'skip';
+      if (mode === 'skip') {
+        if (DB.colabs.some(function(c){return c.email===obj.email;})) return false;
+      } else if (mode === 'replace') {
+        var idx = DB.colabs.findIndex(function(c){return c.email===obj.email;});
+        if (idx !== -1) { DB.colabs[idx] = obj; return true; }
+      }
+      DB.colabs.push(obj); return true;
+    }
+  }
+};
+
+// Stored parsed rows for import
+var _pendingRows = {};
+
+function previewSheet(tipo) {
+  var cfg = SHEET_CFG[tipo];
+  var url = (document.getElementById(cfg.urlId).value||'').trim();
+  var sheet = (document.getElementById(cfg.sheetId).value||'').trim();
+  var previewEl = document.getElementById(cfg.previewId);
+  var btnEl = document.getElementById(cfg.btnId);
+
+  if (!url) { toast('Pega la URL de tu Google Sheet.'); return; }
+  var csvUrl = buildCsvUrl(url, sheet);
+  if (!csvUrl) { toast('URL invalida. Verifica que sea una URL de Google Sheets.'); return; }
+
+  previewEl.innerHTML = '<div class="th tsm" style="padding:20px;text-align:center">Cargando datos...</div>';
+  if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = '.5'; }
+
+  fetch(csvUrl)
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function(text) {
+      var rows = parseCsv(text);
+      // Skip header row if first cell matches expected header
+      var dataRows = rows;
+      if (rows.length > 0) {
+        var first = (rows[0][0]||'').toLowerCase();
+        var expectedH = cfg.headers[0].toLowerCase();
+        if (first === expectedH || first === 'nombre' || first === 'name') {
+          dataRows = rows.slice(1);
+        }
+      }
+      // Filter empty rows
+      dataRows = dataRows.filter(function(r){ return r.some(function(c){return c.trim().length>0;}); });
+      _pendingRows[tipo] = dataRows;
+
+      if (dataRows.length === 0) {
+        previewEl.innerHTML = '<div class="th tsm" style="padding:20px;text-align:center">No se encontraron datos en la hoja. Verifica que tenga contenido y que el nombre de la hoja sea correcto.</div>';
+        return;
+      }
+
+      // Build preview table
+      var valids = dataRows.filter(function(r){ return cfg.validate(cfg.map(r)); });
+      var invalid = dataRows.length - valids.length;
+
+      var html2 = '<div class="fx ic jb mb12" style="flex-wrap:wrap;gap:8px">';
+      html2 += '<span class="bdg b-gn">'+dataRows.length+' filas encontradas</span>';
+      html2 += '<span class="bdg b-gn">'+valids.length+' validas</span>';
+      if (invalid > 0) html2 += '<span class="bdg b-rd">'+invalid+' con errores</span>';
+      html2 += '</div>';
+
+      html2 += '<div class="tw" style="max-height:280px;overflow-y:auto"><table>';
+      html2 += '<thead><tr>'+cfg.headers.map(function(h,i){
+        return '<th>'+ h + (cfg.required.indexOf(i)!==-1?' <span style="color:var(--red)">*</span>':'') +'</th>';
+      }).join('')+'<th>Estado</th></tr></thead><tbody>';
+
+      dataRows.slice(0, 50).forEach(function(row) {
+        var obj = cfg.map(row);
+        var valid = cfg.validate(obj);
+        html2 += '<tr>';
+        cfg.headers.forEach(function(h, i) {
+          var val = (row[i]||'').trim();
+          var isEmpty = !val && cfg.required.indexOf(i) !== -1;
+          html2 += '<td style="'+(isEmpty?'color:var(--red)':'')+'">'+(val||'<span class="th">—</span>')+'</td>';
+        });
+        html2 += '<td><span class="bdg '+(valid?'b-gn':'b-rd')+'">'+(valid?'OK':'Error')+'</span></td>';
+        html2 += '</tr>';
+      });
+
+      if (dataRows.length > 50) {
+        html2 += '<tr><td colspan="'+(cfg.headers.length+1)+'" style="text-align:center;color:var(--hnt);padding:10px">... y '+(dataRows.length-50)+' filas mas</td></tr>';
+      }
+      html2 += '</tbody></table></div>';
+
+      if (valids.length > 0) {
+        html2 += '<div class="fx ic jb mt12"><span class="tsm tm">'+valids.length+' registros listos para importar</span></div>';
+      }
+
+      previewEl.innerHTML = html2;
+
+      if (valids.length > 0 && btnEl) {
+        btnEl.disabled = false;
+        btnEl.style.opacity = '1';
+        btnEl.textContent = 'Importar ' + valids.length + ' ' + tipo;
+      }
+    })
+    .catch(function(err) {
+      var msg = err.message || 'Error desconocido';
+      var hint = '';
+      if (msg.indexOf('Failed to fetch') !== -1 || msg.indexOf('NetworkError') !== -1) {
+        hint = 'Asegurate de que la hoja sea publica: Archivo > Compartir > "Cualquiera con el enlace puede ver".';
+      } else if (msg.indexOf('403') !== -1) {
+        hint = 'Acceso denegado. La hoja debe ser publica.';
+      } else if (msg.indexOf('404') !== -1) {
+        hint = 'Hoja no encontrada. Verifica el nombre de la pestana.';
+      }
+      previewEl.innerHTML = '<div style="background:var(--red-l);border:1px solid #F7C1C1;border-radius:8px;padding:14px 16px">'
+        + '<div class="fw6 tsm" style="color:var(--red);margin-bottom:6px">Error al conectar con Google Sheets</div>'
+        + '<div class="th tsm">' + (hint || msg) + '</div>'
+        + '</div>'
+        + '<div class="card mt12" style="background:var(--s2)">'
+        + '<div class="ctitle mb8">Pasos para hacer la hoja publica</div>'
+        + '<div class="tsm tm">1. Abre tu Google Sheet</div>'
+        + '<div class="tsm tm">2. Archivo → Compartir → Compartir con otros</div>'
+        + '<div class="tsm tm">3. Cambia a "Cualquiera con el enlace" y permisos de "Lector"</div>'
+        + '<div class="tsm tm">4. Copia el enlace y pegalo aqui</div>'
+        + '</div>';
+    });
+}
+
+function importSheet(tipo) {
+  var cfg = SHEET_CFG[tipo];
+  var rows = _pendingRows[tipo];
+  if (!rows || rows.length === 0) { toast('Primero haz la vista previa.'); return; }
+
+  var inserted = 0, skipped = 0, errors = 0;
+  rows.forEach(function(row) {
+    var obj = cfg.map(row);
+    if (!cfg.validate(obj)) { errors++; return; }
+    if (cfg.insert(obj)) inserted++;
+    else skipped++;
+  });
+
+  // Refresh UI
+  if (tipo === 'areas') renderAreas();
+  if (tipo === 'puestos') renderPuestos();
+  if (tipo === 'lideres') renderLideres();
+  if (tipo === 'colabs') renderDash();
+  syncAllSelects();
+
+  // Log import
+  addImportLog(tipo, inserted, skipped, errors);
+
+  var msg = 'Importacion completada: ' + inserted + ' '+tipo+' importados';
+  if (skipped > 0) msg += ', ' + skipped + ' omitidos (ya existian)';
+  if (errors > 0) msg += ', ' + errors + ' con errores';
+  toast(msg);
+  addActividad('Carga masiva: ' + inserted + ' ' + tipo + ' importados desde Google Sheets', 'gn');
+
+  // Reset
+  _pendingRows[tipo] = [];
+  var btnEl = document.getElementById(cfg.btnId);
+  if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = '.5'; btnEl.textContent = 'Importar ' + tipo; }
+}
+
+function addImportLog(tipo, inserted, skipped, errors) {
+  var logEl = document.getElementById('import-log');
+  if (!logEl) return;
+  var now = new Date().toLocaleString('es-MX',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  var statusClass = errors > 0 ? 'b-am' : 'b-gn';
+  var div = document.createElement('div');
+  div.className = 'fr';
+  div.innerHTML = '<span class="bdg b-bl tsm" style="min-width:90px;justify-content:center">'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'</span>'
+    + '<div class="f1 tsm"><div class="fw6">'+inserted+' importados'+(skipped>0?', '+skipped+' omitidos':'')+(errors>0?', '+errors+' errores':'')+'</div><div class="th" style="font-size:11px">'+now+'</div></div>'
+    + '<span class="bdg '+statusClass+'">'+(errors>0?'Parcial':'Exito')+'</span>';
+  // Remove empty state
+  var empty = logEl.querySelector('.th.tsm');
+  if (empty && empty.textContent.indexOf('No hay') !== -1) empty.remove();
+  logEl.insertBefore(div, logEl.firstChild);
+}
+
+// Download CSV template
+function downloadTemplate(tipo) {
+  var templates = {
+    areas: 'Nombre,Responsable,Pais,Descripcion\nTecnologia,Ing. Perez,Mexico,Area de desarrollo de software\nOperaciones,Lic. Garcia,Colombia,Gestion operativa',
+    puestos: 'Nombre,Nivel,Area,Plazas,Vertical,Horizontal,Descripcion\nAnalista Jr.,L1,Tecnologia,5,Analista Semi-Sr.,QA Tester,Analisis de requerimientos\nCoordinador,L2,Operaciones,3,Coordinador Sr.,Especialista RRHH,Coordinacion de proyectos',
+    lideres: 'Nombre,Correo,Cargo,Pais,Area,Telefono,Rol\nCarlos Perez,carlos@empresa.com,Tech Lead,Mexico,Tecnologia,+52 55 1234 5678,Lider\nMaria Garcia,garcia@empresa.com,Gerente Ops,Colombia,Operaciones,+57 300 1234 567,HRBP',
+    colabs: 'Nombre,Correo,Fecha ingreso,Pais,Puesto,Area,Lider,Proceso\nMarco Ruiz,marco@empresa.com,2025-03-19,Mexico,Analista Jr.,Tecnologia,Carlos Perez,Primeros 90 dias\nSofia Torres,sofia@empresa.com,2025-02-01,Colombia,Coordinador,Operaciones,Maria Garcia,Primeros 90 dias'
+  };
+  var content = templates[tipo] || '';
+  var blob = new Blob([content], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'plantilla_' + tipo + '.csv';
+  link.click();
+  toast('Plantilla CSV descargada.');
 }
 
 // ============================================================
