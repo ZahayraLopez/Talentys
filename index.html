@@ -876,7 +876,18 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 </div>
 <div class="fg"><label class="fl">Al vencer sin decision</label><select class="fc"><option>Generar alerta critica</option><option>Renovar automaticamente</option><option>Notificar a RR.HH.</option></select></div>
 <div class="fg"><label class="fl">Nombre de la empresa</label><input type="text" class="fc" id="cfg-empresa" placeholder="Ej. Tendencys"></div>
-<button class="btn btn-or" onclick="saveConfig()">Guardar</button>
+<button class="btn btn-or" onclick="saveConfig()">Guardar configuracion</button>
+          <hr class="div" style="margin:20px 0">
+          <div class="ctitle mb8">Copia de seguridad</div>
+          <div class="ai" style="margin-bottom:14px">
+            <div class="ai-h"><span class="ai-b">INFO</span><span class="ai-t">Datos guardados en este navegador</span></div>
+            <div class="ai-d">Los datos se guardan automaticamente en este navegador. Exporta un backup .json para respaldarlo o para abrirlo en otro dispositivo o compartirlo con el equipo.</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-bl" onclick="exportarDB()">Exportar backup (.json)</button>
+            <button class="btn btn-gh" onclick="importarDB()">Importar backup (.json)</button>
+            <button class="btn btn-gh" style="color:var(--red)" onclick="limpiarDB()">Limpiar todos los datos</button>
+          </div>
 </div>
 </div>
 </div>
@@ -893,45 +904,52 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <div class="tab" onclick="stab(this,'tf-lideres')">Lideres</div>
 <div class="tab" onclick="stab(this,'tf-colabs')">Colaboradores</div>
 </div>
-<div id="tf-todo" class="tc on">
-        <div class="ai"><div class="ai-h"><span class="ai-b">NUEVO</span><span class="ai-t">Carga masiva - todo en una sola base de datos</span></div><div class="ai-d">Conecta un Google Sheet con 4 pestanas y Talentys importa todo de una sola vez en orden correcto: primero Areas, luego Puestos, Lideres y Colaboradores.</div></div>
-        <div class="g2 mb14">
-          <div class="card">
-            <div class="ctitle mb12">Estructura del Google Sheet</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-              <div style="flex:1;min-width:120px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-gn" style="display:block;margin-bottom:6px">Areas</span><div class="th tsm">Nombre, Responsable, Pais, Desc</div></div>
-              <div style="flex:1;min-width:120px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-bl" style="display:block;margin-bottom:6px">Puestos</span><div class="th tsm">Nombre, Nivel, Area, Vertical...</div></div>
-              <div style="flex:1;min-width:120px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-pu" style="display:block;margin-bottom:6px">Lideres</span><div class="th tsm">Nombre, Correo, Cargo, Pais...</div></div>
-              <div style="flex:1;min-width:120px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-tl" style="display:block;margin-bottom:6px">Colaboradores</span><div class="th tsm">Nombre, Correo, Fecha, Pais...</div></div>
-            </div>
-            <div style="background:var(--blu-l);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--blu-d);margin-bottom:14px">Como preparar: Crea el Sheet con 4 pestanas con esos nombres exactos. Primera fila = encabezado. Compartir como publico (Archivo &gt; Compartir &gt; Cualquiera con el enlace puede ver).</div>
-            <div class="ctitle mb8">Descargar plantilla maestra</div>
-            <button onclick="downloadPlantillaMaestra()" style="width:100%;padding:11px 14px;border-radius:8px;background:var(--org);color:#fff;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
-              Descargar Plantilla Maestra Excel (.xlsx)
-            </button>
-            <div style="font-size:11px;color:var(--hnt);text-align:center;margin-bottom:10px">Un solo archivo con las 4 pestanas: Areas, Puestos, Lideres y Colaboradores</div>
-            <div style="border-top:1px solid var(--bdr);padding-top:10px">
-              <div style="font-size:11px;color:var(--hnt);margin-bottom:6px">O descarga individualmente:</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <button class="btn btn-gh btn-sm" onclick="downloadTemplate('areas')">Areas.csv</button>
-                <button class="btn btn-gh btn-sm" onclick="downloadTemplate('puestos')">Puestos.csv</button>
-                <button class="btn btn-gh btn-sm" onclick="downloadTemplate('lideres')">Lideres.csv</button>
-                <button class="btn btn-gh btn-sm" onclick="downloadTemplate('colabs')">Colaboradores.csv</button>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="ctitle mb12">Conectar Google Sheet</div>
-            <div class="fg"><label class="fl">URL del Google Sheet (publico)</label><input type="text" class="fc" id="todo-url" placeholder="https://docs.google.com/spreadsheets/d/..."></div>
-            <button class="btn btn-bl" onclick="loadTodoSheets()" style="margin-bottom:14px">Cargar todas las pestanas</button>
-            <div id="todo-status"><div class="th tsm" style="padding:10px 0">Pega la URL y presiona el boton para cargar los datos de las 4 pestanas a la vez.</div></div>
-            <div id="todo-log" style="display:none;margin-top:12px"></div>
-          </div>
-        </div>
-        <div class="card"><div class="ctitle mb8">Historial de importaciones</div><div id="import-log"><div class="th tsm" style="padding:10px 0;text-align:center">No hay importaciones registradas.</div></div></div>
-      </div>
 
-      <div id="tf-areas" class="tc">
+<div id="tf-todo" class="tc on">
+  <div class="ai"><div class="ai-h"><span class="ai-b">NUEVO</span><span class="ai-t">Carga masiva - todo en una sola base de datos</span></div><div class="ai-d">Sube la Plantilla Maestra Excel con las 4 pestanas, o conecta un Google Sheet. Talentys importa Areas, Puestos, Lideres y Colaboradores de una sola vez.</div></div>
+  <div class="g2">
+    <div class="card">
+      <div class="ctitle mb8">Estructura requerida</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="flex:1;min-width:110px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-gn" style="display:block;margin-bottom:5px">Areas</span><div class="th tsm">Nombre, Responsable, Pais, Desc</div></div>
+        <div style="flex:1;min-width:110px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-bl" style="display:block;margin-bottom:5px">Puestos</span><div class="th tsm">Nombre, Nivel, Area, Vertical...</div></div>
+        <div style="flex:1;min-width:110px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-pu" style="display:block;margin-bottom:5px">Lideres</span><div class="th tsm">Nombre, Correo, Cargo, Pais...</div></div>
+        <div style="flex:1;min-width:110px;background:var(--s2);border-radius:8px;padding:10px 12px"><span class="bdg b-tl" style="display:block;margin-bottom:5px">Colaboradores</span><div class="th tsm">Nombre, Correo, Fecha...</div></div>
+      </div>
+      <div class="ctitle mb8">Descargar plantilla maestra</div>
+      <button onclick="downloadPlantillaMaestra()" style="width:100%;padding:11px;border-radius:8px;background:var(--org);color:#fff;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:6px">Descargar Plantilla Maestra Excel (.xlsx)</button>
+      <div class="th tsm" style="text-align:center;margin-bottom:12px">Un solo archivo con las 4 pestanas listas para llenar</div>
+      <div style="border-top:1px solid var(--bdr);padding-top:10px">
+        <div class="th tsm mb6">O descarga individualmente:</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-gh btn-sm" onclick="downloadTemplate('areas')">Areas.csv</button>
+          <button class="btn btn-gh btn-sm" onclick="downloadTemplate('puestos')">Puestos.csv</button>
+          <button class="btn btn-gh btn-sm" onclick="downloadTemplate('lideres')">Lideres.csv</button>
+          <button class="btn btn-gh btn-sm" onclick="downloadTemplate('colabs')">Colaboradores.csv</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle mb12">Cargar datos</div>
+      <div class="fw6 tsm mb6">Opcion 1 -- Subir archivo Excel o CSV</div>
+      <label style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:8px;border:2px dashed var(--blu);background:var(--blu-l);color:var(--blu-d);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;box-sizing:border-box;margin-bottom:6px">
+        Seleccionar .xlsx o .csv
+        <input type="file" accept=".xlsx,.xls,.csv" style="display:none" onchange="uploadTodoFile(event)">
+      </label>
+      <div id="todo-file-status" class="th tsm" style="text-align:center;margin-bottom:14px">Ningun archivo seleccionado</div>
+      <div style="border-top:1px solid var(--bdr);padding-top:12px">
+        <div class="fw6 tsm mb6">Opcion 2 -- Google Sheet (URL publica)</div>
+        <div class="fg"><label class="fl">URL del Google Sheet</label><input type="text" class="fc" id="todo-url" placeholder="https://docs.google.com/spreadsheets/d/..."></div>
+        <button class="btn btn-bl" onclick="loadTodoSheets()" style="margin-bottom:12px">Cargar todas las pestanas</button>
+      </div>
+      <div id="todo-status"><div class="th tsm" style="padding:8px 0">Sube un archivo o pega la URL para cargar los datos.</div></div>
+      <div id="todo-log" style="display:none;margin-top:12px"></div>
+    </div>
+  </div>
+  <div class="card mt12"><div class="ctitle mb8">Historial de importaciones</div><div id="import-log"><div class="th tsm" style="padding:10px 0;text-align:center">No hay importaciones registradas.</div></div></div>
+</div>
+
+<div id="tf-areas" class="tc">
 <div class="g2">
 <div class="card">
 <div class="ctitle mb12">Importar Areas</div>
@@ -946,13 +964,10 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <div class="fg"><label class="fl">Nombre de la hoja (pestana)</label><input type="text" class="fc" id="gs-sheet-areas" placeholder="Ej. Areas (por defecto: Sheet1)"></div>
 <div class="fg">
 <label class="fl">Opcion 2 -- Subir archivo CSV o Excel</label>
-<div style="display:flex;align-items:center;gap:8px">
-  <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--bdr2);background:var(--s2);color:var(--mut);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">
-    Seleccionar CSV o Excel
-    <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'areas')">
-  </label>
-  <span id="file-name-areas" style="font-size:12px;color:var(--hnt)">Ningun archivo seleccionado</span>
-</div>
+<label class="btn btn-gh" style="cursor:pointer;width:100%;justify-content:center">
+                Seleccionar CSV / Excel (.csv, .xlsx)
+                <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'areas')">
+</label>
 </div>
 <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
 <div class="ctitle mb8">Columnas en tu archivo</div>
@@ -967,7 +982,7 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <button class="btn btn-bl btn-sm" onclick="previewSheet('areas')">Vista previa URL</button>
 <button class="btn btn-or" onclick="importSheet('areas')" id="btn-import-areas" disabled style="opacity:.5">Importar areas</button>
 </div>
-<button onclick="downloadTemplate('areas')" style="margin-top:10px;width:100%;padding:9px 14px;border-radius:6px;border:1.5px solid var(--blu);background:var(--blu-l);color:var(--blu-d);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">Descargar plantilla Areas.csv</button>
+<div class="mt12"><button class="btn btn-gh btn-sm" style="width:100%;justify-content:center;margin-top:4px" onclick="downloadTemplate('areas')">&#11015;&nbsp; Descargar plantilla Areas (.csv)</button></div>
 </div>
 <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-areas"><div class="th tsm" style="padding:20px 0;text-align:center">Sube un archivo o ingresa la URL y presiona "Vista previa".</div></div></div>
 </div>
@@ -980,13 +995,10 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <div class="fg"><label class="fl">Nombre de la hoja</label><input type="text" class="fc" id="gs-sheet-puestos" placeholder="Ej. Puestos"></div>
 <div class="fg">
 <label class="fl">Opcion 2 -- Subir archivo CSV o Excel</label>
-<div style="display:flex;align-items:center;gap:8px">
-  <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--bdr2);background:var(--s2);color:var(--mut);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">
-    Seleccionar CSV o Excel
-    <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'puestos')">
-  </label>
-  <span id="file-name-puestos" style="font-size:12px;color:var(--hnt)">Ningun archivo seleccionado</span>
-</div>
+<label class="btn btn-gh" style="cursor:pointer;width:100%;justify-content:center">
+                Seleccionar CSV / Excel (.csv, .xlsx)
+                <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'puestos')">
+</label>
 </div>
 <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
 <div class="ctitle mb8">Columnas en tu archivo</div>
@@ -1004,7 +1016,7 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <button class="btn btn-bl btn-sm" onclick="previewSheet('puestos')">Vista previa URL</button>
 <button class="btn btn-or" onclick="importSheet('puestos')" id="btn-import-puestos" disabled style="opacity:.5">Importar puestos</button>
 </div>
-<button onclick="downloadTemplate('puestos')" style="margin-top:10px;width:100%;padding:9px 14px;border-radius:6px;border:1.5px solid var(--blu);background:var(--blu-l);color:var(--blu-d);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">Descargar plantilla Puestos.csv</button>
+<div class="mt12"><button class="btn btn-gh btn-sm" style="width:100%;justify-content:center;margin-top:4px" onclick="downloadTemplate('puestos')">&#11015;&nbsp; Descargar plantilla Puestos (.csv)</button></div>
 </div>
 <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-puestos"><div class="th tsm" style="padding:20px 0;text-align:center">Sube un archivo o ingresa la URL y presiona "Vista previa".</div></div></div>
 </div>
@@ -1017,13 +1029,10 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <div class="fg"><label class="fl">Nombre de la hoja</label><input type="text" class="fc" id="gs-sheet-lideres" placeholder="Ej. Lideres"></div>
 <div class="fg">
 <label class="fl">Opcion 2 -- Subir archivo CSV o Excel</label>
-<div style="display:flex;align-items:center;gap:8px">
-  <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--bdr2);background:var(--s2);color:var(--mut);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">
-    Seleccionar CSV o Excel
-    <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'lideres')">
-  </label>
-  <span id="file-name-lideres" style="font-size:12px;color:var(--hnt)">Ningun archivo seleccionado</span>
-</div>
+<label class="btn btn-gh" style="cursor:pointer;width:100%;justify-content:center">
+                Seleccionar CSV / Excel (.csv, .xlsx)
+                <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'lideres')">
+</label>
 </div>
 <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
 <div class="ctitle mb8">Columnas en tu archivo</div>
@@ -1041,7 +1050,7 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <button class="btn btn-bl btn-sm" onclick="previewSheet('lideres')">Vista previa URL</button>
 <button class="btn btn-or" onclick="importSheet('lideres')" id="btn-import-lideres" disabled style="opacity:.5">Importar lideres</button>
 </div>
-<button onclick="downloadTemplate('lideres')" style="margin-top:10px;width:100%;padding:9px 14px;border-radius:6px;border:1.5px solid var(--blu);background:var(--blu-l);color:var(--blu-d);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">Descargar plantilla Lideres.csv</button>
+<div class="mt12"><button class="btn btn-gh btn-sm" style="width:100%;justify-content:center;margin-top:4px" onclick="downloadTemplate('lideres')">&#11015;&nbsp; Descargar plantilla Lideres (.csv)</button></div>
 </div>
 <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-lideres"><div class="th tsm" style="padding:20px 0;text-align:center">Sube un archivo o ingresa la URL y presiona "Vista previa".</div></div></div>
 </div>
@@ -1054,13 +1063,10 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <div class="fg"><label class="fl">Nombre de la hoja</label><input type="text" class="fc" id="gs-sheet-colabs" placeholder="Ej. Colaboradores"></div>
 <div class="fg">
 <label class="fl">Opcion 2 -- Subir archivo CSV o Excel</label>
-<div style="display:flex;align-items:center;gap:8px">
-  <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--bdr2);background:var(--s2);color:var(--mut);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">
-    Seleccionar CSV o Excel
-    <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'colabs')">
-  </label>
-  <span id="file-name-colabs" style="font-size:12px;color:var(--hnt)">Ningun archivo seleccionado</span>
-</div>
+<label class="btn btn-gh" style="cursor:pointer;width:100%;justify-content:center">
+                Seleccionar CSV / Excel (.csv, .xlsx)
+                <input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadFile(event,'colabs')">
+</label>
 </div>
 <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
 <div class="ctitle mb8">Columnas en tu archivo</div>
@@ -1082,7 +1088,7 @@ Accede aqui: {{link_plataforma}}</textarea></div>
 <button class="btn btn-bl btn-sm" onclick="previewSheet('colabs')">Vista previa URL</button>
 <button class="btn btn-or" onclick="importSheet('colabs')" id="btn-import-colabs" disabled style="opacity:.5">Importar colaboradores</button>
 </div>
-<button onclick="downloadTemplate('colabs')" style="margin-top:10px;width:100%;padding:9px 14px;border-radius:6px;border:1.5px solid var(--blu);background:var(--blu-l);color:var(--blu-d);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">Descargar plantilla Colaboradores.csv</button>
+<div class="mt12"><button class="btn btn-gh btn-sm" style="width:100%;justify-content:center;margin-top:4px" onclick="downloadTemplate('colabs')">&#11015;&nbsp; Descargar plantilla Colaboradores (.csv)</button></div>
 </div>
 <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-colabs"><div class="th tsm" style="padding:20px 0;text-align:center">Sube un archivo o ingresa la URL y presiona "Vista previa".</div></div></div>
 </div>
@@ -1384,6 +1390,7 @@ function saveColab() {
   syncAllSelects();
   renderDash();
   toast('"'+colab.nombre+'" agregado. Proceso "'+colab.proceso+'" activado.');
+  saveDB();
   addActividad('Nuevo colaborador: '+colab.nombre+' ('+colab.proceso+')', 'blu');
 }
 
@@ -1429,6 +1436,7 @@ function updateColab() {
   closeM('m-edit-colab');
   syncAllSelects();
   renderDash();
+  saveDB();
   toast('Colaborador actualizado correctamente.');
 }
 
@@ -1459,6 +1467,7 @@ function addArea() {
   document.getElementById('area-desc').value='';
   renderAreas();
   syncAllSelects();
+  saveDB();
   toast('Area "'+nombre+'" agregada.');
 }
 
@@ -1476,6 +1485,7 @@ function delArea(idx) {
   DB.areas.splice(idx,1);
   renderAreas();
   syncAllSelects();
+  saveDB();
   toast('Area "'+nombre+'" eliminada.');
 }
 
@@ -1527,6 +1537,7 @@ function savePuesto() {
   document.getElementById('m-puesto-title').textContent='Nuevo puesto';
   ['puesto-nombre','puesto-plazas','puesto-vertical','puesto-horizontal','puesto-desc'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   closeM('m-puesto');
+  saveDB();
   renderPuestos();
   syncAllSelects();
 }
@@ -1587,6 +1598,7 @@ function saveLider() {
   document.getElementById('m-lider-title').textContent='Nuevo lider';
   ['ldr-nombre','ldr-email','ldr-cargo','ldr-pais','ldr-tel'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   closeM('m-lider');
+  saveDB();
   renderLideres();
   syncAllSelects();
 }
@@ -1728,6 +1740,7 @@ function saveCambio() {
   renderDash();
   renderCambio();
   toast('Cambio de puesto registrado. Periodo de 90 dias activado.');
+  saveDB();
   addActividad('Cambio de puesto: '+DB.colabs[parseInt(idx)].nombre+' -> '+nvo,'tel');
 }
 
@@ -1941,6 +1954,7 @@ function addRepNote() {
   DB.notas[idx].push({autor:'Zahayra Lopez (HRBP)', fecha:new Date().toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'}), txt:txt});
   document.getElementById('rep-note-txt').value='';
   loadRepColab(idx);
+  saveDB();
   toast('Nota guardada en el expediente.');
 }
 
@@ -1998,6 +2012,7 @@ function saveFbComment(quien) {
   if(txtEl) txtEl.value='';
   renderFbComments(idx);
   toast('Comentario guardado en el expediente de '+DB.colabs[parseInt(idx)].nombre+'.');
+  saveDB();
   addActividad('Comentario de '+(quien==='lider'?'lider':'colaborador')+' guardado - '+DB.colabs[parseInt(idx)].nombre,'blu');
 }
 
@@ -2060,6 +2075,7 @@ function saveSem(quien) {
   var idx=sel?sel.value:'';
   if(idx===''){toast('Selecciona un colaborador.');return;}
   toast('Autoevaluacion del '+(quien==='lider'?'lider':'colaborador')+' guardada para '+DB.colabs[parseInt(idx)].nombre+'.');
+  saveDB();
   addActividad('Autoevaluacion semaforo guardada - '+DB.colabs[parseInt(idx)].nombre,'pur');
 }
 
@@ -2157,6 +2173,7 @@ function saveConfig() {
   DB.config.canal=document.getElementById('cfg-canal').value;
   var emp=document.getElementById('cfg-empresa');
   if(emp) DB.config.empresa=emp.value;
+  saveDB();
   toast('Configuracion guardada correctamente.');
 }
 
@@ -2433,6 +2450,7 @@ function renderNivelesInternos() {
 function delNivelInterno(idx) {
   var nombre = DB.nivelesInternos[idx].nombre;
   DB.nivelesInternos.splice(idx, 1);
+  saveDB();
   renderNivelesInternos();
   toast('Nivel "'+nombre+'" eliminado.');
 }
@@ -2468,408 +2486,10 @@ function _valR(t,o){if(t==='areas'||t==='puestos')return !!(o.nombre&&o.nombre.l
 function _insR(t,o){if(t==='areas'){if(DB.areas.some(function(a){return a.nombre===o.nombre;}))return false;DB.areas.push(o);return true;}if(t==='puestos'){if(DB.puestos.some(function(p){return p.nombre===o.nombre;}))return false;DB.puestos.push(o);return true;}if(t==='lideres'){if(DB.lideres.some(function(l){return l.email===o.email;}))return false;DB.lideres.push(o);return true;}if(t==='colabs'){var dup=document.getElementById('gs-dup-colabs');var mode=dup?dup.value:'skip';if(mode==='skip'&&DB.colabs.some(function(c){return c.email===o.email;}))return false;DB.colabs.push(o);return true;}return false;}
 function _showPrev(t,rows,fname){var pe=document.getElementById('preview-'+t);var be=document.getElementById('btn-import-'+t);var hdrs={areas:['Nombre','Responsable','Pais','Desc'],puestos:['Nombre','Nivel','Area','Plazas','Vert','Horiz','Desc'],lideres:['Nombre','Correo','Cargo','Pais','Area','Tel','Rol'],colabs:['Nombre','Correo','Fecha','Pais','Puesto','Area','Lider','Proceso']};var h=hdrs[t]||[];var vals=rows.filter(function(r){return _valR(t,_mapR(t,r));});var inv=rows.length-vals.length;var out='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">'+(fname?'<span class="bdg b-tl">'+fname+'</span>':'')+'<span class="bdg b-gn">'+rows.length+' filas</span><span class="bdg b-gn">'+vals.length+' validas</span>'+(inv>0?'<span class="bdg b-rd">'+inv+' error</span>':'')+'</div><div class="tw" style="max-height:220px;overflow-y:auto"><table><thead><tr>'+h.map(function(hh){return'<th>'+hh+'</th>';}).join('')+'<th>OK</th></tr></thead><tbody>'+rows.slice(0,25).map(function(r){var o=_mapR(t,r);var ok=_valR(t,o);return'<tr>'+h.map(function(hh,i){return'<td>'+(r[i]||'-')+'</td>';}).join('')+'<td><span class="bdg '+(ok?'b-gn':'b-rd')+'">'+(ok?'OK':'!')+'</span></td></tr>';}).join('')+(rows.length>25?'<tr><td colspan="'+(h.length+1)+'" style="text-align:center;padding:6px;color:var(--hnt)">...y '+(rows.length-25)+' mas</td></tr>':'')+'</tbody></table></div>'+(vals.length>0?'<div style="margin-top:8px"><button class="btn btn-or btn-sm" onclick="importSheet(\''+t+'\')">Importar '+vals.length+' '+t+'</button></div>':'');if(pe)pe.innerHTML=out;if(be&&vals.length>0){be.disabled=false;be.style.opacity='1';}_pendingRows[t]=rows;}
 function previewSheet(t){var ue=document.getElementById('gs-url-'+t);var se=document.getElementById('gs-sheet-'+t);var url=(ue?ue.value:'').trim();var sheet=(se?se.value:'').trim();if(!url){toast('Pega la URL.');return;}var cv=buildCsvUrl(url,sheet);if(!cv){toast('URL invalida.');return;}var pe=document.getElementById('preview-'+t);if(pe)pe.innerHTML='<div class="th tsm" style="padding:14px;text-align:center">Cargando...</div>';fetch(cv).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(tx){var rows=parseCsv(tx);var data=(rows.length>0&&(rows[0][0]||'').toLowerCase()==='nombre')?rows.slice(1):rows;data=data.filter(function(r){return r.some(function(c){return(c||'').trim().length>0;});});_showPrev(t,data,null);}).catch(function(e){var pe2=document.getElementById('preview-'+t);if(pe2)pe2.innerHTML='<div style="background:var(--red-l);border-radius:8px;padding:10px"><div class="fw6 tsm" style="color:var(--red)">Error al conectar</div><div class="th tsm">Verifica que la hoja sea publica.</div></div>';});}
-function uploadFile(event, t) {
-  var file = event.target.files[0];
-  if (!file) return;
-  var fnEl = document.getElementById('file-name-' + t);
-  if (fnEl) fnEl.textContent = file.name;
-  var ext = file.name.split('.').pop().toLowerCase();
-  var pe = document.getElementById('preview-' + t);
-  if (pe) pe.innerHTML = '<div class="th tsm" style="padding:14px;text-align:center">Procesando ' + file.name + '...</div>';
-  function doCsv(txt) {
-    var rows = cleanRows(parseCsv(txt));
-    _showPrev(t, rows, file.name);
-  }
-  if (ext === 'csv') {
-    var reader = new FileReader();
-    reader.onload = function(e) { doCsv(e.target.result); };
-    reader.onerror = function() { if (pe) pe.innerHTML = '<div style="color:var(--red);padding:10px">Error al leer el archivo.</div>'; };
-    reader.readAsText(file, 'UTF-8');
-  } else if (ext === 'xlsx' || ext === 'xls') {
-    function doXlsx() {
-      var r2 = new FileReader();
-      r2.onload = function(e2) {
-        try {
-          var wb = XLSX.read(e2.target.result, { type: 'array' });
-          var ws = wb.Sheets[wb.SheetNames[0]];
-          doCsv(XLSX.utils.sheet_to_csv(ws));
-        } catch(err) {
-          if (pe) pe.innerHTML = '<div style="color:var(--red);padding:10px">Error al leer Excel: ' + err.message + '</div>';
-        }
-      };
-      r2.readAsArrayBuffer(file);
-    }
-    if (typeof XLSX !== 'undefined') {
-      doXlsx();
-    } else {
-      if (pe) pe.innerHTML = '<div class="th tsm" style="padding:10px;text-align:center">Cargando lector Excel...</div>';
-      var s = document.createElement('script');
-      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-      s.onload = doXlsx;
-      s.onerror = function() {
-        if (pe) pe.innerHTML = '<div style="color:var(--red);padding:10px">No se pudo cargar el lector de Excel. Guarda el archivo como CSV e intentalo de nuevo.</div>';
-      };
-      document.head.appendChild(s);
-    }
-  } else {
-    if (pe) pe.innerHTML = '<div style="color:var(--red);padding:10px">Formato no soportado. Usa .csv o .xlsx</div>';
-  }
-}
-function importSheet(t){var rows=_pendingRows[t];if(!rows||rows.length===0){toast('Haz vista previa primero.');return;}var ins=0,skip=0,err=0;rows.forEach(function(r){var o=_mapR(t,r);if(!_valR(t,o)){err++;return;}if(_insR(t,o))ins++;else skip++;});if(t==='areas')renderAreas();if(t==='puestos')renderPuestos();if(t==='lideres')renderLideres();if(t==='colabs')renderDash();syncAllSelects();var logEl=document.getElementById('import-log');if(logEl){var d=document.createElement('div');d.className='fr';d.innerHTML='<span class="bdg b-bl tsm" style="min-width:80px;justify-content:center">'+t+'</span><div class="f1 tsm"><div class="fw6">'+ins+' importados'+(skip>0?', '+skip+' omitidos':'')+(err>0?', '+err+' errores':'')+'</div><div class="th" style="font-size:11px">'+new Date().toLocaleString()+'</div></div><span class="bdg '+(err>0?'b-am':'b-gn')+'">'+(err>0?'Parcial':'OK')+'</span>';var empty=logEl.querySelector('.th.tsm');if(empty&&empty.textContent.indexOf('No hay')>=0)empty.remove();logEl.insertBefore(d,logEl.firstChild);}toast(ins+' '+t+' importados'+(skip>0?', '+skip+' omitidos':'')+(err>0?', '+err+' error':'')+'.');addActividad('Carga masiva: '+ins+' '+t+' importados','gn');_pendingRows[t]=[];}
-
-// TODO EN UNO
-var _todoPreviews = null;
-
-function loadTodoSheets() {
-  var urlEl = document.getElementById('todo-url');
-  var url = urlEl ? urlEl.value.trim() : '';
-  if (!url) { toast('Pega la URL del Google Sheet.'); return; }
-  var m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-  if (!m) { toast('URL invalida.'); return; }
-  var id = m[1];
-  var sheets = ['Areas','Puestos','Lideres','Colaboradores'];
-  var keys   = ['areas','puestos','lideres','colabs'];
-  var statusEl = document.getElementById('todo-status');
-  if (statusEl) statusEl.innerHTML = '<div class="th tsm">Cargando las 4 pestanas...</div>';
-  var results = {}; var done = 0;
-  keys.forEach(function(t, idx) {
-    var sheet = sheets[idx];
-    var csvUrl = 'https://docs.google.com/spreadsheets/d/' + id + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(sheet);
-    fetch(csvUrl)
-      .then(function(r) { return r.ok ? r.text() : Promise.reject('HTTP ' + r.status); })
-      .then(function(tx) { results[t] = { rows: cleanRows(parseCsv(tx)), error: null }; })
-      .catch(function() { results[t] = { rows: [], error: 'Pestana "' + sheet + '" no encontrada' }; })
-      .finally ? fetch(csvUrl).then(function(){}).catch(function(){}) : null;
-    // Use a simpler counter approach
-    var checkDone = setInterval(function() {
-      if (Object.keys(results).length === keys.length) {
-        clearInterval(checkDone);
-        renderTodoPreviews(results);
-      }
-    }, 200);
-  });
-  // Backup: after 10s force render with whatever we have
-  setTimeout(function() {
-    if (!_todoPreviews) {
-      keys.forEach(function(t) { if (!results[t]) results[t] = { rows: [], error: 'Tiempo de espera agotado' }; });
-      renderTodoPreviews(results);
-    }
-  }, 10000);
-}
-
-function renderTodoPreviews(results) {
-  _todoPreviews = results;
-  var statusEl = document.getElementById('todo-status');
-  if (!statusEl) return;
-  var colors = { areas: 'b-gn', puestos: 'b-bl', lideres: 'b-pu', colabs: 'b-tl' };
-  var labels = { areas: 'Areas', puestos: 'Puestos', lideres: 'Lideres', colabs: 'Colaboradores' };
-  var keys = ['areas','puestos','lideres','colabs'];
-  var totalVal = 0;
-  var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">';
-  keys.forEach(function(t) {
-    var p = results[t] || { rows: [], error: 'No cargado' };
-    var vals = p.rows.filter(function(r) { return _valR(t, _mapR(t, r)); });
-    totalVal += vals.length;
-    html += '<div style="background:' + (p.error ? 'var(--red-l)' : 'var(--grn-l)') + ';border-radius:8px;padding:12px 14px;border:1px solid ' + (p.error ? '#F7C1C1' : '#9FD4A3') + '">';
-    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
-      + '<span class="bdg ' + colors[t] + '">' + labels[t] + '</span>';
-    if (p.error) html += '<span style="font-size:12px;color:var(--red)">' + p.error + '</span>';
-    else html += '<span style="font-size:12px;color:var(--grn)">' + p.rows.length + ' filas - ' + vals.length + ' validas</span>';
-    html += '</div>';
-    if (!p.error && p.rows.length > 0) {
-      p.rows.slice(0, 3).forEach(function(r) { html += '<div style="font-size:11px;color:var(--mut)">' + (r[0] || '-') + '</div>'; });
-      if (p.rows.length > 3) html += '<div style="font-size:11px;color:var(--hnt)">...y ' + (p.rows.length - 3) + ' mas</div>';
-    }
-    html += '</div>';
-  });
-  html += '</div>';
-  if (totalVal > 0) {
-    html += '<div style="background:var(--s2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">';
-    html += '<div><div class="fw6 tsm">Total listo para importar: ' + totalVal + ' registros</div>';
-    html += '<div class="th tsm">';
-    keys.forEach(function(t) {
-      var vals = (results[t] ? results[t].rows.filter(function(r) { return _valR(t, _mapR(t, r)); }) : []);
-      html += vals.length + ' ' + labels[t] + '  ';
-    });
-    html += '</div></div>';
-    html += '<button class="btn btn-or" onclick="importarTodo()">Importar todo ahora</button>';
-    html += '</div>';
-  } else {
-    html += '<div class="th tsm">No se encontraron datos validos. Verifica que las pestanas tengan los nombres correctos y que el Sheet sea publico.</div>';
-  }
-  statusEl.innerHTML = html;
-  if (totalVal > 0) toast('Datos cargados. Revisa el resumen y presiona "Importar todo ahora".');
-}
-
-function importarTodo() {
-  if (!_todoPreviews) { toast('Primero carga los datos.'); return; }
-  var keys = ['areas','puestos','lideres','colabs'];
-  var labels = { areas: 'Areas', puestos: 'Puestos', lideres: 'Lideres', colabs: 'Colaboradores' };
-  var logEl = document.getElementById('todo-log');
-  var totalIns = 0;
-  var logHtml = '<div class="ctitle mb8">Resultado de la importacion</div>';
-  keys.forEach(function(t) {
-    var rows = _todoPreviews[t] ? _todoPreviews[t].rows : [];
-    var ins = 0, skip = 0;
-    rows.forEach(function(r) {
-      var o = _mapR(t, r);
-      if (!_valR(t, o)) return;
-      if (_insR(t, o)) ins++; else skip++;
-    });
-    totalIns += ins;
-    logHtml += '<div class="fr">'
-      + '<span class="bdg b-bl tsm" style="min-width:90px;justify-content:center">' + labels[t] + '</span>'
-      + '<div class="f1 tsm fw6">' + ins + ' importados' + (skip > 0 ? ', ' + skip + ' omitidos' : '') + '</div>'
-      + '<span class="bdg ' + (ins > 0 ? 'b-gn' : 'b-gy') + '">' + (ins > 0 ? 'OK' : 'Sin datos') + '</span></div>';
-  });
-  if (logEl) { logEl.innerHTML = logHtml; logEl.style.display = 'block'; }
-  renderAreas(); renderPuestos(); renderLideres(); renderDash();
-  syncAllSelects();
-  document.getElementById('todo-status').innerHTML = '<div style="background:var(--grn-l);border:1px solid #9FD4A3;border-radius:8px;padding:10px 14px;font-weight:600;color:var(--grn)">Importacion completada: ' + totalIns + ' registros importados en total.</div>';
-  _todoPreviews = null;
-  toast('Importacion completada: ' + totalIns + ' registros importados.');
-  addActividad('Carga masiva completa: ' + totalIns + ' registros', 'gn');
-}
-
-
-function downloadTemplate(tipo){
-  var templates={
-    areas:['Nombre,Responsable,Pais,Descripcion','Tecnologia,Ing. Perez,Mexico,Area de desarrollo de software','Operaciones,Lic. Garcia,Colombia,Gestion operativa'],
-    puestos:['Nombre,Nivel,Area,Plazas,Vertical,Horizontal,Descripcion','Analista Jr.,L1,Tecnologia,5,Analista Semi-Sr.,QA Tester,Analisis de requerimientos','Coordinador,L2,Operaciones,3,Coordinador Sr.,Especialista RRHH,Coordinacion'],
-    lideres:['Nombre,Correo,Cargo,Pais,Area,Telefono,Rol','Carlos Perez,carlos@empresa.com,Tech Lead,Mexico,Tecnologia,+52 55 1234 5678,Lider','Maria Garcia,maria@empresa.com,Gerente,Colombia,Operaciones,+57 300 1234 567,HRBP'],
-    colabs:['Nombre,Correo,Fecha ingreso,Pais,Puesto,Area,Lider,Proceso','Marco Ruiz,marco@empresa.com,2025-03-19,Mexico,Analista Jr.,Tecnologia,Carlos Perez,Primeros 90 dias','Sofia Torres,sofia@empresa.com,2025-02-01,Colombia,Coordinador,Operaciones,Maria Garcia,Primeros 90 dias']
-  };
-  var rows=templates[tipo];
-  if(!rows){toast('Tipo no reconocido.');return;}
-  var content=rows.join('\r\n');
-
-  // Try Blob download (works when opened locally)
-  var downloaded = false;
-  try {
-    var blob = new Blob([content], {type:'text/csv;charset=utf-8;'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'plantilla_'+tipo+'.csv';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function(){ URL.revokeObjectURL(url); document.body.removeChild(a); }, 1000);
-    downloaded = true;
-    toast('Plantilla '+tipo+'.csv descargada correctamente.');
-  } catch(e){ downloaded = false; }
-
-  // Always show modal too so user can copy if download didn't work
-  if(!downloaded){ showTemplateModal(tipo, content); }
-}
-
-function downloadPlantillaMaestra() {
-  // Build a multi-sheet Excel file using SheetJS
-  // If SheetJS is available, create real .xlsx with 4 tabs
-  // Otherwise fall back to a combined CSV with clear separators shown in a modal
-
-  var data = {
-    Areas: {
-      header: ['Nombre','Responsable','Pais','Descripcion'],
-      rows: [
-        ['Tecnologia','Ing. Perez','Mexico','Area de desarrollo de software'],
-        ['Operaciones','Lic. Garcia','Colombia','Gestion operativa y logistica'],
-        ['Recursos Humanos','Zahayra Lopez','Mexico','Gestion del talento humano'],
-        ['Finanzas','Dir. Ramos','Argentina','Control financiero y presupuesto']
-      ]
-    },
-    Puestos: {
-      header: ['Nombre','Nivel','Area','Plazas','Vertical','Horizontal','Descripcion'],
-      rows: [
-        ['Analista Jr.','L1','Tecnologia','5','Analista Semi-Sr.','QA Tester Jr.','Analisis de requerimientos'],
-        ['Analista Semi-Sr.','L2','Tecnologia','3','Analista Sr.','Data Analyst','Desarrollo y analisis avanzado'],
-        ['Coordinador','L2','Operaciones','4','Coordinador Sr.','Especialista RRHH','Coordinacion de equipos y proyectos'],
-        ['Gerente de Area','L5','Operaciones','2','Director','','Gestion de area y liderazgo']
-      ]
-    },
-    Lideres: {
-      header: ['Nombre','Correo','Cargo','Pais','Area','Telefono','Rol'],
-      rows: [
-        ['Carlos Perez','carlos@empresa.com','Tech Lead','Mexico','Tecnologia','+52 55 1234 5678','Lider'],
-        ['Maria Garcia','maria@empresa.com','Gerente Operaciones','Colombia','Operaciones','+57 300 1234 567','HRBP'],
-        ['Alejandro Ramos','ramos@empresa.com','Director General','Argentina','Finanzas','+54 11 9876 5432','Administrador']
-      ]
-    },
-    Colaboradores: {
-      header: ['Nombre','Correo','Fecha ingreso','Pais','Puesto','Area','Lider','Proceso'],
-      rows: [
-        ['Marco Ruiz','marco@empresa.com','2025-03-19','Mexico','Analista Jr.','Tecnologia','Carlos Perez','Primeros 90 dias'],
-        ['Sofia Torres','sofia@empresa.com','2025-02-01','Colombia','Coordinador','Operaciones','Maria Garcia','Primeros 90 dias'],
-        ['Luis Fernandez','luis@empresa.com','2025-02-01','Mexico','Analista Semi-Sr.','Tecnologia','Carlos Perez','Primeros 90 dias'],
-        ['Camila Mora','camila@empresa.com','2024-01-15','Argentina','Gerente de Area','Operaciones','Alejandro Ramos','Sin proceso activo']
-      ]
-    }
-  };
-
-  function tryXlsx() {
-    var wb = XLSX.utils.book_new();
-    var sheets = ['Areas','Puestos','Lideres','Colaboradores'];
-    sheets.forEach(function(name) {
-      var d = data[name];
-      var wsData = [d.header].concat(d.rows);
-      var ws = XLSX.utils.aoa_to_sheet(wsData);
-      // Style header row width
-      var cols = d.header.map(function(h) { return { wch: Math.max(h.length + 4, 16) }; });
-      ws['!cols'] = cols;
-      XLSX.utils.book_append_sheet(wb, ws, name);
-    });
-    XLSX.writeFile(wb, 'Talentys_PlantillaMaestra.xlsx');
-    toast('Plantilla maestra Excel descargada con 4 pestanas.');
-  }
-
-  // Always show modal with content (works everywhere)
-  // AND try to also trigger xlsx download if possible
-  showMaestraModal(data);
-
-  if (typeof XLSX !== 'undefined') {
-    setTimeout(tryXlsx, 300);
-  } else {
-    var s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-    s.onload = function() { setTimeout(tryXlsx, 100); };
-    document.head.appendChild(s);
-  }
-}
-
-function showMaestraModal(data) {
-  var existing = document.getElementById('maestra-modal');
-  if (existing) existing.remove();
-
-  var overlay = document.createElement('div');
-  overlay.id = 'maestra-modal';
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto';
-
-  var box = document.createElement('div');
-  box.style.cssText = 'background:#fff;border-radius:12px;padding:26px;width:680px;max-width:96vw;margin-bottom:40px';
-
-  // Header
-  var hdr = document.createElement('div');
-  hdr.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px';
-  var ttl = document.createElement('div');
-  ttl.style.cssText = 'font-family:Georgia,serif;font-size:20px';
-  ttl.textContent = 'Plantilla Maestra -- Talentys';
-  var xBtn = document.createElement('button');
-  xBtn.textContent = 'x';
-  xBtn.style.cssText = 'background:none;border:none;font-size:24px;cursor:pointer;color:#7A9BB0;line-height:1';
-  xBtn.onclick = function(){ overlay.remove(); };
-  hdr.appendChild(ttl); hdr.appendChild(xBtn);
-  box.appendChild(hdr);
-
-  var sub = document.createElement('div');
-  sub.style.cssText = 'font-size:13px;color:#3D6478;margin-bottom:18px';
-  sub.textContent = 'Copia cada bloque a su pestana en Google Sheets. La primera fila es el encabezado.';
-  box.appendChild(sub);
-
-  var sheets = ['Areas','Puestos','Lideres','Colaboradores'];
-  var colors = { Areas:'#2E8B35', Puestos:'#1B6CA8', Lideres:'#7B1FA2', Colaboradores:'#00838F' };
-
-  sheets.forEach(function(name) {
-    var d = data[name];
-    var csv = [d.header].concat(d.rows).map(function(row) {
-      return row.map(function(cell) {
-        return (cell||'').indexOf(',') >= 0 ? '"' + cell + '"' : (cell||'');
-      }).join(',');
-    }).join('\r\n');
-
-    var block = document.createElement('div');
-    block.style.cssText = 'margin-bottom:18px';
-
-    var row = document.createElement('div');
-    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:8px';
-
-    var left = document.createElement('div');
-    left.style.cssText = 'display:flex;align-items:center;gap:8px';
-    var badge = document.createElement('div');
-    badge.style.cssText = 'background:'+colors[name]+';color:#fff;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700';
-    badge.textContent = name;
-    var hint = document.createElement('span');
-    hint.style.cssText = 'font-size:12px;color:#7A9BB0';
-    hint.textContent = d.rows.length + ' filas de ejemplo';
-    left.appendChild(badge); left.appendChild(hint);
-
-    var copyBtn = document.createElement('button');
-    copyBtn.textContent = 'Copiar';
-    copyBtn.style.cssText = 'padding:5px 12px;border-radius:5px;background:#1B6CA8;color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer';
-
-    var ta = document.createElement('textarea');
-    ta.value = csv;
-    ta.style.cssText = 'width:100%;height:110px;font-family:monospace;font-size:11px;padding:8px;border:1px solid #D0DDE8;border-radius:6px;resize:vertical;color:#0D2E45;background:#F9FBFD;box-sizing:border-box';
-    ta.readOnly = true;
-    ta.onclick = function(){ this.select(); };
-
-    copyBtn.onclick = function() {
-      ta.select();
-      try { document.execCommand('copy'); copyBtn.textContent = 'Copiado!'; } catch(e) {}
-    };
-
-    row.appendChild(left); row.appendChild(copyBtn);
-    block.appendChild(row); block.appendChild(ta);
-    box.appendChild(block);
-  });
-
-  var tip = document.createElement('div');
-  tip.style.cssText = 'background:#E3F0FA;border-radius:8px;padding:12px 14px;font-size:12px;color:#0F4A78';
-  tip.textContent = 'Como usar: Crea un Google Sheet con 4 pestanas (Areas, Puestos, Lideres, Colaboradores). Copia el bloque de cada seccion a su pestana correspondiente.';
-  box.appendChild(tip);
-
-  overlay.appendChild(box);
-  overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
-  document.body.appendChild(overlay);
-}
-
-function showTemplateModal(tipo,content){
-  var existing=document.getElementById('tpl-modal');
-  if(existing) existing.remove();
-  var div=document.createElement('div');
-  div.id='tpl-modal';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
-  var closeBtn=document.createElement('button');
-  closeBtn.textContent='x';
-  closeBtn.style.cssText='background:none;border:none;font-size:22px;cursor:pointer;color:#7A9BB0;line-height:1';
-  closeBtn.onclick=function(){div.remove();};
-  var copyBtn=document.createElement('button');
-  copyBtn.textContent='Copiar contenido';
-  copyBtn.style.cssText='padding:8px 16px;border-radius:6px;background:#1B6CA8;color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer';
-  var closeBtn2=document.createElement('button');
-  closeBtn2.textContent='Cerrar';
-  closeBtn2.style.cssText='padding:8px 16px;border-radius:6px;background:#E8F0F7;color:#3D6478;border:none;font-size:13px;cursor:pointer';
-  closeBtn2.onclick=function(){div.remove();};
-  var ta=document.createElement('textarea');
-  ta.value=content;
-  ta.style.cssText='width:100%;height:180px;font-family:monospace;font-size:12px;padding:10px;border:1px solid #D0DDE8;border-radius:6px;resize:vertical';
-  ta.readOnly=true;
-  ta.onclick=function(){this.select();};
-  copyBtn.onclick=function(){ta.select();try{document.execCommand('copy');copyBtn.textContent='Copiado!';}catch(e){}};
-  var inner=document.createElement('div');
-  inner.style.cssText='background:#fff;border-radius:12px;padding:24px;width:600px;max-width:96vw;max-height:80vh;overflow-y:auto';
-  var header=document.createElement('div');
-  header.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:16px';
-  var title=document.createElement('div');
-  title.style.cssText='font-weight:700;font-size:16px';
-  title.textContent='Plantilla: '+tipo+'.csv';
-  header.appendChild(title);
-  header.appendChild(closeBtn);
-  var hint=document.createElement('div');
-  hint.style.cssText='background:#F2F6FA;border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;color:#3D6478';
-  hint.textContent='Copia este contenido, pegalo en un archivo de texto y guardalo como plantilla_'+tipo+'.csv';
-  var btns=document.createElement('div');
-  btns.style.cssText='display:flex;gap:8px;margin-top:12px';
-  btns.appendChild(copyBtn);
-  btns.appendChild(closeBtn2);
-  inner.appendChild(header);
-  inner.appendChild(hint);
-  inner.appendChild(ta);
-  inner.appendChild(btns);
-  div.appendChild(inner);
-  div.addEventListener('click',function(e){if(e.target===div)div.remove();});
-  document.body.appendChild(div);
-  ta.select();
-}
+function uploadFile(event,t){var file=event.target.files[0];if(!file)return;var ext=file.name.split('.').pop().toLowerCase();var pe=document.getElementById('preview-'+t);if(pe)pe.innerHTML='<div class="th tsm" style="padding:14px;text-align:center">Procesando...</div>';function doCsv(txt){var rows=parseCsv(txt);var data=(rows.length>0&&(rows[0][0]||'').toLowerCase()==='nombre')?rows.slice(1):rows;data=data.filter(function(r){return r.some(function(c){return(c||'').trim().length>0;});});_showPrev(t,data,file.name);}if(ext==='csv'){var r=new FileReader();r.onload=function(e){doCsv(e.target.result);};r.readAsText(file,'UTF-8');}else if(ext==='xlsx'||ext==='xls'){function doXl(){var r2=new FileReader();r2.onload=function(e){try{var wb=XLSX.read(e.target.result,{type:'array'});doCsv(XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]));}catch(err){if(pe)pe.innerHTML='<div class="th tsm" style="color:var(--red);padding:10px">Error Excel: '+err.message+'</div>';}};r2.readAsArrayBuffer(file);}if(typeof XLSX!=='undefined'){doXl();}else{var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=doXl;s.onerror=function(){if(pe)pe.innerHTML='<div class="th tsm" style="color:var(--red);padding:10px">No se cargo xlsx. Usa CSV.</div>';};document.head.appendChild(s);}}else{if(pe)pe.innerHTML='<div class="th tsm" style="color:var(--red);padding:10px">Usa .csv o .xlsx</div>';}}
+function importSheet(t){var rows=_pendingRows[t];if(!rows||rows.length===0){toast('Haz vista previa primero.');return;}var ins=0,skip=0,err=0;rows.forEach(function(r){var o=_mapR(t,r);if(!_valR(t,o)){err++;return;}if(_insR(t,o))ins++;else skip++;});if(t==='areas')renderAreas();if(t==='puestos')renderPuestos();if(t==='lideres')renderLideres();if(t==='colabs')renderDash();syncAllSelects();var logEl=document.getElementById('import-log');if(logEl){var d=document.createElement('div');d.className='fr';d.innerHTML='<span class="bdg b-bl tsm" style="min-width:80px;justify-content:center">'+t+'</span><div class="f1 tsm"><div class="fw6">'+ins+' importados'+(skip>0?', '+skip+' omitidos':'')+(err>0?', '+err+' errores':'')+'</div><div class="th" style="font-size:11px">'+new Date().toLocaleString()+'</div></div><span class="bdg '+(err>0?'b-am':'b-gn')+'">'+(err>0?'Parcial':'OK')+'</span>';var empty=logEl.querySelector('.th.tsm');if(empty&&empty.textContent.indexOf('No hay')>=0)empty.remove();logEl.insertBefore(d,logEl.firstChild);}toast(ins+' '+t+' importados'+(skip>0?', '+skip+' omitidos':'')+(err>0?', '+err+' error':'')+'.');saveDB();
+  addActividad('Carga masiva: '+ins+' '+t+' importados','gn');_pendingRows[t]=[];}
+function downloadTemplate(tipo){var lines={areas:['Nombre,Responsable,Pais,Descripcion','Tecnologia,Ing. Perez,Mexico,Desarrollo de software','Operaciones,Lic. Garcia,Colombia,Gestion operativa'],puestos:['Nombre,Nivel,Area,Plazas,Vertical,Horizontal,Descripcion','Analista Jr.,L1,Tecnologia,5,Analista Semi-Sr.,QA Tester,Analisis'],lideres:['Nombre,Correo,Cargo,Pais,Area,Telefono,Rol','Carlos Perez,carlos@empresa.com,Tech Lead,Mexico,Tecnologia,+52 55 1234 5678,Lider'],colabs:['Nombre,Correo,Fecha ingreso,Pais,Puesto,Area,Lider,Proceso','Marco Ruiz,marco@empresa.com,2025-03-19,Mexico,Analista Jr.,Tecnologia,Carlos Perez,Primeros 90 dias']};var rows=lines[tipo];if(!rows){toast('Tipo no reconocido.');return;}var content=rows.join('\r\n');var encoded='data:text/csv;charset=utf-8,'+encodeURIComponent(content);var link=document.createElement('a');link.setAttribute('href',encoded);link.setAttribute('download','plantilla_'+tipo+'.csv');document.body.appendChild(link);link.click();document.body.removeChild(link);toast('Plantilla descargada.');}
 
 // LOGIN
 var USERS = [
@@ -2934,8 +2554,56 @@ function logout() {
   document.body.style.overflow='hidden';
 }
 
+
+// PERSISTENCIA localStorage
+var LS_KEY = 'talentys_db_v2';
+function saveDB(){try{localStorage.setItem(LS_KEY,JSON.stringify(DB));}catch(e){}}
+function loadDB(){
+  try{
+    var raw=localStorage.getItem(LS_KEY); if(!raw)return;
+    var d=JSON.parse(raw);
+    ['areas','puestos','lideres','colabs','evaluaciones','documentos','fbDocs','fbComments','semData','notas','nivelesInternos'].forEach(function(k){if(d[k]!==undefined)DB[k]=d[k];});
+    if(d.config)Object.assign(DB.config,d.config);
+    if(d.qCount)DB.qCount=d.qCount;
+  }catch(e){}
+}
+function exportarDB(){
+  try{
+    var blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download='talentys_backup_'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},600);
+    toast('Backup exportado correctamente.');
+  }catch(e){toast('Exporta desde tu navegador local.');}
+}
+function importarDB(){
+  var inp=document.createElement('input');inp.type='file';inp.accept='.json';
+  inp.onchange=function(ev){
+    var file=ev.target.files[0];if(!file)return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      try{
+        var d=JSON.parse(e.target.result);
+        ['areas','puestos','lideres','colabs','evaluaciones','documentos','fbDocs','fbComments','semData','notas','nivelesInternos'].forEach(function(k){if(d[k]!==undefined)DB[k]=d[k];});
+        if(d.config)Object.assign(DB.config,d.config);
+        saveDB();renderAreas();renderPuestos();renderLideres();renderDash();syncAllSelects();
+        toast('Importado: '+DB.colabs.length+' colaboradores, '+DB.areas.length+' areas, '+DB.puestos.length+' puestos, '+DB.lideres.length+' lideres.');
+      }catch(err){toast('Archivo no valido.');}
+    };reader.readAsText(file);
+  };
+  document.body.appendChild(inp);inp.click();document.body.removeChild(inp);
+}
+function limpiarDB(){
+  if(!confirm('Borrar TODOS los datos? No se puede deshacer.'))return;
+  localStorage.removeItem(LS_KEY);
+  DB.areas=[];DB.puestos=[];DB.lideres=[];DB.colabs=[];DB.evaluaciones=[];DB.documentos=[];
+  DB.fbDocs=[];DB.fbComments={};DB.semData={};DB.notas={};DB.nivelesInternos=[];
+  renderAreas();renderPuestos();renderLideres();renderDash();syncAllSelects();
+  toast('Datos eliminados.');
+}
 // INIT
 // Block scroll while login visible
+loadDB();
 document.body.style.overflow = 'hidden';
 syncAllSelects();
 renderAreas();
@@ -2945,3 +2613,69 @@ renderDash();
 </script>
 </body>
 </html>
+// UPLOAD ARCHIVO TODO EN UNO
+function uploadTodoFile(event) {
+  var file = event.target.files[0]; if (!file) return;
+  var statusEl = document.getElementById('todo-file-status');
+  var ext = file.name.split('.').pop().toLowerCase();
+  if(statusEl){statusEl.textContent='Procesando: '+file.name+'...';statusEl.style.color='';}
+
+  function processSheets(wb) {
+    var map = {Areas:'areas',Puestos:'puestos',Lideres:'lideres',Colaboradores:'colabs'};
+    var results={areas:{rows:[],error:null},puestos:{rows:[],error:null},lideres:{rows:[],error:null},colabs:{rows:[],error:null}};
+    var found=0;
+    Object.keys(map).forEach(function(sn){
+      var ws=wb.Sheets[sn];
+      if(!ws){results[map[sn]]={rows:[],error:'Pestana "'+sn+'" no encontrada'};return;}
+      var rows=cleanRows(parseCsv(XLSX.utils.sheet_to_csv(ws)));
+      results[map[sn]]={rows:rows,error:null};
+      if(rows.length>0)found++;
+    });
+    if(found===0){
+      if(statusEl){statusEl.style.color='var(--red)';statusEl.textContent='No se encontraron pestanas validas. El Excel debe tener pestanas: Areas, Puestos, Lideres, Colaboradores.';}
+      return;
+    }
+    renderTodoPreviews(results);
+    if(statusEl){statusEl.style.color='var(--grn)';statusEl.textContent='Archivo cargado: '+file.name+'. Revisa el resumen abajo.';}
+  }
+
+  function processCsv(text) {
+    var rows=cleanRows(parseCsv(text));
+    if(!rows.length){if(statusEl)statusEl.textContent='El archivo esta vacio.';return;}
+    var header=(rows[0]||[]).join(',').toLowerCase();
+    var tipo='colabs';
+    if(header.indexOf('responsable')>=0)tipo='areas';
+    else if(header.indexOf('nivel')>=0||header.indexOf('vertical')>=0)tipo='puestos';
+    else if(header.indexOf('cargo')>=0&&header.indexOf('fecha')<0)tipo='lideres';
+    var res={areas:{rows:[],error:null},puestos:{rows:[],error:null},lideres:{rows:[],error:null},colabs:{rows:[],error:null}};
+    res[tipo]={rows:rows,error:null};
+    renderTodoPreviews(res);
+    if(statusEl){statusEl.style.color='var(--grn)';statusEl.textContent='CSV cargado como "'+tipo+'": '+rows.length+' filas. Revisa el resumen abajo.';}
+  }
+
+  function doWork(){
+    if(ext==='csv'){
+      var r=new FileReader();r.onload=function(e){processCsv(e.target.result);};r.readAsText(file,'UTF-8');
+    } else {
+      var r2=new FileReader();
+      r2.onload=function(e){try{processSheets(XLSX.read(e.target.result,{type:'array'}));}
+        catch(err){if(statusEl){statusEl.style.color='var(--red)';statusEl.textContent='Error al leer: '+err.message;}}};
+      r2.readAsArrayBuffer(file);
+    }
+  }
+
+  if(ext==='csv'){doWork();}
+  else if(ext==='xlsx'||ext==='xls'){
+    if(typeof XLSX!=='undefined'){doWork();}
+    else{
+      if(statusEl)statusEl.textContent='Cargando lector de Excel...';
+      var s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload=doWork;
+      s.onerror=function(){if(statusEl){statusEl.style.color='var(--red)';statusEl.textContent='No se pudo cargar el lector de Excel. Usa CSV.';}};
+      document.head.appendChild(s);
+    }
+  } else {
+    if(statusEl){statusEl.style.color='var(--red)';statusEl.textContent='Formato no soportado. Usa .xlsx o .csv';}
+  }
+}
