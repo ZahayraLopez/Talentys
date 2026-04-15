@@ -2379,7 +2379,9 @@ document.addEventListener('click',function(e){
 });
 
 function resetTodo(){
-  if(!confirm('Borrar TODOS los datos de Talentys y SLAs?'))return;
+  if(!confirm('Borrar TODOS los datos de Talentys y SLAs en Firebase?\nEsta accion no se puede deshacer.'))return;
+
+  // Reset memory
   DB.areas=[];DB.puestos=[];DB.lideres=[];DB.colabs=[];
   DB.evaluaciones=[];DB.fbComments={};DB.semData={};DB.notas={};
   DB.evalDesempeno=[];DB.kpis={};DB.nivelEsperado={};
@@ -2389,15 +2391,42 @@ function resetTodo(){
   GLOBAL.lineas=LINEAS_PREDEFINIDAS.slice();
   SLA_DB={periods:{},customSLAs:{},slasEliminados:{},customAreas:[],customAreaColors:{}};
   SLA_LOADED=false;SLA_OK=false;
+
+  // Clear localStorage
   try{localStorage.removeItem('talentys_db');}catch(e){}
-  saveDB();
-  fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).catch(function(){});
+
+  // Clear Firebase Firestore (linea envia)
+  if(_fbOK&&_db){
+    var ref=_db.collection('lineas').doc('envia');
+    ['areas','puestos','lideres','colabs','evalDesempeno'].forEach(function(col){
+      ref.collection(col).get().then(function(snap){
+        var b=_db.batch();
+        snap.docs.forEach(function(d){b.delete(d.ref);});
+        b.commit().catch(function(){});
+      }).catch(function(){});
+    });
+    ['kpis','nivelEsperado','perfKpis','perfData','perfAsist'].forEach(function(f){
+      _db.collection('lineas').doc('envia').collection('_meta').doc(f).delete().catch(function(){});
+    });
+    // Clear global
+    var gb=_db.batch();
+    gb.set(_db.collection('_global').doc('valores'),{v:[]});
+    gb.set(_db.collection('_global').doc('competencias'),{v:[]});
+    gb.set(_db.collection('_global').doc('usuarios'),{v:[]});
+    gb.commit().catch(function(){});
+  }
+
+  // Clear SLA Firebase
+  fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({periods:{},customSLAs:{},slasEliminados:{},customAreas:[],customAreaColors:{}})}).catch(function(){});
+
+  // Return to login
   currentUser=null;lineaActual=null;
   document.getElementById('login-screen').style.display='';
   document.getElementById('app-layout').style.display='none';
   var cv=document.getElementById('col-view');if(cv)cv.style.display='none';
-  toast('Todo borrado. Plataforma en blanco.');
+  toast('Todo borrado. Plataforma limpia.');
 }
+
 
 function cargarDatosDemo(){
   if(!confirm('Cargar datos de muestra? Esto sobreescribira los datos actuales.'))return;
@@ -2443,137 +2472,186 @@ function cargarDatosDemo(){
   ];
 
   GLOBAL.valores=[
-    {nombre:'Excelencia',       descripcion:'Buscar la calidad en cada accion'},
-    {nombre:'Integridad',       descripcion:'Actuar con honestidad y transparencia'},
-    {nombre:'Innovacion',       descripcion:'Proponer ideas y soluciones creativas'},
-    {nombre:'Colaboracion',     descripcion:'Trabajo en equipo y apoyo mutuo'},
+    {nombre:'Excelencia',        descripcion:'Buscar la calidad en cada accion'},
+    {nombre:'Integridad',        descripcion:'Actuar con honestidad y transparencia'},
+    {nombre:'Innovacion',        descripcion:'Proponer ideas y soluciones creativas'},
+    {nombre:'Colaboracion',      descripcion:'Trabajo en equipo y apoyo mutuo'},
     {nombre:'Enfoque al cliente',descripcion:'Cliente en el centro de cada decision'}
   ];
   GLOBAL.competencias=[
-    {nombre:'Comunicacion efectiva',descripcion:'Expresarse clara y asertivamente',  niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Liderazgo',            descripcion:'Guiar y motivar equipos',           niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Pensamiento analitico',descripcion:'Resolver problemas con datos',      niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Adaptabilidad',        descripcion:'Responder al cambio con agilidad',  niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Orientacion a resultados',descripcion:'Cumplir metas con eficiencia',  niveles:['Basico','Intermedio','Avanzado','Experto']}
+    {nombre:'Comunicacion efectiva',   descripcion:'Expresarse clara y asertivamente',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Liderazgo',               descripcion:'Guiar y motivar equipos',           niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Pensamiento analitico',   descripcion:'Resolver problemas con datos',      niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Adaptabilidad',           descripcion:'Responder al cambio con agilidad',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Orientacion a resultados',descripcion:'Cumplir metas con eficiencia',      niveles:['Basico','Intermedio','Avanzado','Experto']}
   ];
 
   DB.kpis={
-    0:[{nombre:'Tickets resueltos',   peso:40,meta:150,tipo:'mayor'},{nombre:'CSAT',                  peso:35,meta:90, tipo:'mayor'},{nombre:'Tiempo promedio',peso:25,meta:20,tipo:'menor'}],
-    1:[{nombre:'Precision reportes',  peso:45,meta:98, tipo:'mayor'},{nombre:'Entregas a tiempo',     peso:35,meta:95, tipo:'mayor'},{nombre:'Errores contables',peso:20,meta:0,tipo:'menor'}],
-    2:[{nombre:'Bugs cerrados',       peso:40,meta:80, tipo:'mayor'},{nombre:'Code review',           peso:30,meta:100,tipo:'mayor'},{nombre:'Incidencias prod.',peso:30,meta:0,tipo:'menor'}],
-    3:[{nombre:'Contrataciones tiempo',peso:50,meta:100,tipo:'mayor'},{nombre:'Satisfaccion candidatos',peso:30,meta:90,tipo:'mayor'},{nombre:'Rotacion 90 dias',peso:20,meta:5,tipo:'menor'}],
-    4:[{nombre:'SLAs cumplidos',      peso:50,meta:95, tipo:'mayor'},{nombre:'Escalaciones resueltas',peso:30,meta:80, tipo:'mayor'},{nombre:'Tickets pendientes',peso:20,meta:10,tipo:'menor'}],
-    5:[{nombre:'Deploy exitosos',     peso:40,meta:99, tipo:'mayor'},{nombre:'Uptime servicios',      peso:40,meta:99.5,tipo:'mayor'},{nombre:'Incidentes criticos',peso:20,meta:0,tipo:'menor'}],
-    6:[{nombre:'Cierre financiero',   peso:40,meta:100,tipo:'mayor'},{nombre:'Precision forecast',    peso:35,meta:95, tipo:'mayor'},{nombre:'Ajustes post-cierre',peso:25,meta:2,tipo:'menor'}],
-    7:[{nombre:'Campanas lanzadas',   peso:35,meta:8,  tipo:'mayor'},{nombre:'Leads generados',       peso:40,meta:500,tipo:'mayor'},{nombre:'Costo por lead',   peso:25,meta:50,tipo:'menor'}]
+    0:[{nombre:'Tickets resueltos',    peso:40,meta:150,  tipo:'mayor'},{nombre:'CSAT',                    peso:35,meta:90,  tipo:'mayor'},{nombre:'Tiempo promedio',    peso:25,meta:20,  tipo:'menor'}],
+    1:[{nombre:'Precision reportes',   peso:45,meta:98,   tipo:'mayor'},{nombre:'Entregas a tiempo',       peso:35,meta:95,  tipo:'mayor'},{nombre:'Errores contables',   peso:20,meta:0,   tipo:'menor'}],
+    2:[{nombre:'Bugs cerrados',        peso:40,meta:80,   tipo:'mayor'},{nombre:'Code review',             peso:30,meta:100, tipo:'mayor'},{nombre:'Incidencias prod.',    peso:30,meta:0,   tipo:'menor'}],
+    3:[{nombre:'Contrataciones tiempo',peso:50,meta:100,  tipo:'mayor'},{nombre:'Satisfaccion candidatos', peso:30,meta:90,  tipo:'mayor'},{nombre:'Rotacion 90 dias',     peso:20,meta:5,   tipo:'menor'}],
+    4:[{nombre:'SLAs cumplidos',       peso:50,meta:95,   tipo:'mayor'},{nombre:'Escalaciones resueltas',  peso:30,meta:80,  tipo:'mayor'},{nombre:'Tickets pendientes',    peso:20,meta:10,  tipo:'menor'}],
+    5:[{nombre:'Deploy exitosos',      peso:40,meta:99,   tipo:'mayor'},{nombre:'Uptime servicios',        peso:40,meta:99.5,tipo:'mayor'},{nombre:'Incidentes criticos',   peso:20,meta:0,   tipo:'menor'}],
+    6:[{nombre:'Cierre financiero',    peso:40,meta:100,  tipo:'mayor'},{nombre:'Precision forecast',      peso:35,meta:95,  tipo:'mayor'},{nombre:'Ajustes post-cierre',   peso:25,meta:2,   tipo:'menor'}],
+    7:[{nombre:'Campanas lanzadas',    peso:35,meta:8,    tipo:'mayor'},{nombre:'Leads generados',         peso:40,meta:500, tipo:'mayor'},{nombre:'Costo por lead',        peso:25,meta:50,  tipo:'menor'}]
   };
   DB.nivelEsperado={0:3,1:3,2:3,3:2,4:3,5:4,6:3,7:3};
 
   DB.perfKpis={
-    0:[{nombre:'Tickets resueltos',  desc:'Tickets cerrados en el mes',          meta:150,  unidad:'tickets',semVerde:90,semAmarillo:75}],
-    1:[{nombre:'Precision reportes', desc:'% reportes sin errores',              meta:98,   unidad:'%',      semVerde:95,semAmarillo:85}],
-    2:[{nombre:'Bugs cerrados',      desc:'Issues resueltos en el sprint',       meta:80,   unidad:'bugs',   semVerde:90,semAmarillo:75}],
-    3:[{nombre:'Contrataciones',     desc:'% posiciones cubiertas a tiempo',     meta:100,  unidad:'%',      semVerde:90,semAmarillo:75}],
-    4:[{nombre:'SLAs cumplidos',     desc:'% SLAs dentro del tiempo acordado',   meta:95,   unidad:'%',      semVerde:95,semAmarillo:80}],
-    5:[{nombre:'Uptime',             desc:'% disponibilidad servicios',           meta:99.5, unidad:'%',      semVerde:99,semAmarillo:95}],
-    6:[{nombre:'Cierre financiero',  desc:'% entregas de cierre a tiempo',       meta:100,  unidad:'%',      semVerde:95,semAmarillo:85}],
-    7:[{nombre:'Leads generados',    desc:'Leads calificados del mes',            meta:500,  unidad:'leads',  semVerde:80,semAmarillo:60}]
+    0:[{nombre:'Tickets resueltos', desc:'Tickets cerrados en el mes',        meta:150,  unidad:'tickets',semVerde:90,semAmarillo:75}],
+    1:[{nombre:'Precision reportes',desc:'% reportes sin errores',            meta:98,   unidad:'%',      semVerde:95,semAmarillo:85}],
+    2:[{nombre:'Bugs cerrados',     desc:'Issues resueltos en el sprint',     meta:80,   unidad:'bugs',   semVerde:90,semAmarillo:75}],
+    3:[{nombre:'Contrataciones',    desc:'% posiciones cubiertas a tiempo',   meta:100,  unidad:'%',      semVerde:90,semAmarillo:75}],
+    4:[{nombre:'SLAs cumplidos',    desc:'% SLAs dentro del tiempo acordado', meta:95,   unidad:'%',      semVerde:95,semAmarillo:80}],
+    5:[{nombre:'Uptime',            desc:'% disponibilidad servicios',         meta:99.5, unidad:'%',      semVerde:99,semAmarillo:95}],
+    6:[{nombre:'Cierre financiero', desc:'% entregas de cierre a tiempo',     meta:100,  unidad:'%',      semVerde:95,semAmarillo:85}],
+    7:[{nombre:'Leads generados',   desc:'Leads calificados del mes',          meta:500,  unidad:'leads',  semVerde:80,semAmarillo:60}]
   };
 
   var meses=['Enero','Febrero','Marzo'];
-  var reales=[
-    [162,148,155],[99,97,98],[88,76,83],[95,100,92],[97,93,96],[99.8,99.5,99.7],[100,98,100],[520,480,510]
-  ];
-  var punt=[[0.93,0.90,0.92],[0.94,0.91,0.93],[0.88,0.85,0.87],[0.91,0.93,0.89],[0.94,0.91,0.93],[0.96,0.95,0.96],[0.93,0.91,0.94],[0.88,0.85,0.87]];
-  var asis=[[0.96,0.94,0.97],[0.97,0.95,0.96],[0.92,0.90,0.93],[0.94,0.96,0.92],[0.98,0.95,0.97],[0.97,0.97,0.98],[0.95,0.94,0.96],[0.91,0.90,0.92]];
+  var reales=   [162,148,155,  99,97,98,  88,76,83,  95,100,92,  97,93,96,  99.8,99.5,99.7,  100,98,100,  520,480,510];
+  var punt=     [0.93,0.90,0.92,0.94,0.91,0.93,0.88,0.85,0.87,0.91,0.93,0.89,0.94,0.91,0.93,0.96,0.95,0.96,0.93,0.91,0.94,0.88,0.85,0.87];
+  var asis=     [0.96,0.94,0.97,0.97,0.95,0.96,0.92,0.90,0.93,0.94,0.96,0.92,0.98,0.95,0.97,0.97,0.97,0.98,0.95,0.94,0.96,0.91,0.90,0.92];
   DB.perfData={};DB.perfAsist={};
   for(var ci=0;ci<8;ci++){
     DB.perfData[ci]={'2026':{}};DB.perfAsist[ci]={'2026':{}};
     for(var mi=0;mi<3;mi++){
-      var m2=meses[mi];
-      DB.perfData[ci]['2026'][m2]={0:{real:reales[ci][mi],obs:'OK'}};
-      DB.perfAsist[ci]['2026'][m2]={puntualidad:punt[ci][mi],asistencia:asis[ci][mi]};
+      var mes=meses[mi];
+      DB.perfData[ci]['2026'][mes]={0:{real:reales[ci*3+mi],obs:'OK'}};
+      DB.perfAsist[ci]['2026'][mes]={puntualidad:punt[ci*3+mi],asistencia:asis[ci*3+mi]};
     }
   }
 
   DB.evalDesempeno=[
-    {ci:0,periodo:'Q1-2026',status:'completada',  valorScores:{0:4,1:3,2:4,3:5,4:4},compScores:{0:3,1:2,2:4,3:4,4:3},kpiScores:{},comentarios:'Excelente atencion al cliente.',liderComent:'Marco muestra gran compromiso.',fechaFin:'2026-03-31'},
-    {ci:1,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:5,2:3,3:4,4:4},compScores:{0:4,1:2,2:5,3:3,4:5},kpiScores:{},comentarios:'Alta precision en reportes.',   liderComent:'Sofia es muy meticulosa.',    fechaFin:'2026-03-31'},
-    {ci:4,periodo:'Q1-2026',status:'en_progreso', valorScores:{0:3,1:4,2:3,3:5,4:3},compScores:{0:4,1:3,2:3,3:4,4:3},kpiScores:{},comentarios:'',                             liderComent:'',                            fechaFin:''},
-    {ci:5,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:4,2:5,3:4,4:5},compScores:{0:4,1:5,2:5,3:4,4:5},kpiScores:{},comentarios:'Lidera con excelencia.',       liderComent:'Laura es referente del equipo.',fechaFin:'2026-03-31'}
+    {ci:0,periodo:'Q1-2026',status:'completada',  valorScores:{0:4,1:3,2:4,3:5,4:4},compScores:{0:3,1:2,2:4,3:4,4:3},kpiScores:{},comentarios:'Excelente atencion al cliente.',    liderComent:'Marco muestra gran compromiso.',    fechaFin:'2026-03-31'},
+    {ci:1,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:5,2:3,3:4,4:4},compScores:{0:4,1:2,2:5,3:3,4:5},kpiScores:{},comentarios:'Alta precision en reportes.',       liderComent:'Sofia es muy meticulosa.',          fechaFin:'2026-03-31'},
+    {ci:4,periodo:'Q1-2026',status:'en_progreso', valorScores:{0:3,1:4,2:3,3:5,4:3},compScores:{0:4,1:3,2:3,3:4,4:3},kpiScores:{},comentarios:'',                                 liderComent:'',                                  fechaFin:''},
+    {ci:5,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:4,2:5,3:4,4:5},compScores:{0:4,1:5,2:5,3:4,4:5},kpiScores:{},comentarios:'Lidera con excelencia tecnica.',   liderComent:'Laura es referente del equipo.',    fechaFin:'2026-03-31'}
   ];
 
   DB.fbComments={
     0:[
-      {autor:'Carlos Perez',rol:'Lider',      msg:'Marco, excelente manejo de tickets de alta prioridad.',             fecha:'2026-03-10',tipo:'positivo'},
-      {autor:'Marco Ruiz',  rol:'Colaborador',msg:'Gracias. Podriamos mejorar el proceso de escalacion.',             fecha:'2026-03-11',tipo:'sugerencia'}
+      {autor:'Carlos Perez',rol:'Lider',      msg:'Marco, excelente manejo de tickets de alta prioridad este mes.',fecha:'2026-03-10',tipo:'positivo'},
+      {autor:'Marco Ruiz',  rol:'Colaborador',msg:'Gracias. Podriamos mejorar el proceso de escalacion.',         fecha:'2026-03-11',tipo:'sugerencia'}
     ],
-    1:[{autor:'Maria Garcia',rol:'Lider',      msg:'Sofia, el cierre de febrero fue impecable.',                       fecha:'2026-03-05',tipo:'positivo'}],
+    1:[{autor:'Maria Garcia',rol:'Lider',msg:'Sofia, el cierre de febrero fue impecable. Muy buen trabajo.',fecha:'2026-03-05',tipo:'positivo'}],
     5:[
-      {autor:'Luis Torres', rol:'Lider',       msg:'Laura, el deployment del viernes fue un exito. Gracias.',          fecha:'2026-03-15',tipo:'positivo'},
-      {autor:'Laura Soto',  rol:'Colaborador', msg:'Faltaria documentar mejor los rollback procedures.',               fecha:'2026-03-16',tipo:'sugerencia'}
+      {autor:'Luis Torres',rol:'Lider',       msg:'Laura, el deployment del viernes fue un exito total.',          fecha:'2026-03-15',tipo:'positivo'},
+      {autor:'Laura Soto', rol:'Colaborador', msg:'Faltaria documentar mejor los rollback procedures.',            fecha:'2026-03-16',tipo:'sugerencia'}
     ]
   };
 
+  DB.semData={};
+  DB.notas={};
+
   // SLA demo data
   slaApply();
-  var slaMar='2026_Marzo', slaFeb='2026_Febrero';
-  SLA_DB.periods={};
   var slaCfgMar={
-    'Finanzas':        {st:'aprobado', by:'Maria Garcia',      pct:[95,88,100,92,97,85,91,100,96,100,88,93,90]},
-    'Operaciones':     {st:'aprobado', by:'Carlos Perez',      pct:[100,98,94,96,98,95]},
-    'IT':              {st:'enviado',  by:'Luis Torres',        pct:[99.8,100,85,92,0,88]},
-    'LTL':             {st:'pendiente',by:'',                  pct:[]},
-    'Marketing':       {st:'aprobado', by:'Sofia Mendez',      pct:[90,95,88,92,85]},
-    'Recursos Humanos':{st:'rechazado',by:'Ana Ramirez',       pct:[100,95,90,85,88,92,100],cmt:'Faltan datos de reclutamiento Q1.'},
-    'Legal':           {st:'pendiente',by:'',                  pct:[]},
-    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez',   pct:[100,99.5,95,99.8,100,88,97]},
-    'Strategy BI':     {st:'enviado',  by:'Osvaldo Melendez',  pct:[92,88,85,90]},
-    'FTL':             {st:'pendiente',by:'',                  pct:[]},
-    'Growth':          {st:'aprobado', by:'Director Growth',   pct:[100,100,95,92,100]}
+    'Finanzas':        {st:'aprobado', by:'Maria Garcia',    pct:[95,88,100,92,97,85,91,100,96,100,88,93,90]},
+    'Operaciones':     {st:'aprobado', by:'Carlos Perez',    pct:[100,98,94,96,98,95]},
+    'IT':              {st:'enviado',  by:'Luis Torres',      pct:[99.8,100,85,92,0,88]},
+    'LTL':             {st:'pendiente',by:'',                pct:[]},
+    'Marketing':       {st:'aprobado', by:'Sofia Mendez',    pct:[90,95,88,92,85]},
+    'Recursos Humanos':{st:'rechazado',by:'Ana Ramirez',     pct:[100,95,90,85,88,92,100],cmt:'Faltan datos de reclutamiento Q1.'},
+    'Legal':           {st:'pendiente',by:'',                pct:[]},
+    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez', pct:[100,99.5,95,99.8,100,88,97]},
+    'Strategy BI':     {st:'enviado',  by:'Osvaldo Melendez',pct:[92,88,85,90]},
+    'FTL':             {st:'pendiente',by:'',                pct:[]},
+    'Growth':          {st:'aprobado', by:'Director Growth', pct:[100,100,95,92,100]}
   };
   var slaCfgFeb={
-    'Finanzas':        {st:'aprobado', by:'Maria Garcia',      pct:[92,85,98,88,94,82,89,100,93,98,85,90,87]},
-    'Operaciones':     {st:'aprobado', by:'Carlos Perez',      pct:[98,95,91,94,96,92]},
-    'IT':              {st:'aprobado', by:'Luis Torres',        pct:[99.5,100,82,90,0,85]},
-    'LTL':             {st:'aprobado', by:'Ivan Gallegos',     pct:[88,90,85,87,82,80,91]},
-    'Marketing':       {st:'aprobado', by:'Sofia Mendez',      pct:[87,92,85,90,82]},
-    'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',       pct:[98,92,88,83,85,90,98]},
-    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez',   pct:[100,99,92,99.5,98,85,95]},
-    'Growth':          {st:'aprobado', by:'Director Growth',   pct:[98,100,93,90,98]}
+    'Finanzas':        {st:'aprobado', by:'Maria Garcia',    pct:[92,85,98,88,94,82,89,100,93,98,85,90,87]},
+    'Operaciones':     {st:'aprobado', by:'Carlos Perez',    pct:[98,95,91,94,96,92]},
+    'IT':              {st:'aprobado', by:'Luis Torres',      pct:[99.5,100,82,90,0,85]},
+    'LTL':             {st:'aprobado', by:'Ivan Gallegos',   pct:[88,90,85,87,82,80,91]},
+    'Marketing':       {st:'aprobado', by:'Sofia Mendez',    pct:[87,92,85,90,82]},
+    'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',     pct:[98,92,88,83,85,90,98]},
+    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez', pct:[100,99,92,99.5,98,85,95]},
+    'Growth':          {st:'aprobado', by:'Director Growth', pct:[98,100,93,90,98]}
   };
-  function mkSLAPeriod(cfg){
+  var slaCfgEne={
+    'Finanzas':        {st:'aprobado', by:'Maria Garcia',    pct:[90,82,95,86,92,80,87,98,91,96,83,88,85]},
+    'Operaciones':     {st:'aprobado', by:'Carlos Perez',    pct:[96,92,88,91,94,90]},
+    'IT':              {st:'aprobado', by:'Luis Torres',      pct:[99.2,100,80,88,0,83]},
+    'Marketing':       {st:'aprobado', by:'Sofia Mendez',    pct:[85,90,82,88,80]},
+    'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',     pct:[96,90,86,81,83,88,95]},
+    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez', pct:[98,97,90,98,96,83,93]},
+    'Growth':          {st:'aprobado', by:'Director Growth', pct:[96,98,91,88,96]}
+  };
+  function mkSLAPer(cfg){
     var per={areas:{}};
     SLA_AREAS.forEach(function(area){
       var c=cfg[area]||{st:'pendiente',by:'',pct:[]};
       var procs=slaMkP(area);var ps=c.pct||[];
-      procs.forEach(function(p,i){p.c=ps[i]!==undefined&&ps[i]!==''?String(ps[i]):'';p.v=p.c?'Cumplido':'';p.n=p.c&&parseFloat(p.c)>0?String(Math.floor(parseFloat(p.c)/100*50+5)):'';});
-      per.areas[area]={st:c.st||'pendiente',by:c.by||'',at:c.st==='aprobado'||c.st==='enviado'?new Date().toISOString():null,cmt:c.cmt||'',notes:'',logs:[],procs:procs};
+      procs.forEach(function(p,i){
+        var v=ps[i];
+        p.c=(v!==undefined&&v!=='')?String(v):'';
+        p.v=p.c?'Cumplido':'';
+        p.n=p.c&&parseFloat(p.c)>0?String(Math.floor(parseFloat(p.c)/10)):'';
+      });
+      per.areas[area]={
+        st:c.st||'pendiente',by:c.by||'',
+        at:(c.st==='aprobado'||c.st==='enviado')?new Date().toISOString():null,
+        cmt:c.cmt||'',notes:'',logs:[],procs:procs
+      };
     });
     return per;
   }
-  SLA_DB.periods[slaMar]=mkSLAPeriod(slaCfgMar);
-  SLA_DB.periods[slaFeb]=mkSLAPeriod(slaCfgFeb);
+  SLA_DB={periods:{},customSLAs:{},slasEliminados:{},customAreas:[],customAreaColors:{}};
+  SLA_DB.periods['2026_Enero'] =mkSLAPer(slaCfgEne);
+  SLA_DB.periods['2026_Febrero']=mkSLAPer(slaCfgFeb);
+  SLA_DB.periods['2026_Marzo'] =mkSLAPer(slaCfgMar);
+  SLA_OK=true;SLA_LOADED=true;
 
-  saveDB();
-  SLA_OK=true;
-  fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).then(function(){}).catch(function(){});
+  // Save to localStorage immediately
+  try{localStorage.setItem('talentys_db',JSON.stringify({DB:DB,GLOBAL:GLOBAL,linea:'envia'}));}catch(e){}
 
+  // Save to Firebase if connected - use batch write directly
+  function guardarEnFirebase(){
+    if(!_fbOK||!_db)return;
+    var ref=_db.collection('lineas').doc('envia');
+    var b=_db.batch();
+    // Clear + rewrite collections
+    ['areas','puestos','lideres','colabs','evalDesempeno'].forEach(function(col){
+      (DB[col]||[]).forEach(function(item,i){
+        var id='demo_'+col+'_'+i;
+        var d={};Object.keys(item).forEach(function(k){if(k!=='_id')d[k]=item[k];});
+        b.set(ref.collection(col).doc(id),d);
+      });
+    });
+    ['kpis','nivelEsperado','perfKpis','perfData','perfAsist'].forEach(function(f){
+      b.set(ref.collection('_meta').doc(f),{v:DB[f]||{}});
+    });
+    b.commit().then(function(){_fbStatus('Demo guardado','var(--grn)');}).catch(function(e){console.warn(e);});
+    // Save global
+    var gb=_db.batch();
+    gb.set(_db.collection('_global').doc('valores'),{v:GLOBAL.valores});
+    gb.set(_db.collection('_global').doc('competencias'),{v:GLOBAL.competencias});
+    gb.commit().catch(function(e){console.warn(e);});
+    // Save SLA
+    fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).catch(function(){});
+  }
+  guardarEnFirebase();
+
+  // Login as admin and render
   buildUsersFromDB();
   var adminU=_allUsers.find(function(x){return x.user==='admin';});
   if(adminU){
     currentUser=adminU;
     document.getElementById('usr-av').textContent='AD';
     document.getElementById('usr-name').textContent='Administrador';
-    document.getElementById('usr-role').textContent='Administrador';
+    document.getElementById('usr-role').textContent='Administrador - envia.com';
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app-layout').style.display='';
     var cv=document.getElementById('col-view');if(cv)cv.style.display='none';
+    updateLineaBadge();
     renderAll();
     nav('dash');
   }
   toast('Datos demo cargados. 8 colabs, 4 lideres, KPIs, SLAs Ene-Mar 2026.');
 }
+
 
 function renderDemoReset(){
   var el=document.getElementById('pg-admin-demobtn');
