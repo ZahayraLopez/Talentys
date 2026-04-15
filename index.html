@@ -126,6 +126,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
     <div class="fg"><label class="fl">Contrasena</label><input type="password" class="fc" id="login-pass" placeholder="contrasena" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div id="login-err" style="display:none;background:var(--red-l);color:var(--red);padding:8px 12px;border-radius:6px;font-size:12px;margin-bottom:10px">Usuario o contrasena incorrectos.</div>
     <button class="btn btn-or" style="width:100%;justify-content:center;padding:10px" onclick="doLogin()">Iniciar sesion</button>
+    <div style="margin-top:10px;text-align:center"><button onclick="cargarDatosDemo()" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--hnt);text-decoration:underline">Entrar con datos demo</button></div>
   </div>
 </div>
 
@@ -164,6 +165,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
         <div class="sbi" onclick="nav('p90')" data-page="p90"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5V8.5L10.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Primeros 90 dias</div>
         <div class="sbi" onclick="nav('cambio')" data-page="cambio"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M2 8H14M14 8L10 4M14 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cambio de puesto</div>
         <div class="sbi" onclick="nav('carrera')" data-page="carrera"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M2 13L6 9L9 11L14 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Plan de carrera</div>
+        <div class="sbi" onclick="nav('performance')" data-page="performance"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M2 13L5 8L8 10L11 5L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 3v4M14 3h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Performance</div>
         <div class="sbi" onclick="nav('desempeno')" data-page="desempeno"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M2 12L5 7L8 9L12 4L14 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="3" r="1.5" fill="currentColor"/></svg>Eval. Desempeno</div>
       </div>
       <div class="sb-sec">
@@ -174,6 +176,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       </div>
       <div class="sb-sec">
         <div class="sb-lbl">Sistema</div>
+        <div class="sbi" onclick="nav('sla')" data-page="sla"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><rect x="0" y="1" width="14" height="2" rx="1" fill="currentColor" opacity=".5"/><rect x="0" y="5.5" width="9" height="2" rx="1" fill="currentColor" opacity=".7"/><rect x="0" y="10" width="11" height="2" rx="1" fill="currentColor"/></svg>SLAs</div>
         <div class="sbi" onclick="nav('admin')" data-page="admin"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Administracion</div>
         <div class="sbi" onclick="nav('lineas')" data-page="lineas" id="sb-lineas" style="display:none"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>Lineas de negocio</div>
       </div>
@@ -429,12 +432,13 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
         <div class="fg"><label class="fl">Dias de alerta (primeros 90)</label><input type="number" class="fc" id="cfg-alerta" value="7"></div>
         <button class="btn btn-or" onclick="saveConfig()">Guardar configuracion</button>
         <div class="div"></div>
-        <div class="ctitle mb8">Datos de demostracion</div>
-        <div class="th tsm mb10">Carga colaboradores, lideres, areas, KPIs y evaluaciones de ejemplo para explorar la plataforma.</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-bl" onclick="cargarDatosDemo()">Cargar datos demo</button>
-          <button class="btn btn-gh" style="color:var(--red);border-color:var(--red)" onclick="resetTodo()">Reset total</button>
+        <div class="ctitle mb8">Datos demo</div>
+        <p class="th tsm mb10">Carga datos de muestra para explorar todas las funciones, o borra todo para empezar desde cero.</p>
+        <div id="pg-admin-demobtn2" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="cargarDatosDemo()" class="btn btn-bl">Cargar datos demo</button>
+          <button onclick="resetTodo()" style="padding:9px 18px;border-radius:8px;border:1px solid var(--red);background:var(--red-l);color:var(--red);cursor:pointer;font-weight:600;font-size:13px">Borrar todo</button>
         </div>
+
         <div class="div"></div>
         <div class="ctitle mb8">Estado Firebase</div>
         <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--s2);border-radius:8px;margin-bottom:14px">
@@ -594,21 +598,283 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
   </div>
 </div>
 
+<div id="pg-sla" class="pg">
+  <div class="ai">
+    <div class="ai-h"><span class="ai-b">SLA</span><span class="ai-t">SLAs Tendencys 2026</span></div>
+    <div class="ai-d">Cumplimiento mensual de SLAs por area. Admin/HRBP: revisar y aprobar. Lideres: capturar su area.</div>
+  </div>
+  <div id="sla-content"><div style="padding:40px;text-align:center;color:var(--hnt)">Cargando...</div></div>
+</div>
+
 <div id="toast"></div>
+
+<div id="pg-performance" class="pg">
+  <div class="tabs">
+    <div class="tab on" onclick="stab(this,'tperf-seguimiento')">Seguimiento mensual</div>
+    <div class="tab" onclick="stab(this,'tperf-historico');renderPerfHistorico()">Historico anual</div>
+  </div>
+  <div id="tperf-seguimiento" class="tc on">
+    <div class="ai"><div class="ai-h"><span class="ai-b">70/30</span><span class="ai-t">Performance mensual: KPIs 70% + Puntualidad 15% + Asistencia 15%</span></div>
+    <div class="ai-d">Registra el valor real de cada KPI mensualmente. El resultado final combina KPIs (70%) con puntualidad y asistencia (30%). Lideres, HRBP y Admin pueden capturar datos.</div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end">
+      <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador</label>
+        <select class="fc" id="perf-colab-sel" onchange="renderPerfTabla()"><option value="">-- Todos --</option></select>
+      </div>
+      <div class="fg" style="margin:0"><label class="fl">Mes</label>
+        <select class="fc" id="perf-mes-sel" onchange="renderPerfTabla()">
+          <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+          <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+          <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+      </div>
+      <div class="fg" style="margin:0"><label class="fl">Ano</label>
+        <select class="fc" id="perf-ano-sel" onchange="renderPerfTabla()"></select>
+      </div>
+      <button class="btn btn-gh btn-sm" onclick="renderPerfTabla()">Actualizar</button>
+    </div>
+    <div id="perf-tabla-wrap"><div class="th tsm" style="padding:32px;text-align:center">Cargando...</div></div>
+  </div>
+  <div id="tperf-historico" class="tc">
+    <div class="ai"><div class="ai-h"><span class="ai-b">HIST</span><span class="ai-t">Historico anual - Score 70/30 por mes</span></div>
+    <div class="ai-d">Vista de los 12 meses del ano. La fila final muestra el score 70/30 mensual y el promedio anual.</div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end">
+      <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador *</label>
+        <select class="fc" id="perf-hist-colab" onchange="renderPerfHistorico()"><option value="">-- Seleccionar --</option></select>
+      </div>
+      <div class="fg" style="margin:0"><label class="fl">Ano</label>
+        <select class="fc" id="perf-hist-ano" onchange="renderPerfHistorico()"></select>
+      </div>
+    </div>
+    <div id="perf-historico-wrap"><div class="th tsm" style="padding:32px;text-align:center">Selecciona un colaborador.</div></div>
+  </div>
+</div>
+<div id="m-perf-kpi" class="modal">
+  <div class="modal-box" style="width:640px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div id="perf-kpi-modal-title" style="font-size:16px;font-weight:700">Configurar KPIs</div>
+      <button onclick="closeM('m-perf-kpi');renderPerfTabla()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--hnt)">x</button>
+    </div>
+    <div class="g2" style="margin-bottom:14px">
+      <div>
+        <div class="ctitle mb10">Agregar KPI</div>
+        <div class="fg"><label class="fl">Nombre del KPI *</label><input type="text" class="fc" id="pk-nombre" placeholder="Ej. Prospectos efectivos"></div>
+        <div class="fg"><label class="fl">Descripcion</label><input type="text" class="fc" id="pk-desc" placeholder="Descripcion del objetivo..."></div>
+        <div class="g2" style="gap:8px">
+          <div class="fg" style="margin:0"><label class="fl">Meta *</label><input type="number" class="fc" id="pk-meta" placeholder="10" step="0.01" min="0"></div>
+          <div class="fg" style="margin:0"><label class="fl">Unidad</label><input type="text" class="fc" id="pk-unidad" placeholder="visitas, MXN, %"></div>
+        </div>
+        <div class="ctitle mt10 mb6">Semaforo (% de cumplimiento)</div>
+        <div class="g2" style="gap:8px">
+          <div class="fg" style="margin:0"><label class="fl" style="color:var(--grn)">Verde &gt;= (%)</label>
+            <input type="number" class="fc" id="pk-verde" value="80" min="1" max="100">
+          </div>
+          <div class="fg" style="margin:0"><label class="fl" style="color:var(--amb)">Amarillo &gt;= (%)</label>
+            <input type="number" class="fc" id="pk-amarillo" value="60" min="1" max="99">
+          </div>
+        </div>
+        <div class="th tsm mb10" style="color:var(--red)">Rojo = debajo del umbral amarillo</div>
+        <button class="btn btn-or" onclick="addPerfKpi()" style="width:100%;justify-content:center">+ Agregar KPI</button>
+      </div>
+      <div>
+        <div class="ctitle mb10">KPIs configurados</div>
+        <div id="perf-kpi-list"><div class="th tsm" style="padding:12px;text-align:center">Sin KPIs.</div></div>
+      </div>
+    </div>
+    <div style="text-align:right"><button class="btn btn-bl" onclick="closeM('m-perf-kpi');renderPerfTabla()">Listo</button></div>
+  </div>
+</div>
 <script>
+function _hashPass(p){var s='talentys_t_2026';var str=s+p+s;var h=0;for(var i=0;i<str.length;i++){var c=str.charCodeAt(i);h=((h<<5)-h)+c;h=h&h;}var hex='';var v=Math.abs(h);for(var j=0;j<8;j++){hex='0123456789abcdef'[v&15]+hex;v=v>>>4;}return 'h_'+hex+'_'+str.length;}
+function _checkPass(inp,stored){if(stored&&stored.startsWith('h_'))return _hashPass(inp)===stored;return inp===stored;}
+function _esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+var _loginAttempts=0,_loginLocked=false,_loginLockTime=0;
+var _lastActivity=Date.now(),_SESSION_MS=30*60*1000;
+function _resetActivity(){_lastActivity=Date.now();}
+function _checkSession(){if(!currentUser)return;if(Date.now()-_lastActivity>_SESSION_MS){toast('Sesion expirada.');doLogout();}}
+setInterval(_checkSession,60000);
+['click','keydown','mousemove'].forEach(function(ev){document.addEventListener(ev,_resetActivity,{passive:true});});
+
+
+var MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var MESES_FULL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var _perfEditIdx=null;
+
+function _getPerfData(ci,ano,mes,ki){var d=DB.perfData||{};if(!d[ci]||!d[ci][ano]||!d[ci][ano][mes]||d[ci][ano][mes][ki]===undefined)return null;return d[ci][ano][mes][ki];}
+function _calcPerfPromedio(ci,ano,mes){var k=DB.perfKpis[ci]||[];if(!k.length)return null;var t=0,c=0;k.forEach(function(kpi,ki){var d=_getPerfData(ci,ano,mes,ki);if(d&&d.real!==null&&kpi.meta>0){t+=Math.min(d.real/kpi.meta*100,999);c++;}});return c>0?t/c:null;}
+function _getPerfAsist(ci,ano,mes){var d=DB.perfAsist||{};if(!d[ci]||!d[ci][ano]||!d[ci][ano][mes])return null;return d[ci][ano][mes];}
+function _initPerfAsist(ci,ano,mes){if(!DB.perfAsist)DB.perfAsist={};if(!DB.perfAsist[ci])DB.perfAsist[ci]={};if(!DB.perfAsist[ci][ano])DB.perfAsist[ci][ano]={};if(!DB.perfAsist[ci][ano][mes])DB.perfAsist[ci][ano][mes]={puntualidad:null,asistencia:null,obs:''};}
+function _setPerfPunt(ci,ano,mes,val){_initPerfAsist(ci,ano,mes);DB.perfAsist[ci][ano][mes].puntualidad=val;saveDB();}
+function _setPerfAsist(ci,ano,mes,val){_initPerfAsist(ci,ano,mes);DB.perfAsist[ci][ano][mes].asistencia=val;saveDB();}
+function _setPerfAsistObs(ci,ano,mes,val){_initPerfAsist(ci,ano,mes);DB.perfAsist[ci][ano][mes].obs=val;saveDB();}
+function _calcPerf7030(ci,ano,mes){var p=_calcPerfPromedio(ci,ano,mes);var ad=_getPerfAsist(ci,ano,mes);var pu=ad?ad.puntualidad:null;var as=ad?ad.asistencia:null;if(p===null&&pu===null&&as===null)return null;return (p||0)*0.7+(pu||0)*0.15+(as||0)*0.15;}
+function _getSemaforo(pct,kpi){var v=kpi?(kpi.semVerde||80):80;var a=kpi?(kpi.semAmarillo||60):60;if(pct>=v)return{icon:'[V]',color:'var(--grn)',label:'Cumplido'};if(pct>=a)return{icon:'[A]',color:'var(--amb)',label:'En progreso'};return{icon:'[R]',color:'var(--red)',label:'Atencion'};}
+function updatePerfSlider(type,ci,ano,mes,val){var nv=parseFloat(val);var el=document.getElementById((type==='punt'?'pp_':'pa_')+ci+'_'+mes);if(el)el.textContent=Math.round(nv)+'%';if(type==='punt')_setPerfPunt(ci,ano,mes,nv);else _setPerfAsist(ci,ano,mes,nv);}
+
+function renderPerformance(){
+  ['perf-colab-sel','perf-hist-colab'].forEach(function(sid){
+    var s=document.getElementById(sid);if(!s)return;
+    var cur=s.value;
+    s.innerHTML=(sid==='perf-colab-sel'?'<option value="">-- Todos --</option>':'<option value="">-- Seleccionar --</option>')
+      +(DB.colabs||[]).map(function(c,i){return '<option value="'+i+'">'+_esc(c.nombre)+'</option>';}).join('');
+    s.value=cur;
+  });
+  ['perf-ano-sel','perf-hist-ano'].forEach(function(sid){
+    var s=document.getElementById(sid);if(!s||s.options.length>0)return;
+    var y=new Date().getFullYear(),opts='';
+    for(var i=y-1;i<=y+1;i++)opts+='<option value="'+i+'"'+(i===y?' selected':'')+'>'+i+'</option>';
+    s.innerHTML=opts;
+  });
+  var ms=document.getElementById('perf-mes-sel');
+  if(ms&&!ms.value)ms.value=String(new Date().getMonth()+1);
+  renderPerfTabla();
+}
+
+function renderPerfTabla(){
+  var container=document.getElementById('perf-tabla-wrap');if(!container)return;
+  var colabIdx=document.getElementById('perf-colab-sel')?document.getElementById('perf-colab-sel').value:'';
+  var mesNum=document.getElementById('perf-mes-sel')?parseInt(document.getElementById('perf-mes-sel').value)||1:new Date().getMonth()+1;
+  var ano=document.getElementById('perf-ano-sel')?(document.getElementById('perf-ano-sel').value||String(new Date().getFullYear())):String(new Date().getFullYear());
+  var canEdit=isAdmin()||isLider();
+  var cols=colabIdx!==''?[{c:DB.colabs[parseInt(colabIdx)],idx:parseInt(colabIdx)}]:
+    (DB.colabs||[]).map(function(c,i){return{c:c,idx:i};}).filter(function(x){return!isLider()||!currentUser||x.c.lider===currentUser.nombre;});
+  if(!cols.length){container.innerHTML='<div class="th tsm" style="padding:32px;text-align:center">No hay colaboradores.</div>';return;}
+  var h2='';
+  cols.forEach(function(item){
+    var c=item.c,ci=item.idx;
+    var kpis=DB.perfKpis[ci]||[];
+    var s7030=_calcPerf7030(ci,ano,mesNum);
+    var prom=_calcPerfPromedio(ci,ano,mesNum);
+    var disp=s7030!==null?s7030:prom;
+    var semB=disp!==null?_getSemaforo(disp,null):null;
+    h2+='<div class="card mb14">';
+    h2+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">';
+    h2+='<div class="av av-bl">'+_esc(c.initials)+'</div>';
+    h2+='<div class="f1"><div class="fw6" style="font-size:15px">'+_esc(c.nombre)+'</div>';
+    h2+='<div class="th tsm">'+(c.puesto||'-')+' - '+(c.area||'-')+'</div></div>';
+    h2+='<div style="text-align:right"><div class="fw6 tsm">'+MESES_FULL[mesNum-1]+' '+ano+'</div>';
+    if(semB){h2+='<div style="font-size:28px;font-weight:700;color:'+semB.color+'">'+disp.toFixed(1)+'</div>';h2+='<div style="font-size:10px;color:var(--hnt)">'+(s7030!==null?'pts 70/30':'% KPIs')+'</div>';}
+    h2+='</div></div>';
+    if(!kpis.length){
+      h2+='<div class="th tsm" style="padding:12px;background:var(--s2);border-radius:8px;text-align:center">Sin KPIs configurados.'+(canEdit?' Usa Configurar KPIs.':'')+'</div>';
+    } else {
+      h2+='<div class="fw6 tsm mb8" style="color:var(--mut)">KPIs - 70% del resultado</div>';
+      h2+='<div style="overflow-x:auto"><table class="tbl"><thead><tr>';
+      h2+='<th style="min-width:180px">KPI</th><th style="text-align:center">Meta</th>';
+      h2+='<th style="text-align:center">Real</th><th style="text-align:center">% Cumpl.</th>';
+      h2+='<th style="text-align:center">Semaforo</th><th style="min-width:140px">Observaciones</th>';
+      h2+='</tr></thead><tbody>';
+      var totalPct=0,countKpis=0;
+      kpis.forEach(function(kpi,ki){
+        var data=_getPerfData(ci,ano,mesNum,ki);
+        var real=data?data.real:null,obs=data?data.obs:'';
+        var pct=(real!==null&&kpi.meta>0)?Math.min((real/kpi.meta)*100,999):null;
+        var sem2=pct!==null?_getSemaforo(pct,kpi):{icon:'--',color:'var(--hnt)',label:'Sin dato'};
+        if(pct!==null){totalPct+=pct;countKpis++;}
+        h2+='<tr><td><div class="fw6 tsm">'+_esc(kpi.nombre)+'</div>';
+        if(kpi.desc)h2+='<div class="th" style="font-size:11px">'+_esc(kpi.desc)+'</div>';
+        h2+='<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:2px"><span class="bdg b-gy" style="font-size:10px">'+_esc(kpi.unidad||'')+'</span><span style="font-size:10px;color:var(--grn)">V:>='+kpi.semVerde+'%</span><span style="font-size:10px;color:var(--amb)">A:>='+kpi.semAmarillo+'%</span></div></td>';
+        h2+='<td style="text-align:center;font-weight:600">'+kpi.meta+'<div class="th" style="font-size:11px">'+_esc(kpi.unidad||'')+'</div></td>';
+        if(canEdit){
+          h2+='<td style="text-align:center"><input type="number" step="0.01" value="'+(real!==null?real:'')+'" placeholder="--" style="width:78px;padding:5px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;text-align:center;background:var(--s2)" onchange="setPerfReal('+ci+',\''+ano+'\','+mesNum+','+ki+',this.value)"></td>';
+        } else {h2+='<td style="text-align:center;font-weight:600">'+(real!==null?real:'--')+'</td>';}
+        h2+='<td style="text-align:center">';
+        if(pct!==null){h2+='<div style="font-weight:700;font-size:15px;color:'+sem2.color+'">'+pct.toFixed(1)+'%</div><div style="height:4px;background:var(--bdr);border-radius:4px;width:60px;margin:3px auto"><div style="height:100%;width:'+Math.min(pct,100)+'%;background:'+sem2.color+';border-radius:4px"></div></div>';}
+        else{h2+='<span class="th tsm">--</span>';}
+        h2+='</td><td style="text-align:center"><div style="font-size:18px">'+sem2.icon+'</div><div style="font-size:10px;color:'+sem2.color+'">'+sem2.label+'</div></td>';
+        if(canEdit){h2+='<td><input type="text" value="'+_esc(obs)+'" placeholder="Observaciones..." style="width:100%;padding:5px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;font-size:12px" onchange="setPerfObs('+ci+',\''+ano+'\','+mesNum+','+ki+',this.value)"></td>';}
+        else{h2+='<td class="th tsm">'+_esc(obs||'--')+'</td>';}
+        h2+='</tr>';
+      });
+      var promedio=countKpis>0?totalPct/countKpis:null;
+      var semProm=promedio!==null?_getSemaforo(promedio,null):{icon:'--',color:'var(--hnt)',label:'--'};
+      h2+='<tr style="background:var(--s2)"><td colspan="3" style="text-align:right;font-size:13px;font-weight:700;color:var(--mut)">Promedio KPIs (70%)</td>';
+      h2+='<td style="text-align:center;font-size:18px;font-weight:700;color:'+semProm.color+'">'+(promedio!==null?promedio.toFixed(1)+'%':'--')+'</td>';
+      h2+='<td style="text-align:center;font-size:18px">'+semProm.icon+'</td><td></td></tr>';
+      h2+='</tbody></table></div>';
+    }
+    var asistData=_getPerfAsist(ci,ano,mesNum);
+    var punt=asistData?asistData.puntualidad:null;
+    var asist=asistData?asistData.asistencia:null;
+    var asistObs=asistData?asistData.obs:'';
+    var semPunt=punt!==null?_getSemaforo(punt,null):{icon:'--',color:'var(--hnt)',label:'Sin dato'};
+    var semAsist=asist!==null?_getSemaforo(asist,null):{icon:'--',color:'var(--hnt)',label:'Sin dato'};
+    h2+='<div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-top:10px">';
+    h2+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
+    h2+='<div class="fw6 tsm">Comportamiento - 30% del resultado</div><div class="th tsm">Puntualidad 15% + Asistencia 15%</div></div>';
+    h2+='<div class="g2" style="gap:10px">';
+    // Puntualidad
+    h2+='<div style="background:var(--sur);border-radius:8px;padding:12px">';
+    h2+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="fw6 tsm">Puntualidad</div><span class="bdg b-bl">15%</span></div>';
+    h2+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">';
+    h2+='<div id="pp_'+ci+'_'+mesNum+'" style="min-width:44px;font-size:18px;font-weight:700;color:'+semPunt.color+'">'+(punt!==null?Math.round(punt)+'%':'--')+'</div>';
+    if(canEdit){
+      h2+='<input type="range" min="0" max="100" value="'+(punt!==null?Math.round(punt):0)+'" style="flex:1;accent-color:var(--blu)" onchange="updatePerfSlider(\'punt\','+ci+',\''+ano+'\','+mesNum+',this.value)" oninput="document.getElementById(\'pp_'+ci+'_'+mesNum+'\').textContent=Math.round(this.value)+\'%\'">';
+    }
+    h2+='</div><div style="text-align:center"><span style="font-size:18px">'+semPunt.icon+'</span><span style="font-size:11px;color:'+semPunt.color+'"> '+semPunt.label+'</span></div></div>';
+    // Asistencia
+    h2+='<div style="background:var(--sur);border-radius:8px;padding:12px">';
+    h2+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="fw6 tsm">Asistencia</div><span class="bdg b-tl">15%</span></div>';
+    h2+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">';
+    h2+='<div id="pa_'+ci+'_'+mesNum+'" style="min-width:44px;font-size:18px;font-weight:700;color:'+semAsist.color+'">'+(asist!==null?Math.round(asist)+'%':'--')+'</div>';
+    if(canEdit){
+      h2+='<input type="range" min="0" max="100" value="'+(asist!==null?Math.round(asist):0)+'" style="flex:1;accent-color:var(--blu)" onchange="updatePerfSlider(\'asist\','+ci+',\''+ano+'\','+mesNum+',this.value)" oninput="document.getElementById(\'pa_'+ci+'_'+mesNum+'\').textContent=Math.round(this.value)+\'%\'">';
+    }
+    h2+='</div><div style="text-align:center"><span style="font-size:18px">'+semAsist.icon+'</span><span style="font-size:11px;color:'+semAsist.color+'"> '+semAsist.label+'</span></div></div>';
+    h2+='</div>';
+    if(canEdit){
+      h2+='<div class="fg mt10" style="margin-bottom:0"><label class="fl">Observaciones generales</label>';
+      h2+='<input type="text" class="fc" value="'+_esc(asistObs)+'" placeholder="Tardanzas, incapacidades, justificaciones..." onchange="_setPerfAsistObs('+ci+',\''+ano+'\','+mesNum+',this.value)"></div>';
+    } else if(asistObs){h2+='<div class="th tsm mt8">Obs: '+_esc(asistObs)+'</div>';}
+    h2+='</div>';
+    var promKpis=_calcPerfPromedio(ci,ano,mesNum);
+    var s70=promKpis!==null?(promKpis*0.7):null;
+    var s15p=punt!==null?(punt*0.15):null;
+    var s15a=asist!==null?(asist*0.15):null;
+    var sTotal=s70!==null||s15p!==null||s15a!==null?(s70||0)+(s15p||0)+(s15a||0):null;
+    var semTotal=sTotal!==null?_getSemaforo(sTotal,null):{icon:'--',color:'#555',label:'Sin datos'};
+    h2+='<div style="background:'+semTotal.color+';border-radius:10px;padding:14px 18px;margin-top:10px;display:flex;align-items:center;gap:16px">';
+    h2+='<div style="flex:1"><div style="font-size:13px;font-weight:700;color:#fff;opacity:.9">Resultado final 70/30</div>';
+    h2+='<div style="display:flex;gap:12px;margin-top:5px;flex-wrap:wrap">';
+    h2+='<div style="font-size:11px;color:rgba(255,255,255,.8)">KPIs (70%): <strong>'+(s70!==null?s70.toFixed(1):'--')+'</strong></div>';
+    h2+='<div style="font-size:11px;color:rgba(255,255,255,.8)">Puntualidad (15%): <strong>'+(s15p!==null?s15p.toFixed(1):'--')+'</strong></div>';
+    h2+='<div style="font-size:11px;color:rgba(255,255,255,.8)">Asistencia (15%): <strong>'+(s15a!==null?s15a.toFixed(1):'--')+'</strong></div>';
+    h2+='</div></div>';
+    h2+='<div style="text-align:right"><div style="font-size:42px;font-weight:700;color:#fff;line-height:1">'+(sTotal!==null?sTotal.toFixed(1):'--')+'</div>';
+    h2+='<div style="font-size:12px;color:rgba(255,255,255,.8)">de 100 pts</div>';
+    h2+='<div style="font-size:15px;font-weight:700;color:#fff">'+semTotal.icon+' '+semTotal.label+'</div></div></div>';
+    if(canEdit){
+      h2+='<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">';
+      h2+='<button class="btn btn-bl btn-sm" onclick="openPerfKpiConfig('+ci+')">Configurar KPIs</button>';
+      h2+='<button class="btn btn-gh btn-sm" onclick="exportPerfColab('+ci+')">Exportar historial</button>';
+      h2+='</div>';
+    }
+    h2+='</div>';
+  });
+  container.innerHTML=h2;
+}
+
+function setPerfReal(ci,ano,mes,ki,val){var v=parseFloat(val);if(isNaN(v))return;if(!DB.perfData)DB.perfData={};if(!DB.perfData[ci])DB.perfData[ci]={};if(!DB.perfData[ci][ano])DB.perfData[ci][ano]={};if(!DB.perfData[ci][ano][mes])DB.perfData[ci][ano][mes]={};if(!DB.perfData[ci][ano][mes][ki])DB.perfData[ci][ano][mes][ki]={real:null,obs:''};DB.perfData[ci][ano][mes][ki].real=v;saveDB();setTimeout(function(){renderPerfTabla();},150);}
+function setPerfObs(ci,ano,mes,ki,val){if(!DB.perfData)DB.perfData={};if(!DB.perfData[ci])DB.perfData[ci]={};if(!DB.perfData[ci][ano])DB.perfData[ci][ano]={};if(!DB.perfData[ci][ano][mes])DB.perfData[ci][ano][mes]={};if(!DB.perfData[ci][ano][mes][ki])DB.perfData[ci][ano][mes][ki]={real:null,obs:''};DB.perfData[ci][ano][mes][ki].obs=val;saveDB();}
+function openPerfKpiConfig(ci){_perfEditIdx=ci;var t=document.getElementById('perf-kpi-modal-title');if(t)t.textContent='KPIs: '+DB.colabs[ci].nombre;renderPerfKpiList(ci);openM('m-perf-kpi');}
+function renderPerfKpiList(ci){var list=document.getElementById('perf-kpi-list');if(!list)return;var kpis=DB.perfKpis[ci]||[];if(!kpis.length){list.innerHTML='<div class="th tsm" style="padding:12px;text-align:center">Sin KPIs.</div>';return;}list.innerHTML='<table class="tbl"><thead><tr><th>KPI</th><th>Meta</th><th>Verde</th><th>Amarillo</th><th></th></tr></thead><tbody>'+kpis.map(function(k,ki){return '<tr><td><div class="fw6 tsm">'+_esc(k.nombre)+'</div></td><td class="fw6 tsm">'+k.meta+' '+_esc(k.unidad||'')+'</td><td style="color:var(--grn);font-weight:700">'+k.semVerde+'%</td><td style="color:var(--amb);font-weight:700">'+k.semAmarillo+'%</td><td><button class="btn btn-gh btn-sm" style="color:var(--red)" onclick="delPerfKpi('+ci+','+ki+')">x</button></td></tr>';}).join('')+'</tbody></table>';}
+function addPerfKpi(){var ci=_perfEditIdx;if(ci===null)return;var nombre=(document.getElementById('pk-nombre').value||'').trim();var meta=parseFloat(document.getElementById('pk-meta').value||0);var unidad=(document.getElementById('pk-unidad').value||'').trim();var desc=(document.getElementById('pk-desc').value||'').trim();var verde=parseInt(document.getElementById('pk-verde').value||80);var amarillo=parseInt(document.getElementById('pk-amarillo').value||60);if(!nombre){toast('Escribe el nombre.');return;}if(!meta||meta<=0){toast('Meta > 0.');return;}if(amarillo>=verde){toast('Verde > Amarillo.');return;}if(!DB.perfKpis)DB.perfKpis={};if(!DB.perfKpis[ci])DB.perfKpis[ci]=[];DB.perfKpis[ci].push({nombre:nombre,desc:desc,meta:meta,unidad:unidad,semVerde:verde,semAmarillo:amarillo});['pk-nombre','pk-desc','pk-meta','pk-unidad'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});document.getElementById('pk-verde').value='80';document.getElementById('pk-amarillo').value='60';renderPerfKpiList(ci);saveDB();toast('KPI agregado.');}
+function delPerfKpi(ci,ki){DB.perfKpis[ci].splice(ki,1);renderPerfKpiList(ci);saveDB();}
+function exportPerfColab(ci){var c=DB.colabs[ci];if(!c)return;var kpis=DB.perfKpis[ci]||[];var data=(DB.perfData||{})[ci]||{};var rows=[['Colaborador','Mes','Ano','KPI','Meta','Unidad','Real','% Cumpl.','Semaforo','Obs','Puntualidad%','Asistencia%','Score 70/30']];Object.keys(data).sort().forEach(function(ano){Object.keys(data[ano]).sort(function(a,b){return a-b;}).forEach(function(mes){kpis.forEach(function(kpi,ki){var d=data[ano][mes][ki];var real=d?d.real:null;var pct=real!==null&&kpi.meta>0?(real/kpi.meta*100):null;var sem=pct!==null?(pct>=kpi.semVerde?'Verde':pct>=kpi.semAmarillo?'Amarillo':'Rojo'):'Sin dato';var ad=_getPerfAsist(ci,ano,parseInt(mes));var s7030=_calcPerf7030(ci,ano,parseInt(mes));rows.push([c.nombre,MESES[parseInt(mes)-1],ano,kpi.nombre,kpi.meta,kpi.unidad||'',real!==null?real:'',pct!==null?pct.toFixed(1)+'%':'',sem,d?d.obs||'':'',ad&&ad.puntualidad!==null?ad.puntualidad.toFixed(0)+'%':'',ad&&ad.asistencia!==null?ad.asistencia.toFixed(0)+'%':'',s7030!==null?s7030.toFixed(1):'']);});});});var csv=rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='performance_'+c.nombre.replace(/\s+/g,'_')+'.csv';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},600);toast('Exportado.');}
+function renderPerfHistorico(){var container=document.getElementById('perf-historico-wrap');if(!container)return;var ci=document.getElementById('perf-hist-colab')?document.getElementById('perf-hist-colab').value:'';var ano=document.getElementById('perf-hist-ano')?(document.getElementById('perf-hist-ano').value||String(new Date().getFullYear())):String(new Date().getFullYear());if(ci===''){container.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">Selecciona un colaborador.</div>';return;}var idx=parseInt(ci);var kpis=DB.perfKpis[idx]||[];if(!kpis.length){container.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">Sin KPIs.</div>';return;}var h='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>KPI</th>'+MESES.map(function(m){return '<th style="text-align:center;min-width:55px">'+m+'</th>';}).join('')+'<th style="text-align:center">Prom.</th></tr></thead><tbody>';kpis.forEach(function(kpi,ki){h+='<tr><td class="fw6 tsm">'+_esc(kpi.nombre)+'<div class="th" style="font-size:10px">Meta: '+kpi.meta+' '+_esc(kpi.unidad||'')+'</div></td>';var total=0,cnt=0;for(var m=1;m<=12;m++){var d=_getPerfData(idx,ano,m,ki);var real=d?d.real:null;var pct=real!==null&&kpi.meta>0?(real/kpi.meta*100):null;var sem2=pct!==null?_getSemaforo(pct,kpi):null;if(pct!==null){total+=pct;cnt++;}h+='<td style="text-align:center">'+(pct!==null?'<div style="font-weight:700;font-size:12px;color:'+sem2.color+'">'+pct.toFixed(0)+'%</div><div style="font-size:14px">'+sem2.icon+'</div>':'<span class="th" style="font-size:11px">--</span>')+'</td>';}var pr=cnt>0?total/cnt:null;var sp=pr!==null?_getSemaforo(pr,kpi):null;h+='<td style="text-align:center;font-weight:700">'+(pr!==null?'<div style="color:'+sp.color+'">'+pr.toFixed(1)+'%</div><div>'+sp.icon+'</div>':'<span class="th tsm">--</span>')+'</td></tr>';});h+='<tr style="background:var(--s2);font-weight:700"><td class="fw6 tsm">Score 70/30<div class="th" style="font-size:10px">KPIs+Puntualidad+Asistencia</div></td>';var aT=0,aC=0;for(var mm=1;mm<=12;mm++){var s=_calcPerf7030(idx,ano,mm);var s3=s!==null?_getSemaforo(s,null):null;if(s!==null){aT+=s;aC++;}h+='<td style="text-align:center">'+(s!==null?'<div style="font-weight:700;font-size:13px;color:'+s3.color+'">'+s.toFixed(0)+'</div><div>'+s3.icon+'</div>':'<span class="th" style="font-size:11px">--</span>')+'</td>';}var aA=aC>0?aT/aC:null;var sA=aA!==null?_getSemaforo(aA,null):null;h+='<td style="text-align:center;font-weight:700">'+(aA!==null?'<div style="color:'+sA.color+'">'+aA.toFixed(1)+'</div><div>'+sA.icon+'</div>':'<span class="th tsm">--</span>')+'</td></tr>';h+='</tbody></table></div>';container.innerHTML=h;}
+
 
 // ============================================================
 // LINEAS DE NEGOCIO
 // ============================================================
 var LINEAS_PREDEFINIDAS = [
-  {id:'envia',       nombre:'envia.com',              color:'#0A2035'},
-  {id:'partners',    nombre:'envia.com Partners',     color:'#5B9BD5'},
-  {id:'fulfillment', nombre:'envia.com Fulfillment',  color:'#4CAF50'},
-  {id:'wms',         nombre:'envia.com WMS',          color:'#9C27B0'},
-  {id:'cargo',       nombre:'envia.com Cargo',        color:'#2196F3'},
-  {id:'ecartapi',    nombre:'ecartapi',                color:'#FF5722'},
-  {id:'ecartpay',    nombre:'ecartPay',                color:'#8BC34A'},
-  {id:'paquetes',    nombre:'Para Paquetes',           color:'#1A2D4A'}
+  {id:'partners',    nombre:'envia.com Partners',    color:'#5B9BD5'},
+  {id:'fulfillment', nombre:'envia.com Fulfillment', color:'#4CAF50'},
+  {id:'wms',         nombre:'envia.com WMS',         color:'#9C27B0'},
+  {id:'cargo',       nombre:'envia.com Cargo',       color:'#2196F3'},
+  {id:'ecartapi',    nombre:'ecartapi',               color:'#FF5722'},
+  {id:'ecartpay',    nombre:'ecartPay',               color:'#8BC34A'},
+  {id:'paquetes',    nombre:'Para Paquetes',          color:'#1A2D4A'}
 ];
 
 // ============================================================
@@ -625,6 +891,7 @@ var DB = {
   areas:[], puestos:[], lideres:[], colabs:[],
   evaluaciones:[], fbComments:{}, semData:{}, notas:{},
   evalDesempeno:[], kpis:{}, nivelEsperado:{},
+  perfKpis:{}, perfData:{}, perfAsist:{},
   config:{empresa:'Tendencys',alerta:7}
 };
 
@@ -636,7 +903,7 @@ var _db          = null;
 var _fbTimer     = null;
 var _desEvalData = {};
 
-var TITLES = {
+var TITLES = {performance:'Performance - KPIs mensuales',sla:'SLAs Tendencys 2026',
   dash:'Dashboard', p90:'Primeros 90 dias', cambio:'Cambio de puesto',
   carrera:'Plan de carrera', desempeno:'Evaluacion de Desempeno Trimestral',
   eval:'Evaluaciones', feedback:'Feedback', reportes:'Reportes',
@@ -653,10 +920,10 @@ var NIVELES_DESC = [
 // ROLES
 // ============================================================
 var ROLE_PERMS = {
-  Administrador:{pages:['dash','p90','cambio','carrera','desempeno','eval','feedback','reportes','admin','lineas'],canAdmin:true,allLineas:true},
-  HRBP:         {pages:['dash','p90','cambio','carrera','desempeno','eval','feedback','reportes','admin'],canAdmin:true,allLineas:true},
-  AdminLinea:   {pages:['dash','p90','cambio','carrera','desempeno','eval','feedback','reportes','admin'],canAdmin:true,allLineas:false},
-  Lider:        {pages:['dash','p90','cambio','desempeno','eval','feedback','reportes'],canAdmin:false,allLineas:false},
+  Administrador:{pages:['dash','p90','cambio','carrera','desempeno','performance','eval','feedback','reportes','sla','admin','lineas'],canAdmin:true,allLineas:true},
+  HRBP:         {pages:['dash','p90','cambio','carrera','desempeno','performance','eval','feedback','reportes','sla','admin'],canAdmin:true,allLineas:true},
+  AdminLinea:   {pages:['dash','p90','cambio','carrera','desempeno','performance','eval','feedback','reportes','sla','admin'],canAdmin:true,allLineas:false},
+  Lider:        {pages:['dash','p90','cambio','desempeno','performance','eval','feedback','reportes','sla'],canAdmin:false,allLineas:false},
   Colaborador:  {pages:[],canAdmin:false,allLineas:false}
 };
 function getRolPerms(){return ROLE_PERMS[currentUser&&currentUser.rol]||ROLE_PERMS.Colaborador;}
@@ -727,7 +994,7 @@ function _loadLineaData(cb){
       DB[col]=s.docs.map(function(d){return Object.assign({_id:d.id},d.data());});tick();
     }).catch(function(){tick();});
   });
-  ['kpis','nivelEsperado'].forEach(function(f){
+  ['kpis','nivelEsperado','perfKpis','perfData','perfAsist'].forEach(function(f){
     ref.collection('_meta').doc(f).get().then(function(d){
       if(d.exists)DB[f]=d.data().v||{};tick();
     }).catch(function(){tick();});
@@ -758,7 +1025,7 @@ function saveDB(){
         b.set(ref.collection(col).doc(id),d);
       });
     });
-    ['kpis','nivelEsperado'].forEach(function(f){
+    ['kpis','nivelEsperado','perfKpis','perfData','perfAsist'].forEach(function(f){
       b.set(ref.collection('_meta').doc(f),{v:DB[f]||{}});
     });
     b.commit().then(function(){_fbStatus('Guardado','var(--grn)');}).catch(function(e){console.warn(e);});
@@ -835,9 +1102,11 @@ function doLogin(){
   var u=(document.getElementById('login-user').value||'').trim().toLowerCase();
   var p=(document.getElementById('login-pass').value||'').trim();
   var err=document.getElementById('login-err');
+  if(_loginLocked){var w=Math.ceil((_loginLockTime-Date.now())/1000);err.style.display='block';err.textContent='Bloqueado '+w+'s.';return;}
   buildUsersFromDB();
-  var found=_allUsers.find(function(x){return x.user===u&&x.pass===p;});
-  if(!found){err.style.display='block';document.getElementById('login-pass').value='';return;}
+  var found=_allUsers.find(function(x){return x.user===u&&_checkPass(p,x.pass);});
+  if(!found){_loginAttempts++;err.style.display='block';err.textContent='Incorrecto.'+(_loginAttempts>=3?' '+_loginAttempts+'/5':'');document.getElementById('login-pass').value='';if(_loginAttempts>=5){_loginLocked=true;_loginLockTime=Date.now()+30000;setTimeout(function(){_loginLocked=false;_loginAttempts=0;},30000);}return;}
+  _loginAttempts=0;_resetActivity();
   err.style.display='none';
   currentUser=found;
   if(found.linea){
@@ -879,6 +1148,7 @@ function doLogout(){
 // NAVEGACION
 // ============================================================
 function nav(id){
+  if(!currentUser){toast('Inicia sesion primero.');return;}
   var perms=getRolPerms();
   if(perms.pages.indexOf(id)<0){toast('Sin acceso a esta seccion.');return;}
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
@@ -891,12 +1161,13 @@ function nav(id){
   if(t)t.textContent=TITLES[id]||id;
   if(id==='desempeno')renderDesempeno();
   if(id==='reportes')renderReportes();
-  if(id==='admin'){renderColabsAdmin();renderAreas();renderPuestos();renderLideres();renderUsuariosLinea();}
+  if(id==='admin'){renderColabsAdmin();renderAreas();renderPuestos();renderLideres();renderUsuariosLinea();renderDemoReset();}
   if(id==='lineas')renderLineasAdmin();
   if(id==='p90')renderP90();
   if(id==='carrera')renderCarrera();
   if(id==='eval')renderEvalBanco();
   if(id==='feedback')renderFeedbackList();
+  if(id==='sla')renderSLA();
 }
 
 function stab(el,id){
@@ -1951,244 +2222,367 @@ function renderColCarrera(c){
 // ============================================================
 // INIT
 // ============================================================
+loadDB();
+buildUsersFromDB();
 
-// ============================================================
-// DATOS DEMO + RESET
-// ============================================================
-function cargarDatosDemo() {
-  if (!confirm('Cargar datos de demostracion? Esto reemplazara los datos actuales de la linea activa.')) return;
 
-  // Asegurarse de tener una linea activa
-  if (!lineaActual) {
-    lineaActual = LINEAS_PREDEFINIDAS.find(function(l){ return l.id === 'partners'; }) || LINEAS_PREDEFINIDAS[0];
-  }
+var SLA_FB="https://slas-2026-default-rtdb.firebaseio.com/db";
+var SLA_DB={periods:{},customSLAs:{},slasEliminados:{},customAreas:[],customAreaColors:{}};
+var SLA_OK=false,SLA_SVG=false,SLA_ST=null;
+var SLA_V="dash",SLA_DD=null,SLA_DF=null;
+var SLA_MES="Marzo",SLA_ANIO="2026",SLA_HANUAL="2026",SLA_GAREA="Finanzas";
+var SLA_MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+var SLA_YEARS=["2025","2026","2027","2028"];
+var SLA_AC={"Finanzas":"#22c55e","Operaciones":"#e879f9","IT":"#4CAF50","LTL":"#FF5722","Marketing":"#f59e0b","Recursos Humanos":"#fb7185","Legal":"#a78bfa","Fulfillment":"#2dd4c0","Strategy BI":"#60a5fa","FTL":"#f87171","Growth":"#c084fc","Partnerships":"#f97316","Corporate Sales":"#00ACC1","Comercial USA":"#00ACC1","Comercial Envia":"#5DCAA5"};
+var SLA_SC={pendiente:{t:"Pendiente",c:"#94b8cc",b:"rgba(148,184,204,.12)"},enviado:{t:"Enviado",c:"#60a5fa",b:"rgba(96,165,250,.12)"},aprobado:{t:"Aprobado",c:"#2dd4c0",b:"rgba(45,212,192,.12)"},rechazado:{t:"Rechazado",c:"#f87171",b:"rgba(248,113,113,.12)"},editado:{t:"Editado",c:"#fbbf24",b:"rgba(251,191,36,.12)"}};
+var SLA_BASE={
+"Finanzas":[{s:"2.1 Tesoreria",p:"Reporte gastos direccion",o:"Max. 10 dias"},{s:"2.1 Tesoreria",p:"Revision contracargos",o:"Max. 5 dias"},{s:"2.1 Tesoreria",p:"Reembolso nacional",o:"Max. 10 dias"},{s:"2.2 Nomina",p:"Comisiones globales",o:"Antes dia 14"},{s:"2.2 Nomina",p:"Incidentes nomina",o:"Max. 1 dia"},{s:"2.3 Contabilidad",p:"Informes ingresos",o:"Primeros 12 dias"},{s:"2.3 Contabilidad",p:"Calculo impuestos",o:"Antes dia 10"},{s:"2.4 CxC",p:"Contacto adeudos",o:"Primeros 5 dias"},{s:"2.5 Facturacion",p:"Brasil Recarga",o:"Ultimo dia"},{s:"2.5 Facturacion",p:"MX/CO/GT",o:"Antes ultimo dia"},{s:"2.6 Costos",p:"Calculo margen operativo",o:"Max. 7 dias"},{s:"2.6 Costos",p:"Auditoria vs carriers",o:"Diaria"},{s:"2.7 Planeacion",p:"Resumen ejecutivo KPIs",o:"Max. 3 dias"}],
+"Operaciones":[{s:"6.1 Respuesta",p:"Primera resp. WhatsApp",o:"<= 5 min"},{s:"6.1 Respuesta",p:"Primera resp. Tickets",o:"<= 10 min"},{s:"6.2 Resolucion",p:"Resolucion tickets",o:"<= 20 dias"},{s:"6.4 Calidad",p:"Puntuacion calidad",o:">= 90 pts"},{s:"6.5 Experiencia",p:"Satisfaccion cliente",o:">= 4.5/5"},{s:"6.6 Comercial",p:"Clientes retenidos",o:">= 98%"}],
+"IT":[{s:"12.1 Disponibilidad",p:"Uptime servicios core",o:">= 99.9%"},{s:"12.1 Disponibilidad",p:"Recuperacion criticos",o:"<= 1 hora"},{s:"12.2 Calidad",p:"Due Date Compliance",o:">= 80%"},{s:"12.2 Calidad",p:"Tickets reabiertos",o:"<= 15%"},{s:"12.3 Seguridad",p:"Vulnerabilidades criticas",o:"0"},{s:"12.4 Innovacion",p:"AI Adoption IT",o:">= 65%"}],
+"LTL":[{s:"9.1 Prospeccion",p:"Contacto leads",o:"< 1.5 hrs"},{s:"9.1 Prospeccion",p:"Conversion leads",o:">= 15%"},{s:"9.2 Cotizacion",p:"Cotizacion estandar",o:"< 4 hrs"},{s:"9.3 Envios",p:"Confirmacion carrier",o:"< 6 hrs"},{s:"9.4 Monitoreo",p:"Resp. estatus",o:"< 2 hrs"},{s:"9.5 Reclamos",p:"Resolucion reclamos",o:"Max. 15 dias"},{s:"9.6 Retencion",p:"Contacto proactivo",o:"1 reunion/mes"}],
+"Marketing":[{s:"11.1 Campanas",p:"Lanzamiento campanas",o:"5 dias habiles"},{s:"11.1 Campanas",p:"Contenido grafico",o:"1 dia habil"},{s:"11.2 Diseno",p:"Materiales graficos",o:"Max. 2 dias"},{s:"11.3 Leads",p:"Leads calificados",o:"24 hrs"},{s:"11.5 Reportes",p:"Reportes campanas",o:"Mensual"}],
+"Recursos Humanos":[{s:"13.1 Admin",p:"Alta IMSS/Nomina",o:"1 dia antes"},{s:"13.1 Admin",p:"Proceso finiquito",o:"3 dias"},{s:"13.2 Reclutamiento",p:"Contratacion operaciones",o:"20 dias"},{s:"13.2 Reclutamiento",p:"Contratacion Managers",o:"45 dias"},{s:"13.3 Capacitacion",p:"Satisfaccion capacitacion",o:">= 85%"},{s:"13.4 Desarrollo",p:"Evaluacion desempeno",o:"Fin de Q"},{s:"13.5 Cultura",p:"Kit bienvenida",o:"1er dia"}],
+"Legal":[{s:"8.1 Contratos",p:"Revision contratos internos",o:"Max. 5 dias"},{s:"8.1 Contratos",p:"Contratos nuevos",o:"Max. 15 dias"},{s:"8.2 Disputas",p:"Resp. inicial disputas",o:"< 48 hrs"},{s:"8.3 Normativo",p:"Cambios normativos",o:"Cada 3 meses"},{s:"8.6 Asesoria",p:"Consultas legales",o:"Max. 48 hrs"}],
+"Fulfillment":[{s:"7.1 Inventario",p:"Procesamiento inventario",o:"Max. 24 hrs"},{s:"7.1 Inventario",p:"Precision inventario",o:">= 99.5%"},{s:"7.2 Pick Pack",p:"Pedidos estandar",o:"< 12 hrs"},{s:"7.2 Pick Pack",p:"Exactitud preparacion",o:">= 99.9%"},{s:"7.3 Despacho",p:"Despacho estandar",o:"< 24 hrs"},{s:"7.4 Devoluciones",p:"Procesamiento devoluciones",o:"< 48 hrs"},{s:"7.5 Soporte",p:"Resp. consultas stock",o:"< 2 hrs"}],
+"Strategy BI":[{s:"15.1 Reportes",p:"Queries estandar",o:"Max. 48 hrs"},{s:"15.2 Dashboards",p:"Diseno dashboards",o:"15-30 dias"},{s:"15.3 Analisis",p:"Solicitudes especificas",o:"Max. 5 dias"},{s:"15.5 Soporte",p:"Solicitudes internas",o:"< 24 hrs"}],
+"FTL":[{s:"10.1 Publicacion",p:"Cargas publicadas vs tomadas",o:">= 75%"},{s:"10.2 Operativo",p:"OTA recoleccion",o:">= 90%"},{s:"10.2 Operativo",p:"OTD entrega",o:">= 90%"},{s:"10.6 Economia",p:"Margen promedio",o:">= 10%"}],
+"Growth":[{s:"14.2 IA",p:"Solucion incidencias",o:"Max. 24 hrs"},{s:"14.3 Monitoreo",p:"Monitoreo continuo",o:"24/7"},{s:"14.5 Incidencias",p:"Falla critica",o:"Inmediata"},{s:"14.5 Incidencias",p:"Falla alta",o:"<= 1 hora"},{s:"14.7 Usuarios",p:"Resp. inicial MX",o:"<= 4 horas"}]
+};
+var SLA_CAT=JSON.parse(JSON.stringify(SLA_BASE));
+var SLA_AREAS=Object.keys(SLA_CAT);
+function slaPC(v){var n=parseFloat(v);if(isNaN(n)||v===''||v===null||v===undefined)return'var(--hnt)';return n>=95?'var(--grn)':n>=80?'var(--amb)':'var(--red)';}
+function slaBdg(st){var s=SLA_SC[st]||SLA_SC.pendiente;return'<span class="bdg" style="background:'+s.b+';color:'+s.c+'">'+s.t+'</span>';}
+function slaMbar(v){if(!v&&v!==0)return'';var n=parseFloat(v)||0,c=slaPC(v);return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="flex:1;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.min(n,100)+'%;background:'+c+';border-radius:3px"></div></div><span style="font-size:11px;font-weight:700;color:'+c+'">'+parseFloat(v).toFixed(1)+'%</span></div>';}
+function slaCC(p){return p===100?'var(--grn)':p>=60?'var(--amb)':'var(--red)';}
+function slaApply(){SLA_CAT=JSON.parse(JSON.stringify(SLA_BASE));(SLA_DB.customAreas||[]).forEach(function(a){if(!SLA_CAT[a]){SLA_CAT[a]=[];if((SLA_DB.customAreaColors||{})[a])SLA_AC[a]=SLA_DB.customAreaColors[a];}});Object.keys(SLA_DB.slasEliminados||{}).forEach(function(a){if(SLA_CAT[a])SLA_CAT[a]=SLA_CAT[a].filter(function(p){return((SLA_DB.slasEliminados||{})[a]||[]).indexOf(p.p)<0;});});Object.keys(SLA_DB.customSLAs||{}).forEach(function(a){if(!SLA_CAT[a])SLA_CAT[a]=[];var ex=SLA_CAT[a].map(function(p){return p.p;});((SLA_DB.customSLAs||{})[a]||[]).forEach(function(p){if(ex.indexOf(p.p)<0)SLA_CAT[a].push(p);});});SLA_AREAS=Object.keys(SLA_CAT);}
+function slaMkP(a){return(SLA_CAT[a]||[]).map(function(p){return{s:p.s,p:p.p,o:p.o,v:'',c:'',n:''};});}
+function slaMkA(a){return{st:'pendiente',at:null,by:'',cmt:'',notes:'',logs:[],procs:slaMkP(a)};}
+function slaMkPer(){var o={};SLA_AREAS.forEach(function(a){o[a]=slaMkA(a);});return{areas:o};}
+function slaSyncP(a,ad){var fr=slaMkP(a),ex={};(ad.procs||[]).forEach(function(p){ex[p.p]=p;});ad.procs=fr.map(function(fp){var e=ex[fp.p];return e?Object.assign({},fp,{v:e.v||'',c:e.c||'',n:e.n||''}):fp;});}
+function slaGP(m,y){var k=y+'_'+m;if(!SLA_DB.periods[k])SLA_DB.periods[k]=slaMkPer();var p=SLA_DB.periods[k];SLA_AREAS.forEach(function(a){if(!p.areas[a])p.areas[a]=slaMkA(a);else{if(!p.areas[a].logs)p.areas[a].logs=[];slaSyncP(a,p.areas[a]);}});return p;}
+function slaCurP(){return slaGP(SLA_MES,SLA_ANIO);}
+function slaAvg(procs){var s=0,f=0;(procs||[]).forEach(function(p){var v=parseFloat(p.c);if(!isNaN(v)&&p.c!==''){s+=v;f++;}});return{avg:f?s/f:0,fil:f};}
+function slaGAAvg(a,m,y){var ad=slaGP(m,y).areas[a];if(!ad||(ad.st!=='aprobado'&&ad.st!=='editado'))return null;var r=slaAvg(ad.procs);return r.fil?r.avg:null;}
+function slaComp(procs){var f=0,ps=procs||[];ps.forEach(function(p){if(String(p.c||'').trim()!=='')f++;});return{filled:f,total:ps.length,pct:ps.length?Math.round(f/ps.length*100):0};}
+function slaLog(ad,ac,by){if(!ad.logs)ad.logs=[];ad.logs.push({ac:ac,by:by,at:new Date().toISOString()});}
+function slaRole(){if(!currentUser)return'lider';var r=currentUser.rol;return(r==='Administrador'||r==='HRBP'||r==='AdminLinea')?'do':'lider';}
+function slaDO(){return slaRole()==='do';}
+async function slaLoad(){if(SLA_OK)return;try{var r=await fetch(SLA_FB+'.json');if(r.ok){var d=await r.json();if(d){SLA_DB=d;if(!SLA_DB.periods)SLA_DB.periods={};if(!SLA_DB.customSLAs)SLA_DB.customSLAs={};if(!SLA_DB.slasEliminados)SLA_DB.slasEliminados={};if(!SLA_DB.customAreas)SLA_DB.customAreas=[];if(!SLA_DB.customAreaColors)SLA_DB.customAreaColors={};slaApply();}}}catch(e){console.warn('SLA:',e);}SLA_OK=true;}
+function slaSave(){if(SLA_ST)clearTimeout(SLA_ST);SLA_ST=setTimeout(async function(){SLA_ST=null;if(SLA_SVG)return;SLA_SVG=true;try{await fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)});}catch(e){toast('Error SLA:'+e.message);}finally{SLA_SVG=false;}},900);}
+function renderSLA(){var el=document.getElementById('sla-content');if(!el)return;if(!SLA_OK){el.innerHTML='<div style="padding:40px;text-align:center;color:var(--hnt)">Cargando SLA...</div>';slaLoad().then(slaRender);return;}slaRender();}
+function slaRender(){
+  var el=document.getElementById('sla-content');if(!el)return;
+  slaApply();var p=slaCurP();
+  var pend=SLA_AREAS.filter(function(a){return(p.areas[a]||{}).st==='enviado';});
+  var apro=SLA_AREAS.filter(function(a){var s=(p.areas[a]||{}).st;return s==='aprobado'||s==='editado';});
+  var rech=SLA_AREAS.filter(function(a){return(p.areas[a]||{}).st==='rechazado';});
+  var noen=SLA_AREAS.filter(function(a){var s=(p.areas[a]||{}).st;return!s||s==='pendiente';});
+  var tC=0,fC=0;SLA_AREAS.forEach(function(a){var c=slaComp((p.areas[a]||{}).procs);tC+=c.total;fC+=c.filled;});
+  var gP=tC?Math.round(fC/tC*100):0;
+  var mSel='<select id="s_slames" class="fc" style="padding:4px 7px;font-size:12px;width:auto">'+SLA_MESES.map(function(m){return'<option'+(m===SLA_MES?' selected':'')+'>'+m+'</option>';}).join('')+'</select>';
+  var ySel='<select id="s_slaanio" class="fc" style="padding:4px 7px;font-size:12px;width:auto">'+SLA_YEARS.map(function(y){return'<option'+(y===SLA_ANIO?' selected':'')+'>'+y+'</option>';}).join('')+'</select>';
+  function tab(v,l,cnt,col){var on=SLA_V===v;return'<button data-slatv="'+v+'" style="padding:6px 12px;border-radius:6px;border:1px solid '+(on?col:'var(--bdr)')+';background:'+(on?col+'22':'transparent')+';color:'+(on?col:'var(--hnt)')+';cursor:pointer;font-size:12px;font-weight:'+(on?700:400)+'">'+l+(cnt>0?'<span style="background:'+col+';color:#fff;border-radius:10px;padding:0 5px;font-size:10px;margin-left:4px">'+cnt+'</span>':'')+'</button>';}
+  var tabs='<div id="sla-tabs-row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">';
+  tabs+=tab('dash','Dashboard',0,'var(--blu)');
+  if(slaDO()){tabs+=tab('rev','Revisar',pend.length,'#60a5fa');tabs+=tab('apr','Aprobados',apro.length,'var(--grn)');tabs+=tab('rej','Rechazados',rech.length,'var(--red)');tabs+=tab('none','Sin enviar',noen.length,'var(--hnt)');tabs+=tab('fill','Llenar',0,'var(--amb)');tabs+=tab('hist','Historico',0,'var(--pur)');tabs+=tab('gest','Gestionar',0,'var(--pur)');}
+  else{tabs+=tab('mi','Mi area',0,'var(--blu)');tabs+=tab('hist','Historico',0,'var(--pur)');}
+  tabs+='</div>';
+  var gc=slaCC(gP);
+  var stats='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center"><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Global</div><div style="font-size:20px;font-weight:700;color:'+gc+'">'+gP+'%</div></div><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Aprobadas</div><div style="font-size:20px;font-weight:700;color:var(--grn)">'+apro.length+'/'+SLA_AREAS.length+'</div></div><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Por revisar</div><div style="font-size:20px;font-weight:700;color:#60a5fa">'+pend.length+'</div></div><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Rechazadas</div><div style="font-size:20px;font-weight:700;color:var(--red)">'+rech.length+'</div></div><div style="margin-left:auto;display:flex;gap:6px;align-items:center">'+mSel+ySel+'</div></div>';
+  var body='';
+  if(SLA_V==='dash')body=slaDash(p,apro);
+  else if(SLA_V==='rev')body=slaRev(p,pend);
+  else if(SLA_V==='apr')body=slaList(p,apro,'aprobado');
+  else if(SLA_V==='rej')body=slaList(p,rech,'rechazado');
+  else if(SLA_V==='none')body=slaList(p,noen,'pendiente');
+  else if(SLA_V==='fill')body=slaFillGrid(p);
+  else if(SLA_V==='hist')body=slaHist();
+  else if(SLA_V==='gest')body=slaGest();
+  else if(SLA_V==='mi')body=slaMi(p);
+  else if(SLA_V==='det'&&SLA_DD)body=slaDet(p,SLA_DD);
+  else if(SLA_V==='fillf'&&SLA_DF)body=slaFillForm(p,SLA_DF);
+  else body=slaDash(p,apro);
+  el.innerHTML=tabs+stats+body;
+  var ms=document.getElementById('s_slames'),as=document.getElementById('s_slaanio');
+  if(ms)ms.onchange=function(){SLA_MES=ms.value;slaRender();};
+  if(as)as.onchange=function(){SLA_ANIO=as.value;slaRender();};
+  var ha=document.getElementById('s_slaha');if(ha)ha.onchange=function(){SLA_HANUAL=ha.value;slaRender();};
+  var ga=document.getElementById('s_slaga');if(ga)ga.onchange=function(){SLA_GAREA=ga.value;slaRender();};
+  var ma=document.getElementById('s_slama');if(ma)ma.onchange=function(){SLA_GAREA=ma.value;slaRender();};
+  var tr=document.getElementById('sla-tabs-row');
+  if(tr)tr.addEventListener('click',function(e){var b=e.target.closest('[data-slatv]');if(b){SLA_V=b.getAttribute('data-slatv');SLA_DD=null;SLA_DF=null;slaRender();}});
+}
+function slaDash(p,apro){
+  var avgs=apro.map(function(a){return slaGAAvg(a,SLA_MES,SLA_ANIO);}).filter(function(v){return v!==null;});
+  var ga=avgs.length?avgs.reduce(function(s,v){return s+v;},0)/avgs.length:null;
+  var h='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="ctitle">'+SLA_MES+' '+SLA_ANIO+'</div>'+(ga!==null?'<span style="font-size:15px;font-weight:700;color:'+slaPC(ga)+'">Prom.: '+ga.toFixed(1)+'%</span>':'')+'</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Area</th><th>Estado</th><th>Completado</th><th>Promedio</th><th></th></tr></thead><tbody>';
+  SLA_AREAS.forEach(function(area){var ad=p.areas[area]||{procs:[],st:'pendiente'};var av=slaGAAvg(area,SLA_MES,SLA_ANIO);var cmp=slaComp(ad.procs);var cc=slaCC(cmp.pct);h+='<tr><td><span style="font-weight:600;font-size:12px;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span></td><td>'+slaBdg(ad.st||'pendiente')+'</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:55px;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+cmp.pct+'%;background:'+cc+';border-radius:3px"></div></div><span style="font-size:11px;color:'+cc+'">'+cmp.pct+'%</span></div></td><td>'+(av!==null?'<span style="font-weight:700;color:'+slaPC(av)+'">'+av.toFixed(1)+'%</span>':'<span style="color:var(--hnt);font-size:11px">--</span>')+'</td><td><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Ver</button></td></tr>';});
+  return h+'</tbody></table></div></div>';
+}
+function slaRev(p,pend){
+  if(!pend.length)return'<div class="card"><div style="text-align:center;padding:40px;color:var(--hnt)">Sin areas pendientes.</div></div>';
+  return pend.map(function(area){var ad=p.areas[area];var cmp=slaComp(ad.procs||[]);var av=slaAvg(ad.procs||[]);return'<div class="card mb10"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px"><div style="flex:1"><div style="font-size:14px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+';margin-bottom:6px">'+_esc(area)+'</div>'+slaMbar(av.fil?String(av.avg):'')+'<div style="font-size:11px;color:var(--hnt)">'+cmp.filled+'/'+cmp.total+' campos - '+_esc(ad.by||'')+'</div></div><div style="display:flex;flex-direction:column;gap:6px"><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Detalle</button><button data-slaapr="'+area+'" class="btn btn-bl btn-sm">Aprobar</button><button data-slarej="'+area+'" class="btn btn-rd btn-sm">Rechazar</button></div></div></div>';}).join('');
+}
+function slaList(p,areas,tipo){
+  if(!areas.length)return'<div class="card"><div style="text-align:center;padding:40px;color:var(--hnt)">Sin areas.</div></div>';
+  return areas.map(function(area){var ad=p.areas[area]||{procs:[],st:'pendiente'};var av=slaAvg(ad.procs||[]);var cmp=slaComp(ad.procs||[]);return'<div class="card mb10"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"><div style="flex:1"><span style="font-size:13px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span> '+slaBdg(ad.st||'pendiente')+slaMbar(av.fil?String(av.avg):'')+'<div style="font-size:11px;color:var(--hnt)">'+cmp.pct+'% completo'+(ad.cmt&&tipo==='rechazado'?' - '+_esc(ad.cmt):'')+'</div></div><div style="display:flex;gap:6px"><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Ver</button>'+(slaDO()&&tipo==='rechazado'?'<button data-slaapr="'+area+'" class="btn btn-bl btn-sm">Aprobar</button>':'')+(slaDO()&&(tipo==='aprobado'||tipo==='editado')?'<button data-sladap="'+area+'" class="btn btn-gh btn-sm" style="color:var(--amb)">Desaprobar</button>':'')+'</div></div></div>';}).join('');
+}
+function slaPF(ad,ro){
+  var secs={};(ad.procs||[]).forEach(function(p,i){if(!secs[p.s])secs[p.s]=[];secs[p.s].push(Object.assign({},p,{i:i}));});
+  var dis=ro?'disabled':'';var h='';
+  Object.keys(secs).forEach(function(sec){
+    h+='<div style="background:var(--s2);border-radius:6px;padding:5px 10px;margin:10px 0 6px;font-size:11px;font-weight:700;color:var(--hnt);text-transform:uppercase;letter-spacing:.5px">'+_esc(sec)+'</div>';
+    secs[sec].forEach(function(p){var em=String(p.c||'').trim()==='';h+='<div style="border:1px solid '+(em&&!ro?'var(--red)':'var(--bdr)')+';border-radius:8px;padding:10px;margin-bottom:7px;background:'+(em&&!ro?'var(--red-l)':'var(--sur)')+'">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:6px"><div style="flex:1"><div style="font-size:13px;font-weight:600">'+_esc(p.p)+'</div><div style="font-size:11px;color:var(--hnt)">Obj: <span style="color:var(--blu)">'+_esc(p.o)+'</span></div></div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap"><div><label class="fl">Alcance</label><input type="text" '+dis+' data-slai="'+p.i+'" data-slaf="v" value="'+_esc(p.v||'')+'" style="width:100px;padding:5px 8px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;font-size:12px;background:var(--sur);color:var(--txt)"></div>'
+      +'<div><label class="fl">% Cumpl.</label><input type="number" min="0" max="100" step="0.01" '+dis+' data-slai="'+p.i+'" data-slaf="c" value="'+_esc(p.c||'')+'" placeholder="0-100" style="width:88px;padding:5px 8px;border:1px solid '+(em&&!ro?'var(--red)':'var(--bdr)')+';border-radius:6px;font-family:inherit;font-size:12px;background:var(--sur);color:'+slaPC(p.c)+'"></div>'
+      +'<div><label class="fl" style="color:var(--blu)">Solicitudes</label><input type="number" min="0" '+dis+' data-slai="'+p.i+'" data-slaf="n" value="'+_esc(p.n||'')+'" style="width:70px;padding:5px 8px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;font-size:12px;background:var(--sur);color:var(--blu)"></div>'
+      +'</div></div>'+slaMbar(p.c)+'</div>';});
+  });
+  return h;
+}
+function slaDet(p,area){
+  var ad=p.areas[area]||{procs:[],st:'pendiente'};var apv=ad.st==='aprobado'||ad.st==='editado';var ro=apv&&!slaDO();
+  var av=slaAvg(ad.procs||[]);var cmp=slaComp(ad.procs||[]);var cc=slaCC(cmp.pct);
+  var h='<div><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button data-slaback="dash" class="btn btn-gh btn-sm">Volver</button><span style="font-size:15px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span>'+slaBdg(ad.st||'pendiente')+(av.fil?'<span style="margin-left:auto;font-size:20px;font-weight:700;color:'+slaPC(av.avg)+'">'+av.avg.toFixed(1)+'%</span>':'')+'</div>';
+  h+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--s2);border:1px solid var(--bdr);margin-bottom:12px"><span style="font-size:11px;color:var(--hnt);min-width:80px">Completado</span><div style="flex:1;height:7px;background:var(--bdr);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+cmp.pct+'%;background:'+cc+';border-radius:4px"></div></div><span style="font-size:13px;font-weight:700;color:'+cc+'">'+cmp.pct+'%</span><span style="font-size:11px;color:var(--hnt)">'+cmp.filled+'/'+cmp.total+'</span></div>';
+  if(ad.cmt&&ad.st==='rechazado')h+='<div style="background:var(--red-l);border:1px solid var(--red);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--red)"><b>Rechazado:</b> '+_esc(ad.cmt)+'</div>';
+  h+='<div class="card">'+slaPF(ad,ro)+'<div style="margin-top:12px"><label class="fl">Notas</label><textarea data-slanotes="1" '+(ro?'disabled':'')+' class="fc" rows="2">'+_esc(ad.notes||'')+'</textarea></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">';
+  if(!apv)h+='<button data-slasave="draft" class="btn btn-gh">Borrador</button><button data-slasave="send" class="btn btn-bl">Enviar al DO</button>';
+  if(slaDO()&&ad.st==='enviado')h+='<button data-slaapr="'+area+'" class="btn btn-bl">Aprobar</button><button data-slarej="'+area+'" class="btn btn-rd">Rechazar</button>';
+  if(slaDO()&&apv)h+='<button data-slasave="edit" class="btn btn-bl">Guardar edicion</button><button data-sladap="'+area+'" class="btn btn-gh" style="color:var(--amb)">Desaprobar</button>';
+  if(ro)h+='<span style="font-size:12px;color:var(--grn);padding:8px 12px;background:var(--grn-l);border-radius:6px">Aprobado. Solo DO puede modificar.</span>';
+  return h+'</div></div></div>';
+}
+function slaFillGrid(p){var h='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">';SLA_AREAS.forEach(function(a){var ad=p.areas[a]||{procs:[],st:'pendiente'};var cmp=slaComp(ad.procs||[]);var av=slaAvg(ad.procs||[]);var brd=cmp.pct===100?'border-color:rgba(46,139,53,.3)':cmp.pct>0?'border-color:rgba(196,83,10,.25)':'';h+='<div class="card" style="margin:0;cursor:pointer;'+brd+'" data-slafill="'+a+'"><div style="font-size:11px;font-weight:700;color:'+(SLA_AC[a]||'var(--blu)')+';margin-bottom:4px">'+_esc(a)+'</div>'+slaBdg(ad.st||'pendiente')+'<div style="font-size:18px;font-weight:700;color:'+(av.fil?slaPC(av.avg):'var(--hnt)')+';margin:4px 0">'+(av.fil?av.avg.toFixed(1)+'%':'--')+'</div><div style="font-size:10px;color:var(--hnt)">'+cmp.filled+'/'+cmp.total+' campos</div></div>';});return h+'</div>';}
+function slaFillForm(p,area){var ad=p.areas[area]||{procs:[],st:'pendiente'};return'<div><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button data-slaback="fill" class="btn btn-gh btn-sm">Volver</button><span style="font-size:15px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span></div><div class="ai mb14"><div class="ai-d">Al guardar, el area quedara aprobada automaticamente.</div></div><div class="card">'+slaPF(ad,false)+'</div><div style="display:flex;gap:8px;margin-top:12px"><button data-slafillsave="1" class="btn btn-bl" style="flex:1">Guardar y aprobar</button><button data-slaback="fill" class="btn btn-gh">Cancelar</button></div></div>';}
+function slaMi(p){return'<div class="fg"><label class="fl">Tu area</label><select id="s_slama" class="fc" style="max-width:280px">'+SLA_AREAS.map(function(a){return'<option'+(a===SLA_GAREA?' selected':'')+'>'+a+'</option>';}).join('')+'</select></div>'+slaDet(p,SLA_GAREA);}
+function slaHist(){var ySel='<select id="s_slaha" class="fc" style="width:auto;padding:4px 8px;font-size:12px">'+SLA_YEARS.map(function(y){return'<option'+(y===SLA_HANUAL?' selected':'')+'>'+y+'</option>';}).join('')+'</select>';var h='<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><div class="ctitle" style="margin:0">Historico anual</div>'+ySel+'</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Area</th>';SLA_MESES.forEach(function(m){h+='<th style="text-align:center;font-size:10px">'+m.slice(0,3)+'</th>';});h+='<th style="text-align:center">Prom.</th></tr></thead><tbody>';SLA_AREAS.forEach(function(area){var vals=SLA_MESES.map(function(m){return slaGAAvg(area,m,SLA_HANUAL);});var fl=vals.filter(function(v){return v!==null;});var pr=fl.length?fl.reduce(function(s,v){return s+v;},0)/fl.length:null;var prev=null;h+='<tr><td style="font-size:12px;font-weight:600;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</td>';vals.forEach(function(v){var tr=v!==null&&prev!==null?(v>prev?'+':v<prev?'-':'='):'';h+='<td style="text-align:center">'+(v!==null?'<span style="font-size:11px;font-weight:700;color:'+slaPC(v)+'">'+v.toFixed(1)+'%</span><span style="font-size:9px;color:'+(tr==='+'?'var(--grn)':tr==='-'?'var(--red)':'var(--hnt)')+'"> '+tr+'</span>':'<span style="color:var(--hnt);font-size:10px">--</span>')+'</td>';if(v!==null)prev=v;});h+='<td style="text-align:center">'+(pr!==null?'<span style="font-size:12px;font-weight:700;color:'+slaPC(pr)+'">'+pr.toFixed(1)+'%</span>':'--')+'</td></tr>';});return h+'</tbody></table></div></div>';}
+function slaGest(){var procs=SLA_CAT[SLA_GAREA]||[];var custom=(SLA_DB.customSLAs||{})[SLA_GAREA]||[];var elim=(SLA_DB.slasEliminados||{})[SLA_GAREA]||[];var h='<div class="card"><div class="ctitle mb10">Gestionar SLAs</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap"><label class="fl" style="margin:0">Area:</label><select id="s_slaga" class="fc" style="max-width:240px">'+SLA_AREAS.map(function(a){return'<option'+(a===SLA_GAREA?' selected':'')+'>'+a+'</option>';}).join('')+'</select><button data-slanewarea="1" class="btn btn-bl btn-sm">+ Nueva area</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="fw6 tsm">SLAs de '+_esc(SLA_GAREA)+'</span><button data-slanewsla="1" class="btn btn-gh btn-sm">+ Agregar</button></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Seccion</th><th>Proceso</th><th>Objetivo</th><th>Tipo</th><th></th></tr></thead><tbody>';procs.forEach(function(pp){var isE=elim.indexOf(pp.p)>=0;var ep=pp.p.replace(/&/g,'&amp;').replace(/"/g,'&quot;');h+='<tr style="'+(isE?'opacity:.4':'')+'"><td style="color:var(--hnt);font-size:11px">'+_esc(pp.s)+'</td><td>'+(isE?'<s>':'')+_esc(pp.p)+(isE?'</s>':'')+'</td><td style="color:var(--blu);font-size:11px">'+_esc(pp.o)+'</td><td><span style="font-size:10px;color:var(--hnt);background:var(--s2);padding:1px 5px;border-radius:3px">Base</span></td><td>'+(!isE?'<button data-slaelimb="'+ep+'" class="btn btn-gh btn-sm" style="color:var(--red)">Eliminar</button>':'<button data-slarestb="'+ep+'" class="btn btn-gh btn-sm" style="color:var(--grn)">Restaurar</button>')+'</td></tr>';});custom.forEach(function(pp,ci){h+='<tr style="background:rgba(123,31,162,.04)"><td style="color:var(--pur);font-size:11px">'+_esc(pp.s)+'</td><td>'+_esc(pp.p)+'</td><td style="color:var(--blu);font-size:11px">'+_esc(pp.o)+'</td><td><span style="font-size:10px;color:var(--pur);background:var(--pur-l);padding:1px 5px;border-radius:3px">Custom</span></td><td><button data-slaelimcs="'+ci+'" class="btn btn-gh btn-sm" style="color:var(--red)">Eliminar</button></td></tr>';});return h+'</tbody></table></div></div>';}
+function slaGuardarArea(area,mode){var ad=slaCurP().areas[area];if(!ad)return;document.querySelectorAll('[data-slai][data-slaf]').forEach(function(el){ad.procs[parseInt(el.dataset.slai)][el.dataset.slaf]=el.value;});var ne=document.querySelector('[data-slanotes]');if(ne)ad.notes=ne.value;if(mode==='edit'){ad.st='editado';ad.at=new Date().toISOString();ad.by=currentUser?currentUser.nombre:'DO';slaLog(ad,'editado',ad.by);toast('Edicion guardada');}else if(mode==='send'){var c=slaComp(ad.procs);if(!c.filled){toast('Llena al menos un proceso.');return;}ad.st='enviado';ad.at=new Date().toISOString();ad.by=currentUser?currentUser.nombre:'';slaLog(ad,'enviado',ad.by);toast('Enviado al DO');}else{ad.by=currentUser?currentUser.nombre:'';slaLog(ad,'borrador',ad.by);toast('Borrador guardado');}slaSave();slaRender();}
+function slaFillSaveArea(area){var ad=slaCurP().areas[area];if(!ad)return;document.querySelectorAll('[data-slai][data-slaf]').forEach(function(el){ad.procs[parseInt(el.dataset.slai)][el.dataset.slaf]=el.value;});ad.st='aprobado';ad.at=new Date().toISOString();ad.by=(currentUser?currentUser.nombre:'DO')+' (DO)';ad.cmt='';slaLog(ad,'aprobado',ad.by);slaSave();toast(area+' aprobado');SLA_V='fill';SLA_DF=null;slaRender();}
+document.addEventListener('click',function(e){
+  var t=e.target,el;
+  el=t.closest('[data-sladet]');if(el){SLA_V='det';SLA_DD=el.getAttribute('data-sladet');SLA_DF=null;slaRender();return;}
+  el=t.closest('[data-slaback]');if(el){SLA_V=el.getAttribute('data-slaback');SLA_DD=null;SLA_DF=null;slaRender();return;}
+  el=t.closest('[data-slafill]');if(el){SLA_V='fillf';SLA_DF=el.getAttribute('data-slafill');SLA_DD=null;slaRender();return;}
+  el=t.closest('[data-slaapr]');if(el){var a=el.getAttribute('data-slaapr');var ad=slaCurP().areas[a];if(!ad)return;ad.st='aprobado';ad.at=new Date().toISOString();ad.by=currentUser?currentUser.nombre:'DO';ad.cmt='';slaLog(ad,'aprobado',ad.by);slaSave();SLA_DD=null;toast(a+' aprobado');slaRender();return;}
+  el=t.closest('[data-slarej]');if(el){var area=el.getAttribute('data-slarej');var cmt=prompt('Motivo del rechazo:');if(!cmt)return;var ad2=slaCurP().areas[area];if(!ad2)return;ad2.st='rechazado';ad2.cmt=cmt;ad2.at=new Date().toISOString();ad2.by=currentUser?currentUser.nombre:'DO';slaLog(ad2,'rechazado',ad2.by);slaSave();toast('Rechazado','warn');slaRender();return;}
+  el=t.closest('[data-sladap]');if(el){var area2=el.getAttribute('data-sladap');var ad3=slaCurP().areas[area2];if(!ad3)return;ad3.st='enviado';ad3.at=new Date().toISOString();ad3.by=currentUser?currentUser.nombre:'DO';slaLog(ad3,'desaprobado',ad3.by);slaSave();toast('Desaprobado','warn');slaRender();return;}
+  el=t.closest('[data-slasave]');if(el&&SLA_DD){slaGuardarArea(SLA_DD,el.getAttribute('data-slasave'));return;}
+  el=t.closest('[data-slafillsave]');if(el&&SLA_DF){slaFillSaveArea(SLA_DF);return;}
+  el=t.closest('[data-slanewarea]');if(el){var n=prompt('Nombre del nuevo area:');if(!n||!n.trim())return;n=n.trim();if(SLA_CAT[n]){toast('Ya existe.','warn');return;}if(!SLA_DB.customAreas)SLA_DB.customAreas=[];SLA_DB.customAreas.push(n);SLA_CAT[n]=[];SLA_BASE[n]=[];SLA_AREAS=Object.keys(SLA_CAT);slaSave();SLA_GAREA=n;toast('Area creada');slaRender();return;}
+  el=t.closest('[data-slanewsla]');if(el){var sec=prompt('Seccion:');if(!sec)return;var proc=prompt('Proceso:');if(!proc)return;var obj=prompt('Objetivo SLA:');if(!obj)return;if(!SLA_DB.customSLAs)SLA_DB.customSLAs={};if(!SLA_DB.customSLAs[SLA_GAREA])SLA_DB.customSLAs[SLA_GAREA]=[];SLA_DB.customSLAs[SLA_GAREA].push({s:sec,p:proc,o:obj});SLA_CAT[SLA_GAREA].push({s:sec,p:proc,o:obj});slaSave();toast('SLA agregado');slaRender();return;}
+  el=t.closest('[data-slaelimb]');if(el){var pn=el.getAttribute('data-slaelimb');if(!confirm('Eliminar?'))return;if(!SLA_DB.slasEliminados)SLA_DB.slasEliminados={};if(!SLA_DB.slasEliminados[SLA_GAREA])SLA_DB.slasEliminados[SLA_GAREA]=[];if(SLA_DB.slasEliminados[SLA_GAREA].indexOf(pn)<0)SLA_DB.slasEliminados[SLA_GAREA].push(pn);slaApply();slaSave();toast('SLA eliminado','warn');slaRender();return;}
+  el=t.closest('[data-slarestb]');if(el){var pn2=el.getAttribute('data-slarestb');if(!SLA_DB.slasEliminados||!SLA_DB.slasEliminados[SLA_GAREA])return;SLA_DB.slasEliminados[SLA_GAREA]=SLA_DB.slasEliminados[SLA_GAREA].filter(function(p){return p!==pn2;});slaApply();slaSave();toast('SLA restaurado');slaRender();return;}
+  el=t.closest('[data-slaelimcs]');if(el){var ci=parseInt(el.getAttribute('data-slaelimcs'));if(!confirm('Eliminar?'))return;var cs=(SLA_DB.customSLAs||{})[SLA_GAREA]||[];var pobj=cs[ci];if(!pobj)return;cs.splice(ci,1);SLA_CAT[SLA_GAREA]=SLA_CAT[SLA_GAREA].filter(function(x){return!(x.s===pobj.s&&x.p===pobj.p);});slaSave();toast('SLA eliminado','warn');slaRender();return;}
+});
 
-  // VALORES EMPRESA (globales)
-  GLOBAL.valores = [
-    {nombre:'Innovacion',    desc:'Buscamos nuevas formas de resolver problemas y agregar valor.'},
-    {nombre:'Colaboracion',  desc:'Trabajamos en equipo con transparencia y confianza mutua.'},
-    {nombre:'Orientacion al cliente', desc:'El cliente es el centro de todas nuestras decisiones.'},
-    {nombre:'Excelencia',    desc:'Hacemos las cosas bien desde la primera vez y mejoramos continuamente.'}
+function resetTodo(){
+  if(!confirm('Borrar TODOS los datos de Talentys y SLAs?'))return;
+  DB.areas=[];DB.puestos=[];DB.lideres=[];DB.colabs=[];
+  DB.evaluaciones=[];DB.fbComments={};DB.semData={};DB.notas={};
+  DB.evalDesempeno=[];DB.kpis={};DB.nivelEsperado={};
+  DB.perfKpis={};DB.perfData={};DB.perfAsist={};
+  DB.config={empresa:'Tendencys',alerta:7};
+  GLOBAL.usuarios=[];GLOBAL.valores=[];GLOBAL.competencias=[];
+  GLOBAL.lineas=LINEAS_PREDEFINIDAS.slice();
+  SLA_DB={periods:{},customSLAs:{},slasEliminados:{},customAreas:[],customAreaColors:{}};
+  SLA_LOADED=false;SLA_OK=false;
+  try{localStorage.removeItem('talentys_db');}catch(e){}
+  saveDB();
+  fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).catch(function(){});
+  currentUser=null;lineaActual=null;
+  document.getElementById('login-screen').style.display='';
+  document.getElementById('app-layout').style.display='none';
+  var cv=document.getElementById('col-view');if(cv)cv.style.display='none';
+  toast('Todo borrado. Plataforma en blanco.');
+}
+
+function cargarDatosDemo(){
+  if(!confirm('Cargar datos de muestra? Esto sobreescribira los datos actuales.'))return;
+
+  lineaActual={id:'envia',nombre:'envia.com',color:'#0A2035'};
+
+  DB.areas=[
+    {nombre:'Finanzas',        responsable:'Maria Garcia',  pais:'Mexico'},
+    {nombre:'Operaciones',     responsable:'Carlos Perez',  pais:'Mexico'},
+    {nombre:'Recursos Humanos',responsable:'Ana Ramirez',   pais:'Mexico'},
+    {nombre:'IT',              responsable:'Luis Torres',   pais:'Mexico'},
+    {nombre:'Marketing',       responsable:'Sofia Mendez',  pais:'Mexico'},
+    {nombre:'Legal',           responsable:'Roberto Silva', pais:'Mexico'}
   ];
 
-  // COMPETENCIAS (globales, con comportamientos por nivel)
-  GLOBAL.competencias = [
-    {
-      nombre: 'Pensamiento innovador',
-      valor:  'Innovacion',
-      niveles: {
-        1: 'Propone mejoras simples en su area de trabajo.',
-        2: 'Identifica oportunidades de mejora y las comunica a su equipo.',
-        3: 'Implementa soluciones practicas a problemas recurrentes.',
-        4: 'Genera ideas que impactan positivamente al area.',
-        5: 'Lidera iniciativas de innovacion con resultados medibles.',
-        6: 'Promueve cultura de innovacion en su equipo.',
-        7: 'Dirige proyectos de transformacion digital o de proceso.',
-        8: 'Define la estrategia de innovacion para el area.',
-        9: 'Impulsa la innovacion a nivel organizacional y de mercado.'
-      }
-    },
-    {
-      nombre: 'Trabajo en equipo',
-      valor:  'Colaboracion',
-      niveles: {
-        1: 'Participa activamente en las actividades del equipo.',
-        2: 'Comparte informacion util con sus companeros.',
-        3: 'Colabora proactivamente para alcanzar metas comunes.',
-        4: 'Facilita la comunicacion y cohesion del equipo.',
-        5: 'Resuelve conflictos y fortalece la dinamica del equipo.',
-        6: 'Mentoriza a otros y eleva el desempeno colectivo.',
-        7: 'Construye equipos de alto desempeno.',
-        8: 'Crea cultura colaborativa entre areas.',
-        9: 'Promueve la colaboracion como ventaja competitiva.'
-      }
-    },
-    {
-      nombre: 'Orientacion al servicio',
-      valor:  'Orientacion al cliente',
-      niveles: {
-        1: 'Atiende solicitudes con amabilidad y disposicion.',
-        2: 'Resuelve problemas basicos del cliente de forma autonoma.',
-        3: 'Anticipa necesidades frecuentes del cliente.',
-        4: 'Propone mejoras en la experiencia del cliente.',
-        5: 'Lidera iniciativas de mejora en servicio al cliente.',
-        6: 'Es referente de cultura de servicio en el equipo.',
-        7: 'Dirige estrategias de experiencia del cliente.',
-        8: 'Define estandares de calidad en el servicio.',
-        9: 'Posiciona al cliente como eje de la estrategia organizacional.'
-      }
-    },
-    {
-      nombre: 'Calidad y precision',
-      valor:  'Excelencia',
-      niveles: {
-        1: 'Entrega su trabajo revisado y sin errores basicos.',
-        2: 'Verifica sus entregables antes de presentarlos.',
-        3: 'Cumple con estandares de calidad definidos por el equipo.',
-        4: 'Implementa controles de calidad en su proceso.',
-        5: 'Establece estandares de calidad para su area.',
-        6: 'Audita y mejora procesos para garantizar excelencia.',
-        7: 'Dirige programas de mejora continua.',
-        8: 'Define politicas de calidad organizacional.',
-        9: 'Lidera la excelencia operativa a nivel empresa.'
-      }
-    }
+  DB.puestos=[
+    {nombre:'Gerente de Finanzas',     nivel:'Manager',area:'Finanzas'},
+    {nombre:'Analista de Costos',      nivel:'Junior', area:'Finanzas'},
+    {nombre:'Coordinador Operaciones', nivel:'Senior', area:'Operaciones'},
+    {nombre:'Agente CSR',              nivel:'Junior', area:'Operaciones'},
+    {nombre:'HR Business Partner',     nivel:'Senior', area:'Recursos Humanos'},
+    {nombre:'Tech Lead',               nivel:'Senior', area:'IT'},
+    {nombre:'Developer',               nivel:'Junior', area:'IT'},
+    {nombre:'Marketing Manager',       nivel:'Manager',area:'Marketing'}
   ];
 
-  // AREAS
-  DB.areas = [
-    {nombre:'Tecnologia',     responsable:'Carlos Perez',    pais:'Mexico'},
-    {nombre:'Operaciones',    responsable:'Maria Garcia',    pais:'Colombia'},
-    {nombre:'Ventas',         responsable:'Luis Torres',     pais:'Mexico'},
-    {nombre:'Customer Success',responsable:'Ana Ramirez',   pais:'Mexico'},
-    {nombre:'Recursos Humanos',responsable:'Zahayra Lopez',  pais:'Mexico'}
+  DB.lideres=[
+    {nombre:'Carlos Perez', email:'carlos.perez@envia.com',cargo:'Lider Operaciones',    area:'Operaciones',     usuario:'carlos.perez',password:'lider2025',initials:'CP'},
+    {nombre:'Maria Garcia', email:'maria.garcia@envia.com',cargo:'Lider Finanzas',       area:'Finanzas',        usuario:'maria.garcia', password:'lider2025',initials:'MG'},
+    {nombre:'Luis Torres',  email:'luis.torres@envia.com', cargo:'Lider IT',             area:'IT',              usuario:'luis.torres',  password:'lider2025',initials:'LT'},
+    {nombre:'Ana Ramirez',  email:'ana.ramirez@envia.com', cargo:'Lider RRHH',           area:'Recursos Humanos',usuario:'ana.ramirez',  password:'lider2025',initials:'AR'}
   ];
 
-  // PUESTOS
-  DB.puestos = [
-    {nombre:'Analista Jr.',    nivel:'N2',area:'Tecnologia',   vertical:'Analista Sr.,Coordinador',        horizontal:'QA Jr.,Soporte Tecnico'},
-    {nombre:'Analista Sr.',    nivel:'N4',area:'Tecnologia',   vertical:'Lead Tecnico,Arquitecto',          horizontal:'Analista de Datos'},
-    {nombre:'Lead Tecnico',    nivel:'N6',area:'Tecnologia',   vertical:'Gerente de Tecnologia',            horizontal:'Product Manager'},
-    {nombre:'Ejecutivo Jr.',   nivel:'N2',area:'Ventas',       vertical:'Ejecutivo Sr.,Coordinador Ventas', horizontal:'Customer Success Jr.'},
-    {nombre:'Ejecutivo Sr.',   nivel:'N4',area:'Ventas',       vertical:'Gerente de Ventas',                horizontal:'Account Manager'},
-    {nombre:'CS Specialist',   nivel:'N3',area:'Customer Success',vertical:'CS Lead,Gerente CS',           horizontal:'Onboarding Specialist'},
-    {nombre:'Coordinador Ops', nivel:'N5',area:'Operaciones',  vertical:'Gerente Operaciones',              horizontal:'Analista de Procesos'},
-    {nombre:'HRBP Jr.',        nivel:'N3',area:'Recursos Humanos',vertical:'HRBP Sr.,Gerente RRHH',        horizontal:'Recruiter Sr.'}
+  DB.colabs=[
+    {nombre:'Marco Ruiz',     email:'marco.ruiz@envia.com',    fecha:'2024-03-01',fechaBaja:'',pais:'Mexico',puesto:'Agente CSR',              area:'Operaciones',     lider:'Carlos Perez', proceso:'Activo',           status:'Vigente',usuario:'marco.ruiz',    password:'colab2025',initials:'MR'},
+    {nombre:'Sofia Torres',   email:'sofia.torres@envia.com',  fecha:'2024-06-15',fechaBaja:'',pais:'Mexico',puesto:'Analista de Costos',      area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'sofia.torres',  password:'colab2025',initials:'ST'},
+    {nombre:'Diego Mora',     email:'diego.mora@envia.com',    fecha:'2024-09-01',fechaBaja:'',pais:'Mexico',puesto:'Developer',               area:'IT',              lider:'Luis Torres',  proceso:'Primeros 90 dias', status:'Vigente',usuario:'diego.mora',    password:'colab2025',initials:'DM'},
+    {nombre:'Valentina Cruz', email:'valentina.cruz@envia.com',fecha:'2025-01-10',fechaBaja:'',pais:'Mexico',puesto:'HR Business Partner',     area:'Recursos Humanos',lider:'Ana Ramirez',  proceso:'Activo',           status:'Vigente',usuario:'valentina.cruz',password:'colab2025',initials:'VC'},
+    {nombre:'Andres Vega',    email:'andres.vega@envia.com',   fecha:'2024-04-20',fechaBaja:'',pais:'Mexico',puesto:'Coordinador Operaciones', area:'Operaciones',     lider:'Carlos Perez', proceso:'Activo',           status:'Vigente',usuario:'andres.vega',   password:'colab2025',initials:'AV'},
+    {nombre:'Laura Soto',     email:'laura.soto@envia.com',    fecha:'2023-11-01',fechaBaja:'',pais:'Mexico',puesto:'Tech Lead',              area:'IT',              lider:'Luis Torres',  proceso:'Activo',           status:'Vigente',usuario:'laura.soto',    password:'colab2025',initials:'LS'},
+    {nombre:'Roberto Nieto',  email:'roberto.nieto@envia.com', fecha:'2024-08-05',fechaBaja:'',pais:'Mexico',puesto:'Gerente de Finanzas',     area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'roberto.nieto', password:'colab2025',initials:'RN'},
+    {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',  fecha:'2025-02-28',fechaBaja:'',pais:'Mexico',puesto:'Marketing Manager',       area:'Marketing',       lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'camila.reyes',  password:'colab2025',initials:'CR'}
   ];
 
-  // LIDERES
-  DB.lideres = [
-    {nombre:'Carlos Perez',  email:'carlos.perez@envia.com',  cargo:'Tech Lead',         area:'Tecnologia',      usuario:'carlos.perez',  password:'lider2025', initials:'CP'},
-    {nombre:'Maria Garcia',  email:'maria.garcia@envia.com',  cargo:'Gerente Operaciones',area:'Operaciones',    usuario:'maria.garcia',  password:'lider2025', initials:'MG'},
-    {nombre:'Luis Torres',   email:'luis.torres@envia.com',   cargo:'Director de Ventas', area:'Ventas',          usuario:'luis.torres',   password:'lider2025', initials:'LT'},
-    {nombre:'Ana Ramirez',   email:'ana.ramirez@envia.com',   cargo:'CS Manager',         area:'Customer Success',usuario:'ana.ramirez',   password:'lider2025', initials:'AR'}
+  GLOBAL.valores=[
+    {nombre:'Excelencia',       descripcion:'Buscar la calidad en cada accion'},
+    {nombre:'Integridad',       descripcion:'Actuar con honestidad y transparencia'},
+    {nombre:'Innovacion',       descripcion:'Proponer ideas y soluciones creativas'},
+    {nombre:'Colaboracion',     descripcion:'Trabajo en equipo y apoyo mutuo'},
+    {nombre:'Enfoque al cliente',descripcion:'Cliente en el centro de cada decision'}
+  ];
+  GLOBAL.competencias=[
+    {nombre:'Comunicacion efectiva',descripcion:'Expresarse clara y asertivamente',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Liderazgo',            descripcion:'Guiar y motivar equipos',           niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Pensamiento analitico',descripcion:'Resolver problemas con datos',      niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Adaptabilidad',        descripcion:'Responder al cambio con agilidad',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Orientacion a resultados',descripcion:'Cumplir metas con eficiencia',  niveles:['Basico','Intermedio','Avanzado','Experto']}
   ];
 
-  // COLABORADORES
-  var hoy = new Date();
-  function diasAtras(n){ var d=new Date(hoy); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
+  DB.kpis={
+    0:[{nombre:'Tickets resueltos',   peso:40,meta:150,tipo:'mayor'},{nombre:'CSAT',                  peso:35,meta:90, tipo:'mayor'},{nombre:'Tiempo promedio',peso:25,meta:20,tipo:'menor'}],
+    1:[{nombre:'Precision reportes',  peso:45,meta:98, tipo:'mayor'},{nombre:'Entregas a tiempo',     peso:35,meta:95, tipo:'mayor'},{nombre:'Errores contables',peso:20,meta:0,tipo:'menor'}],
+    2:[{nombre:'Bugs cerrados',       peso:40,meta:80, tipo:'mayor'},{nombre:'Code review',           peso:30,meta:100,tipo:'mayor'},{nombre:'Incidencias prod.',peso:30,meta:0,tipo:'menor'}],
+    3:[{nombre:'Contrataciones tiempo',peso:50,meta:100,tipo:'mayor'},{nombre:'Satisfaccion candidatos',peso:30,meta:90,tipo:'mayor'},{nombre:'Rotacion 90 dias',peso:20,meta:5,tipo:'menor'}],
+    4:[{nombre:'SLAs cumplidos',      peso:50,meta:95, tipo:'mayor'},{nombre:'Escalaciones resueltas',peso:30,meta:80, tipo:'mayor'},{nombre:'Tickets pendientes',peso:20,meta:10,tipo:'menor'}],
+    5:[{nombre:'Deploy exitosos',     peso:40,meta:99, tipo:'mayor'},{nombre:'Uptime servicios',      peso:40,meta:99.5,tipo:'mayor'},{nombre:'Incidentes criticos',peso:20,meta:0,tipo:'menor'}],
+    6:[{nombre:'Cierre financiero',   peso:40,meta:100,tipo:'mayor'},{nombre:'Precision forecast',    peso:35,meta:95, tipo:'mayor'},{nombre:'Ajustes post-cierre',peso:25,meta:2,tipo:'menor'}],
+    7:[{nombre:'Campanas lanzadas',   peso:35,meta:8,  tipo:'mayor'},{nombre:'Leads generados',       peso:40,meta:500,tipo:'mayor'},{nombre:'Costo por lead',   peso:25,meta:50,tipo:'menor'}]
+  };
+  DB.nivelEsperado={0:3,1:3,2:3,3:2,4:3,5:4,6:3,7:3};
 
-  DB.colabs = [
-    {nombre:'Marco Ruiz',     email:'marco.ruiz@envia.com',     fecha:diasAtras(25),  fechaBaja:'', pais:'Mexico',   puesto:'Analista Jr.',    area:'Tecnologia',      lider:'Carlos Perez', proceso:'Primeros 90 dias',   status:'Vigente', usuario:'marco.ruiz',    password:'colab2025', initials:'MR'},
-    {nombre:'Sofia Torres',   email:'sofia.torres@envia.com',   fecha:diasAtras(62),  fechaBaja:'', pais:'Colombia', puesto:'CS Specialist',   area:'Customer Success',lider:'Ana Ramirez',  proceso:'Primeros 90 dias',   status:'Vigente', usuario:'sofia.torres',  password:'colab2025', initials:'ST'},
-    {nombre:'Diego Mendez',   email:'diego.mendez@envia.com',   fecha:diasAtras(92),  fechaBaja:'', pais:'Mexico',   puesto:'Ejecutivo Jr.',   area:'Ventas',          lider:'Luis Torres',  proceso:'Evaluacion periodica',status:'Vigente', usuario:'diego.mendez',  password:'colab2025', initials:'DM'},
-    {nombre:'Lucia Vargas',   email:'lucia.vargas@envia.com',   fecha:diasAtras(45),  fechaBaja:'', pais:'Mexico',   puesto:'Analista Jr.',    area:'Tecnologia',      lider:'Carlos Perez', proceso:'Primeros 90 dias',   status:'Vigente', usuario:'lucia.vargas',  password:'colab2025', initials:'LV'},
-    {nombre:'Roberto Silva',  email:'roberto.silva@envia.com',  fecha:diasAtras(180), fechaBaja:'', pais:'Mexico',   puesto:'Analista Sr.',    area:'Tecnologia',      lider:'Carlos Perez', proceso:'Evaluacion periodica',status:'Vigente', usuario:'roberto.silva', password:'colab2025', initials:'RS'},
-    {nombre:'Patricia Leal',  email:'patricia.leal@envia.com',  fecha:diasAtras(120), fechaBaja:'', pais:'Colombia', puesto:'Coordinador Ops', area:'Operaciones',     lider:'Maria Garcia', proceso:'Cambio de puesto',    status:'Vigente', usuario:'patricia.leal', password:'colab2025', initials:'PL'},
-    {nombre:'Fernando Ortiz', email:'fernando.ortiz@envia.com', fecha:diasAtras(15),  fechaBaja:'', pais:'Mexico',   puesto:'Ejecutivo Jr.',   area:'Ventas',          lider:'Luis Torres',  proceso:'Primeros 90 dias',   status:'Vigente', usuario:'fernando.ortiz',password:'colab2025', initials:'FO'},
-    {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',   fecha:diasAtras(300), fechaBaja:'2025-12-31', pais:'Mexico', puesto:'HRBP Jr.', area:'Recursos Humanos',lider:'',           proceso:'Sin proceso activo',  status:'Baja',    usuario:'',              password:'',          initials:'CR'}
-  ];
-
-  // KPIS por colaborador
-  DB.kpis = {
-    '0': [{nombre:'Pull Requests revisados', meta:'20', unidad:'PRs/mes',  peso:40},{nombre:'Bugs resueltos',       meta:'15', unidad:'bugs',     peso:35},{nombre:'Documentacion tecnica',meta:'3',  unidad:'docs/mes', peso:25}],
-    '1': [{nombre:'CSAT promedio',           meta:'4.5',unidad:'/ 5',     peso:50},{nombre:'Tickets resueltos',    meta:'80', unidad:'tickets',  peso:30},{nombre:'Tiempo de respuesta', meta:'2',   unidad:'hrs',      peso:20}],
-    '2': [{nombre:'Ventas cerradas',         meta:'50', unidad:'cuentas', peso:60},{nombre:'Pipeline generado',   meta:'200',unidad:'k MXN',    peso:40}],
-    '3': [{nombre:'Tareas completadas',      meta:'90', unidad:'%',       peso:50},{nombre:'Code reviews',       meta:'10', unidad:'/semana',   peso:30},{nombre:'Capacitaciones',      meta:'2',   unidad:'/mes',     peso:20}],
-    '4': [{nombre:'Proyectos entregados',    meta:'3',  unidad:'/trimestre',peso:50},{nombre:'SLA cumplimiento', meta:'95', unidad:'%',         peso:30},{nombre:'Mejoras propuestas', meta:'2',   unidad:'/mes',     peso:20}],
-    '5': [{nombre:'Eficiencia operativa',    meta:'95', unidad:'%',       peso:60},{nombre:'Incidencias reducidas',meta:'20',unidad:'%',        peso:40}],
-    '6': [{nombre:'Ventas cerradas',         meta:'30', unidad:'cuentas', peso:70},{nombre:'Follow-ups realizados',meta:'100',unidad:'/mes',    peso:30}]
+  DB.perfKpis={
+    0:[{nombre:'Tickets resueltos',  desc:'Tickets cerrados en el mes',          meta:150,  unidad:'tickets',semVerde:90,semAmarillo:75}],
+    1:[{nombre:'Precision reportes', desc:'% reportes sin errores',              meta:98,   unidad:'%',      semVerde:95,semAmarillo:85}],
+    2:[{nombre:'Bugs cerrados',      desc:'Issues resueltos en el sprint',       meta:80,   unidad:'bugs',   semVerde:90,semAmarillo:75}],
+    3:[{nombre:'Contrataciones',     desc:'% posiciones cubiertas a tiempo',     meta:100,  unidad:'%',      semVerde:90,semAmarillo:75}],
+    4:[{nombre:'SLAs cumplidos',     desc:'% SLAs dentro del tiempo acordado',   meta:95,   unidad:'%',      semVerde:95,semAmarillo:80}],
+    5:[{nombre:'Uptime',             desc:'% disponibilidad servicios',           meta:99.5, unidad:'%',      semVerde:99,semAmarillo:95}],
+    6:[{nombre:'Cierre financiero',  desc:'% entregas de cierre a tiempo',       meta:100,  unidad:'%',      semVerde:95,semAmarillo:85}],
+    7:[{nombre:'Leads generados',    desc:'Leads calificados del mes',            meta:500,  unidad:'leads',  semVerde:80,semAmarillo:60}]
   };
 
-  // NIVEL ESPERADO por colaborador
-  DB.nivelEsperado = {'0':2,'1':3,'2':3,'3':2,'4':4,'5':5,'6':2,'7':3};
+  var meses=['Enero','Febrero','Marzo'];
+  var reales=[
+    [162,148,155],[99,97,98],[88,76,83],[95,100,92],[97,93,96],[99.8,99.5,99.7],[100,98,100],[520,480,510]
+  ];
+  var punt=[[0.93,0.90,0.92],[0.94,0.91,0.93],[0.88,0.85,0.87],[0.91,0.93,0.89],[0.94,0.91,0.93],[0.96,0.95,0.96],[0.93,0.91,0.94],[0.88,0.85,0.87]];
+  var asis=[[0.96,0.94,0.97],[0.97,0.95,0.96],[0.92,0.90,0.93],[0.94,0.96,0.92],[0.98,0.95,0.97],[0.97,0.97,0.98],[0.95,0.94,0.96],[0.91,0.90,0.92]];
+  DB.perfData={};DB.perfAsist={};
+  for(var ci=0;ci<8;ci++){
+    DB.perfData[ci]={'2026':{}};DB.perfAsist[ci]={'2026':{}};
+    for(var mi=0;mi<3;mi++){
+      var m2=meses[mi];
+      DB.perfData[ci]['2026'][m2]={0:{real:reales[ci][mi],obs:'OK'}};
+      DB.perfAsist[ci]['2026'][m2]={puntualidad:punt[ci][mi],asistencia:asis[ci][mi]};
+    }
+  }
 
-  // EVALUACIONES en banco
-  DB.evaluaciones = [
-    {nombre:'Evaluacion 30 dias - Integracion',  proceso:'Primeros 90 dias',  preguntas:['El colaborador logro los objetivos del primer mes?','Como evaluas su integracion al equipo?','Muestra iniciativa y proactividad?','Calidad de sus primeras entregas?']},
-    {nombre:'Evaluacion 60 dias - Seguimiento',  proceso:'Primeros 90 dias',  preguntas:['Ha cumplido los objetivos definidos?','La calidad de su trabajo es consistente?','Se comunica efectivamente con el equipo?','Ha mostrado mejora respecto al mes anterior?']},
-    {nombre:'Evaluacion 90 dias - Decision',     proceso:'Primeros 90 dias',  preguntas:['Recomiendas la permanencia del colaborador?','Ha demostrado los valores de la empresa?','Tiene potencial de crecimiento en el rol?','Ha cumplido las expectativas del puesto?']},
-    {nombre:'Evaluacion de cambio de puesto',    proceso:'Cambio de puesto',  preguntas:['Ha asimilado las responsabilidades del nuevo rol?','Su curva de aprendizaje es la esperada?','Como evaluas su adaptacion al cambio?']},
-    {nombre:'Autoevaluacion colaborador',        proceso:'Evaluacion periodica',preguntas:['Cuales fueron tus principales logros?','Que areas de mejora identificas?','Como evaluas el apoyo de tu lider?','Que recursos necesitas para mejorar?']}
+  DB.evalDesempeno=[
+    {ci:0,periodo:'Q1-2026',status:'completada',  valorScores:{0:4,1:3,2:4,3:5,4:4},compScores:{0:3,1:2,2:4,3:4,4:3},kpiScores:{},comentarios:'Excelente atencion al cliente.',liderComent:'Marco muestra gran compromiso.',fechaFin:'2026-03-31'},
+    {ci:1,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:5,2:3,3:4,4:4},compScores:{0:4,1:2,2:5,3:3,4:5},kpiScores:{},comentarios:'Alta precision en reportes.',   liderComent:'Sofia es muy meticulosa.',    fechaFin:'2026-03-31'},
+    {ci:4,periodo:'Q1-2026',status:'en_progreso', valorScores:{0:3,1:4,2:3,3:5,4:3},compScores:{0:4,1:3,2:3,3:4,4:3},kpiScores:{},comentarios:'',                             liderComent:'',                            fechaFin:''},
+    {ci:5,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:4,2:5,3:4,4:5},compScores:{0:4,1:5,2:5,3:4,4:5},kpiScores:{},comentarios:'Lidera con excelencia.',       liderComent:'Laura es referente del equipo.',fechaFin:'2026-03-31'}
   ];
 
-  // FEEDBACK de ejemplo
-  DB.fbComments = {
-    '0': [
-      {quien:'lider',tipo:'Reconocimiento',txt:'Marco ha demostrado excelente disposicion para aprender. Sus primeras entregas son de buena calidad para ser su primer mes.',fecha:'15 Ene'},
-      {quien:'colab',tipo:'Autoreflexion',txt:'Me siento bien integrado al equipo. Necesito mejorar mi velocidad en la resolucion de bugs pero estoy aprendiendo rapido.',fecha:'16 Ene'}
+  DB.fbComments={
+    0:[
+      {autor:'Carlos Perez',rol:'Lider',      msg:'Marco, excelente manejo de tickets de alta prioridad.',             fecha:'2026-03-10',tipo:'positivo'},
+      {autor:'Marco Ruiz',  rol:'Colaborador',msg:'Gracias. Podriamos mejorar el proceso de escalacion.',             fecha:'2026-03-11',tipo:'sugerencia'}
     ],
-    '1': [
-      {quien:'lider',tipo:'Logro',txt:'Sofia tuvo el CSAT mas alto del equipo este mes con 4.8/5. Excelente trabajo en los tickets complejos.',fecha:'20 Ene'},
-      {quien:'colab',tipo:'Peticion de apoyo',txt:'Me gustaria recibir mas capacitacion en el manejo de cuentas enterprise. Los casos son mas complejos de lo esperado.',fecha:'21 Ene'}
-    ],
-    '4': [
-      {quien:'lider',tipo:'Area de mejora',txt:'Roberto necesita mejorar la documentacion de sus proyectos. El codigo es solido pero falta contexto para el equipo.',fecha:'10 Ene'}
+    1:[{autor:'Maria Garcia',rol:'Lider',      msg:'Sofia, el cierre de febrero fue impecable.',                       fecha:'2026-03-05',tipo:'positivo'}],
+    5:[
+      {autor:'Luis Torres', rol:'Lider',       msg:'Laura, el deployment del viernes fue un exito. Gracias.',          fecha:'2026-03-15',tipo:'positivo'},
+      {autor:'Laura Soto',  rol:'Colaborador', msg:'Faltaria documentar mejor los rollback procedures.',               fecha:'2026-03-16',tipo:'sugerencia'}
     ]
   };
 
-  // EVALUACION DE DESEMPENO de ejemplo
-  var trimQ4 = {
-    colabIdx:'4', colabNombre:'Roberto Silva',
-    trimestre:'Q4 (Oct-Dic)', anio:'2024',
-    fechaInicio:'2024-10-01', fechaFin:'2024-12-31',
-    fecha:'15 Ene 2025', evaluador:'Carlos Perez',
-    nivelEsperado:4, kpiScore:48.5, compScore:22.4, total:70.9,
-    nivel:'Satisfactorio',
-    kpiDetalle:[
-      {nombre:'Proyectos entregados',peso:50,meta:'3',cumplimiento:80,aporte:28},
-      {nombre:'SLA cumplimiento',    peso:30,meta:'95%',cumplimiento:90,aporte:13.5},
-      {nombre:'Mejoras propuestas',  peso:20,meta:'2/mes',cumplimiento:70,aporte:7}
-    ],
-    compDetalle:[
-      {nombre:'Pensamiento innovador',valor:'Innovacion',score:3,aporte:5.6},
-      {nombre:'Trabajo en equipo',    valor:'Colaboracion',score:4,aporte:7.5},
-      {nombre:'Orientacion al servicio',valor:'Orientacion al cliente',score:3,aporte:5.6},
-      {nombre:'Calidad y precision',  valor:'Excelencia',score:2,aporte:3.75}
-    ],
-    fortalezas:'Excelente dominio tecnico. Entrega proyectos sin errores criticos. Buen companero de equipo.',
-    areasDesarrollo:'Mejorar documentacion tecnica. Aumentar velocidad de entrega. Comunicar bloqueos con mas anticipacion.',
-    compromisos:'Documentar todos los proyectos del Q1. Asistir a taller de gestion del tiempo. Revision semanal con el lider.'
+  // SLA demo data
+  slaApply();
+  var slaMar='2026_Marzo', slaFeb='2026_Febrero';
+  SLA_DB.periods={};
+  var slaCfgMar={
+    'Finanzas':        {st:'aprobado', by:'Maria Garcia',      pct:[95,88,100,92,97,85,91,100,96,100,88,93,90]},
+    'Operaciones':     {st:'aprobado', by:'Carlos Perez',      pct:[100,98,94,96,98,95]},
+    'IT':              {st:'enviado',  by:'Luis Torres',        pct:[99.8,100,85,92,0,88]},
+    'LTL':             {st:'pendiente',by:'',                  pct:[]},
+    'Marketing':       {st:'aprobado', by:'Sofia Mendez',      pct:[90,95,88,92,85]},
+    'Recursos Humanos':{st:'rechazado',by:'Ana Ramirez',       pct:[100,95,90,85,88,92,100],cmt:'Faltan datos de reclutamiento Q1.'},
+    'Legal':           {st:'pendiente',by:'',                  pct:[]},
+    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez',   pct:[100,99.5,95,99.8,100,88,97]},
+    'Strategy BI':     {st:'enviado',  by:'Osvaldo Melendez',  pct:[92,88,85,90]},
+    'FTL':             {st:'pendiente',by:'',                  pct:[]},
+    'Growth':          {st:'aprobado', by:'Director Growth',   pct:[100,100,95,92,100]}
   };
-  DB.evalDesempeno = [trimQ4];
-
-  updateLineaBadge();
-  saveDB();
-  _saveGlobal();
-  buildUsersFromDB();
-  renderAll();
-  nav('dash');
-  toast('Datos de demostracion cargados. ' + DB.colabs.length + ' colaboradores, ' + DB.lideres.length + ' lideres.');
-}
-
-function resetTodo() {
-  if (!confirm('RESET TOTAL: Borrar absolutamente todos los datos (colaboradores, areas, evaluaciones, feedback, lideres, KPIs)?\n\nEsta accion no se puede deshacer.')) return;
-  // Reset DB
-  DB.areas=[]; DB.puestos=[]; DB.lideres=[]; DB.colabs=[];
-  DB.evaluaciones=[]; DB.fbComments={}; DB.semData={}; DB.notas={};
-  DB.evalDesempeno=[]; DB.kpis={}; DB.nivelEsperado={};
-  DB.config={empresa:'Tendencys', alerta:7};
-  // Reset GLOBAL (valores, competencias, usuarios creados)
-  GLOBAL.valores=[];
-  GLOBAL.competencias=[];
-  GLOBAL.usuarios=[];
-  GLOBAL.lineas=LINEAS_PREDEFINIDAS.slice();
-  // Clear localStorage
-  try { localStorage.removeItem('talentys_db'); } catch(e) {}
-  // Clear Firebase
-  if (_fbOK && _db) {
-    ['areas','puestos','lideres','colabs','evalDesempeno'].forEach(function(col) {
-      var ref = lineaActual ? _db.collection('lineas').doc(lineaActual.id).collection(col) : null;
-      if (!ref) return;
-      ref.get().then(function(snap) {
-        var b = _db.batch();
-        snap.docs.forEach(function(d) { b.delete(d.ref); });
-        return b.commit();
-      }).catch(function() {});
+  var slaCfgFeb={
+    'Finanzas':        {st:'aprobado', by:'Maria Garcia',      pct:[92,85,98,88,94,82,89,100,93,98,85,90,87]},
+    'Operaciones':     {st:'aprobado', by:'Carlos Perez',      pct:[98,95,91,94,96,92]},
+    'IT':              {st:'aprobado', by:'Luis Torres',        pct:[99.5,100,82,90,0,85]},
+    'LTL':             {st:'aprobado', by:'Ivan Gallegos',     pct:[88,90,85,87,82,80,91]},
+    'Marketing':       {st:'aprobado', by:'Sofia Mendez',      pct:[87,92,85,90,82]},
+    'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',       pct:[98,92,88,83,85,90,98]},
+    'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez',   pct:[100,99,92,99.5,98,85,95]},
+    'Growth':          {st:'aprobado', by:'Director Growth',   pct:[98,100,93,90,98]}
+  };
+  function mkSLAPeriod(cfg){
+    var per={areas:{}};
+    SLA_AREAS.forEach(function(area){
+      var c=cfg[area]||{st:'pendiente',by:'',pct:[]};
+      var procs=slaMkP(area);var ps=c.pct||[];
+      procs.forEach(function(p,i){p.c=ps[i]!==undefined&&ps[i]!==''?String(ps[i]):'';p.v=p.c?'Cumplido':'';p.n=p.c&&parseFloat(p.c)>0?String(Math.floor(parseFloat(p.c)/100*50+5)):'';});
+      per.areas[area]={st:c.st||'pendiente',by:c.by||'',at:c.st==='aprobado'||c.st==='enviado'?new Date().toISOString():null,cmt:c.cmt||'',notes:'',logs:[],procs:procs};
     });
-    var g = _db.batch();
-    ['lineas','usuarios','valores','competencias'].forEach(function(k) {
-      g.set(_db.collection('_global').doc(k), {v: k==='lineas'?GLOBAL.lineas:[]});
-    });
-    g.commit().catch(function() {});
+    return per;
   }
+  SLA_DB.periods[slaMar]=mkSLAPeriod(slaCfgMar);
+  SLA_DB.periods[slaFeb]=mkSLAPeriod(slaCfgFeb);
+
+  saveDB();
+  SLA_OK=true;
+  fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).then(function(){}).catch(function(){});
+
   buildUsersFromDB();
-  renderAll();
-  toast('Reset completado. La plataforma esta limpia.');
+  var adminU=_allUsers.find(function(x){return x.user==='admin';});
+  if(adminU){
+    currentUser=adminU;
+    document.getElementById('usr-av').textContent='AD';
+    document.getElementById('usr-name').textContent='Administrador';
+    document.getElementById('usr-role').textContent='Administrador';
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-layout').style.display='';
+    var cv=document.getElementById('col-view');if(cv)cv.style.display='none';
+    renderAll();
+    nav('dash');
+  }
+  toast('Datos demo cargados. 8 colabs, 4 lideres, KPIs, SLAs Ene-Mar 2026.');
 }
 
-loadDB();
-buildUsersFromDB();
+function renderDemoReset(){
+  var el=document.getElementById('pg-admin-demobtn');
+  if(!el)return;
+  el.innerHTML='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
+    +'<button onclick="cargarDatosDemo()" class="btn btn-bl">Cargar datos demo</button>'
+    +'<button onclick="resetTodo()" style="padding:9px 18px;border-radius:8px;border:1px solid var(--red);background:var(--red-l);color:var(--red);cursor:pointer;font-weight:600;font-size:13px">Borrar todo y resetear</button>'
+    +'</div>';
+}
 </script>
 </body>
 </html>
