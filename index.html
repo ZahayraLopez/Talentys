@@ -373,6 +373,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
     <div class="tab" onclick="stab(this,'ta-puestos')">Puestos</div>
     <div class="tab" onclick="stab(this,'ta-lideres')">Lideres</div>
     <div class="tab" onclick="stab(this,'ta-config')">Configuracion</div>
+    <div class="tab" onclick="stab(this,'ta-carga')">Carga masiva</div>
   </div>
   <!-- COLABS TAB -->
   <div id="ta-colabs" class="tc on">
@@ -456,6 +457,137 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
         <div class="ctitle mb10">Crear usuario colaborador</div>
         <div class="th tsm mb10">Los usuarios se crean automaticamente al registrar lideres y colaboradores con usuario y contrasena.</div>
         <div id="usuarios-linea-list"><div class="th tsm" style="padding:12px;text-align:center">No hay usuarios en esta linea.</div></div>
+      </div>
+    </div>
+
+  <div id="ta-carga" class="tc">
+      <div class="ai"><div class="ai-h"><span class="ai-b">SHEETS</span><span class="ai-t">Carga masiva desde Google Sheets</span></div>
+        <div class="ai-d">Importa areas, puestos, lideres o colaboradores desde una hoja de Google Sheets publica. Previsualiza antes de importar. O descarga la plantilla CSV de ejemplo.</div>
+      </div>
+      <div class="tabs" style="margin-bottom:16px">
+        <div class="tab on" onclick="stab(this,'tf-areas')">Areas</div>
+        <div class="tab" onclick="stab(this,'tf-puestos')">Puestos</div>
+        <div class="tab" onclick="stab(this,'tf-lideres')">Lideres</div>
+        <div class="tab" onclick="stab(this,'tf-colabs')">Colaboradores</div>
+      </div>
+
+      <!-- AREAS -->
+      <div id="tf-areas" class="tc on">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet - Areas</div>
+            <div class="fg"><label class="fl">URL de Google Sheets</label><input type="text" class="fc" id="gs-url-areas" placeholder="https://docs.google.com/spreadsheets/d/..."><div class="th tsm mt4">La hoja debe ser publica (Compartir > Cualquiera con el enlace puede ver).</div></div>
+            <div class="fg"><label class="fl">Nombre de la pestana (opcional)</label><input type="text" class="fc" id="gs-sheet-areas" placeholder="Ej. Areas (por defecto: Sheet1)"></div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span>Nombre del area <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">B</span><span>Responsable</span>
+                <span class="bdg b-gy">C</span><span>Pais</span>
+                <span class="bdg b-gy">D</span><span>Descripcion</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('areas')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('areas')" id="btn-import-areas" disabled style="opacity:.5">Importar areas</button>
+            </div>
+            <div style="margin-top:12px"><a href="#" onclick="downloadTemplate('areas');return false;" style="font-size:12px;color:var(--blu)">Descargar plantilla CSV de ejemplo</a></div>
+          </div>
+          <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-areas"><div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona Vista previa.</div></div></div>
+        </div>
+      </div>
+
+      <!-- PUESTOS -->
+      <div id="tf-puestos" class="tc">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet - Puestos</div>
+            <div class="fg"><label class="fl">URL de Google Sheets</label><input type="text" class="fc" id="gs-url-puestos" placeholder="https://docs.google.com/spreadsheets/d/..."></div>
+            <div class="fg"><label class="fl">Nombre de la pestana (opcional)</label><input type="text" class="fc" id="gs-sheet-puestos" placeholder="Ej. Puestos"></div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span>Nombre del puesto <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">B</span><span>Nivel (L1, L2, Junior...)</span>
+                <span class="bdg b-gy">C</span><span>Area</span>
+                <span class="bdg b-gy">D</span><span>Plazas</span>
+                <span class="bdg b-gy">E</span><span>Crecimiento vertical</span>
+                <span class="bdg b-gy">F</span><span>Movimiento horizontal</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('puestos')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('puestos')" id="btn-import-puestos" disabled style="opacity:.5">Importar puestos</button>
+            </div>
+            <div style="margin-top:12px"><a href="#" onclick="downloadTemplate('puestos');return false;" style="font-size:12px;color:var(--blu)">Descargar plantilla CSV de ejemplo</a></div>
+          </div>
+          <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-puestos"><div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona Vista previa.</div></div></div>
+        </div>
+      </div>
+
+      <!-- LIDERES -->
+      <div id="tf-lideres" class="tc">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet - Lideres</div>
+            <div class="fg"><label class="fl">URL de Google Sheets</label><input type="text" class="fc" id="gs-url-lideres" placeholder="https://docs.google.com/spreadsheets/d/..."></div>
+            <div class="fg"><label class="fl">Nombre de la pestana (opcional)</label><input type="text" class="fc" id="gs-sheet-lideres" placeholder="Ej. Lideres"></div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span>Nombre completo <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-bl">B</span><span>Correo electronico <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">C</span><span>Cargo / Puesto</span>
+                <span class="bdg b-gy">D</span><span>Pais</span>
+                <span class="bdg b-gy">E</span><span>Area</span>
+                <span class="bdg b-gy">F</span><span>Telefono</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('lideres')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('lideres')" id="btn-import-lideres" disabled style="opacity:.5">Importar lideres</button>
+            </div>
+            <div style="margin-top:12px"><a href="#" onclick="downloadTemplate('lideres');return false;" style="font-size:12px;color:var(--blu)">Descargar plantilla CSV de ejemplo</a></div>
+          </div>
+          <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-lideres"><div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona Vista previa.</div></div></div>
+        </div>
+      </div>
+
+      <!-- COLABORADORES -->
+      <div id="tf-colabs" class="tc">
+        <div class="g2">
+          <div class="card">
+            <div class="ctitle mb12">Conectar Google Sheet - Colaboradores</div>
+            <div class="fg"><label class="fl">URL de Google Sheets</label><input type="text" class="fc" id="gs-url-colabs" placeholder="https://docs.google.com/spreadsheets/d/..."></div>
+            <div class="fg"><label class="fl">Nombre de la pestana (opcional)</label><input type="text" class="fc" id="gs-sheet-colabs" placeholder="Ej. Colaboradores"></div>
+            <div style="background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+              <div class="ctitle mb8">Columnas esperadas</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:12px">
+                <span class="bdg b-bl">A</span><span>Nombre completo <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-bl">B</span><span>Correo electronico <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-bl">C</span><span>Fecha ingreso (YYYY-MM-DD) <b style="color:var(--red)">*</b></span>
+                <span class="bdg b-gy">D</span><span>Pais</span>
+                <span class="bdg b-gy">E</span><span>Puesto</span>
+                <span class="bdg b-gy">F</span><span>Area</span>
+                <span class="bdg b-gy">G</span><span>Lider</span>
+                <span class="bdg b-gy">H</span><span>Proceso (Primeros 90 dias / Activo / Cambio de puesto)</span>
+              </div>
+            </div>
+            <div class="fg"><label class="fl">Duplicados</label><select class="fc" id="gs-dup-colabs"><option value="skip">Omitir si ya existe (por correo)</option><option value="replace">Reemplazar si ya existe</option><option value="add">Agregar siempre</option></select></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-bl btn-sm" onclick="previewSheet('colabs')">Vista previa</button>
+              <button class="btn btn-or" onclick="importSheet('colabs')" id="btn-import-colabs" disabled style="opacity:.5">Importar colaboradores</button>
+            </div>
+            <div style="margin-top:12px"><a href="#" onclick="downloadTemplate('colabs');return false;" style="font-size:12px;color:var(--blu)">Descargar plantilla CSV de ejemplo</a></div>
+          </div>
+          <div class="card"><div class="ctitle mb12">Vista previa</div><div id="preview-colabs"><div class="th tsm" style="padding:20px 0;text-align:center">Ingresa la URL y presiona Vista previa.</div></div></div>
+        </div>
+      </div>
+
+      <!-- LOG -->
+      <div class="card" style="margin-top:16px">
+        <div class="ctitle mb10">Historial de importaciones</div>
+        <div id="import-log"><div class="th tsm" style="padding:12px 0;text-align:center">No hay importaciones registradas.</div></div>
       </div>
     </div>
   </div>
@@ -599,11 +731,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
 </div>
 
 <div id="pg-sla" class="pg">
-  <div class="ai">
-    <div class="ai-h"><span class="ai-b">SLA</span><span class="ai-t">SLAs Tendencys 2026</span></div>
-    <div class="ai-d">Cumplimiento mensual de SLAs por area. Admin/HRBP: revisar y aprobar. Lideres: capturar su area.</div>
-  </div>
-  <div id="sla-content"><div style="padding:40px;text-align:center;color:var(--hnt)">Cargando...</div></div>
+  <div id="sla-content"><div style="padding:40px;text-align:center;color:var(--mut)">Cargando SLAs...</div></div>
 </div>
 
 <div id="toast"></div>
@@ -614,9 +742,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
     <div class="tab" onclick="stab(this,'tperf-historico');renderPerfHistorico()">Historico anual</div>
   </div>
   <div id="tperf-seguimiento" class="tc on">
-    <div class="ai"><div class="ai-h"><span class="ai-b">70/30</span><span class="ai-t">Performance mensual: KPIs 70% + Puntualidad 15% + Asistencia 15%</span></div>
-    <div class="ai-d">Registra el valor real de cada KPI mensualmente. El resultado final combina KPIs (70%) con puntualidad y asistencia (30%). Lideres, HRBP y Admin pueden capturar datos.</div></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
       <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador</label>
         <select class="fc" id="perf-colab-sel" onchange="renderPerfTabla()"><option value="">-- Todos --</option></select>
       </div>
@@ -638,7 +764,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
   <div id="tperf-historico" class="tc">
     <div class="ai"><div class="ai-h"><span class="ai-b">HIST</span><span class="ai-t">Historico anual - Score 70/30 por mes</span></div>
     <div class="ai-d">Vista de los 12 meses del ano. La fila final muestra el score 70/30 mensual y el promedio anual.</div></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
       <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador *</label>
         <select class="fc" id="perf-hist-colab" onchange="renderPerfHistorico()"><option value="">-- Seleccionar --</option></select>
       </div>
@@ -747,7 +873,7 @@ function renderPerfTabla(){
     var prom=_calcPerfPromedio(ci,ano,mesNum);
     var disp=s7030!==null?s7030:prom;
     var semB=disp!==null?_getSemaforo(disp,null):null;
-    h2+='<div class="card mb14">';
+    h2+='<div class="card mb10">';
     h2+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">';
     h2+='<div class="av av-bl">'+_esc(c.initials)+'</div>';
     h2+='<div class="f1"><div class="fw6" style="font-size:15px">'+_esc(c.nombre)+'</div>';
@@ -1220,15 +1346,42 @@ function toggleLineaSwitcher(){
   if(!sw)return;
   if(sw.style.display==='none'||!sw.style.display){
     var h='';
+    if(canSeeAllLineas()){
+      var isGen=!lineaActual;
+      h+='<div onclick="switchAdminGeneral()" style="display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;border-left:3px solid '+(isGen?'#E8470A':'transparent')+';background:'+(isGen?'rgba(232,71,10,.15)':'transparent')+'">'
+        +'<div style="width:8px;height:8px;border-radius:50%;background:#E8470A"></div>'
+        +'<span style="font-size:12px;font-weight:'+(isGen?700:400)+';color:'+(isGen?'#fff':'rgba(255,255,255,.7)')+'">Todas las lineas (Admin General)</span>'
+        +'</div>'
+        +'<div style="height:1px;background:rgba(255,255,255,.08);margin:2px 0"></div>';
+    }
     (GLOBAL.lineas||[]).forEach(function(l){
       var active=lineaActual&&lineaActual.id===l.id;
-      h+='<div onclick="switchLinea(\''+l.id+'\')" style="display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;border-left:3px solid '+(active?l.color:'transparent')+'">'
+      h+='<div onclick="switchLinea(\''+l.id+'\')" style="display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;border-left:3px solid '+(active?l.color:'transparent')+';background:'+(active?'rgba(255,255,255,.06)':'transparent')+'">'
         +'<div style="width:8px;height:8px;border-radius:50%;background:'+l.color+'"></div>'
-        +'<span style="font-size:12px;color:'+(active?'#fff':'rgba(255,255,255,.6)')+'">'+l.nombre+'</span>'
+        +'<span style="font-size:12px;font-weight:'+(active?700:400)+';color:'+(active?'#fff':'rgba(255,255,255,.6)')+'">'+l.nombre+'</span>'
         +'</div>';
     });
     sw.innerHTML=h;sw.style.display='block';
   } else {sw.style.display='none';}
+}
+
+function switchAdminGeneral(){
+  var sw=document.getElementById('linea-switcher');
+  if(sw)sw.style.display='none';
+  lineaActual=null;
+  DB.areas=[];DB.puestos=[];DB.lideres=[];DB.colabs=[];
+  DB.evalDesempeno=[];DB.kpis={};DB.nivelEsperado={};DB.fbComments={};
+  DB.perfKpis={};DB.perfData={};DB.perfAsist={};
+  // Reload from localStorage
+  try{
+    var raw=localStorage.getItem('talentys_db');
+    if(raw){var d=JSON.parse(raw);if(d.DB)Object.assign(DB,d.DB);if(d.GLOBAL)Object.assign(GLOBAL,d.GLOBAL);}
+  }catch(e){}
+  updateLineaBadge();
+  if(currentUser)document.getElementById('usr-role').textContent=currentUser.rol+' - Admin General';
+  buildUsersFromDB();renderAll();nav('dash');
+  saveDB();
+  toast('Modo Admin General activado.');
 }
 
 function switchLinea(lineaId){
@@ -1385,6 +1538,7 @@ function syncSelects(){
 function renderAll(){
   syncSelects();renderDash();renderP90();renderEvalBanco();renderFeedbackList();
   renderColabsAdmin();renderAreas();renderPuestos();renderLideres();
+  renderDesResultados();
 }
 
 // ============================================================
@@ -1440,9 +1594,11 @@ function renderDash(){
 // ============================================================
 function renderP90(){
   var list=document.getElementById('p90-list');if(!list)return;
-  var cols=(DB.colabs||[]).filter(function(c){return c.proceso==='Primeros 90 dias';});
-  if(isLider()&&currentUser)cols=cols.filter(function(c){return c.lider===currentUser.nombre;});
-  if(!cols.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">No hay colaboradores en primeros 90 dias.</div>';return;}
+  var todosP90=(DB.colabs||[]).filter(function(c){return c.proceso==='Primeros 90 dias';});
+  if(isLider()&&currentUser)todosP90=todosP90.filter(function(c){return c.lider===currentUser.nombre;});
+  var cols=todosP90.filter(function(c){return calcDias(c.fecha)<=90;});
+  var vencidos=todosP90.filter(function(c){return calcDias(c.fecha)>90;});
+  if(!cols.length&&!vencidos.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">No hay colaboradores en primeros 90 dias.</div>';return;}
   var avColors=['av-bl','av-gn','av-pu','av-am','av-tl'];
   list.innerHTML=cols.map(function(c,i){
     var dias=calcDias(c.fecha);
@@ -2233,8 +2389,8 @@ var SLA_V="dash",SLA_DD=null,SLA_DF=null;
 var SLA_MES="Marzo",SLA_ANIO="2026",SLA_HANUAL="2026",SLA_GAREA="Finanzas";
 var SLA_MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 var SLA_YEARS=["2025","2026","2027","2028"];
-var SLA_AC={"Finanzas":"#22c55e","Operaciones":"#e879f9","IT":"#4CAF50","LTL":"#FF5722","Marketing":"#f59e0b","Recursos Humanos":"#fb7185","Legal":"#a78bfa","Fulfillment":"#2dd4c0","Strategy BI":"#60a5fa","FTL":"#f87171","Growth":"#c084fc","Partnerships":"#f97316","Corporate Sales":"#00ACC1","Comercial USA":"#00ACC1","Comercial Envia":"#5DCAA5"};
-var SLA_SC={pendiente:{t:"Pendiente",c:"#94b8cc",b:"rgba(148,184,204,.12)"},enviado:{t:"Enviado",c:"#60a5fa",b:"rgba(96,165,250,.12)"},aprobado:{t:"Aprobado",c:"#2dd4c0",b:"rgba(45,212,192,.12)"},rechazado:{t:"Rechazado",c:"#f87171",b:"rgba(248,113,113,.12)"},editado:{t:"Editado",c:"#fbbf24",b:"rgba(251,191,36,.12)"}};
+var SLA_AC={"Finanzas":"#1a7a35","Operaciones":"#7b1fa2","IT":"#2E8B35","LTL":"#bf360c","Marketing":"#C4530A","Recursos Humanos":"#c2185b","Legal":"#5c35b0","Fulfillment":"#00838F","Strategy BI":"#1B6CA8","FTL":"#B52A2A","Growth":"#6a1b9a","Partnerships":"#e65100","Corporate Sales":"#006064","Comercial USA":"#006064","Comercial Envia":"#00695c"};
+var SLA_SC={pendiente:{t:"Pendiente",c:"#5A7A90",b:"rgba(90,122,144,.1)"},enviado:{t:"Enviado",c:"#1B6CA8",b:"rgba(27,108,168,.1)"},aprobado:{t:"Aprobado",c:"#2E8B35",b:"rgba(46,139,53,.1)"},rechazado:{t:"Rechazado",c:"#B52A2A",b:"rgba(181,42,42,.1)"},editado:{t:"Editado",c:"#C4530A",b:"rgba(196,83,10,.1)"}};
 var SLA_BASE={
 "Finanzas":[{s:"2.1 Tesoreria",p:"Reporte gastos direccion",o:"Max. 10 dias"},{s:"2.1 Tesoreria",p:"Revision contracargos",o:"Max. 5 dias"},{s:"2.1 Tesoreria",p:"Reembolso nacional",o:"Max. 10 dias"},{s:"2.2 Nomina",p:"Comisiones globales",o:"Antes dia 14"},{s:"2.2 Nomina",p:"Incidentes nomina",o:"Max. 1 dia"},{s:"2.3 Contabilidad",p:"Informes ingresos",o:"Primeros 12 dias"},{s:"2.3 Contabilidad",p:"Calculo impuestos",o:"Antes dia 10"},{s:"2.4 CxC",p:"Contacto adeudos",o:"Primeros 5 dias"},{s:"2.5 Facturacion",p:"Brasil Recarga",o:"Ultimo dia"},{s:"2.5 Facturacion",p:"MX/CO/GT",o:"Antes ultimo dia"},{s:"2.6 Costos",p:"Calculo margen operativo",o:"Max. 7 dias"},{s:"2.6 Costos",p:"Auditoria vs carriers",o:"Diaria"},{s:"2.7 Planeacion",p:"Resumen ejecutivo KPIs",o:"Max. 3 dias"}],
 "Operaciones":[{s:"6.1 Respuesta",p:"Primera resp. WhatsApp",o:"<= 5 min"},{s:"6.1 Respuesta",p:"Primera resp. Tickets",o:"<= 10 min"},{s:"6.2 Resolucion",p:"Resolucion tickets",o:"<= 20 dias"},{s:"6.4 Calidad",p:"Puntuacion calidad",o:">= 90 pts"},{s:"6.5 Experiencia",p:"Satisfaccion cliente",o:">= 4.5/5"},{s:"6.6 Comercial",p:"Clientes retenidos",o:">= 98%"}],
@@ -2250,10 +2406,10 @@ var SLA_BASE={
 };
 var SLA_CAT=JSON.parse(JSON.stringify(SLA_BASE));
 var SLA_AREAS=Object.keys(SLA_CAT);
-function slaPC(v){var n=parseFloat(v);if(isNaN(n)||v===''||v===null||v===undefined)return'var(--hnt)';return n>=95?'var(--grn)':n>=80?'var(--amb)':'var(--red)';}
+function slaPC(v){var n=parseFloat(v);if(isNaN(n)||v===''||v===null||v===undefined)return'var(--mut)';return n>=95?'var(--grn)':n>=80?'var(--amb)':'var(--red)';}
 function slaBdg(st){var s=SLA_SC[st]||SLA_SC.pendiente;return'<span class="bdg" style="background:'+s.b+';color:'+s.c+'">'+s.t+'</span>';}
-function slaMbar(v){if(!v&&v!==0)return'';var n=parseFloat(v)||0,c=slaPC(v);return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="flex:1;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.min(n,100)+'%;background:'+c+';border-radius:3px"></div></div><span style="font-size:11px;font-weight:700;color:'+c+'">'+parseFloat(v).toFixed(1)+'%</span></div>';}
-function slaCC(p){return p===100?'var(--grn)':p>=60?'var(--amb)':'var(--red)';}
+function slaMbar(v){if(!v&&v!==0)return'';var n=parseFloat(v)||0,c=slaPC(v);return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="flex:1;height:6px;background:#D0DDE8;border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.min(n,100)+'%;background:'+c+';border-radius:3px"></div></div><span style="font-size:12px;font-weight:700;color:'+c+'">'+parseFloat(v).toFixed(1)+'%</span></div>';}
+function slaCC(p){return p===100?'#2E8B35':p>=60?'#C4530A':'#B52A2A';}
 function slaApply(){SLA_CAT=JSON.parse(JSON.stringify(SLA_BASE));(SLA_DB.customAreas||[]).forEach(function(a){if(!SLA_CAT[a]){SLA_CAT[a]=[];if((SLA_DB.customAreaColors||{})[a])SLA_AC[a]=SLA_DB.customAreaColors[a];}});Object.keys(SLA_DB.slasEliminados||{}).forEach(function(a){if(SLA_CAT[a])SLA_CAT[a]=SLA_CAT[a].filter(function(p){return((SLA_DB.slasEliminados||{})[a]||[]).indexOf(p.p)<0;});});Object.keys(SLA_DB.customSLAs||{}).forEach(function(a){if(!SLA_CAT[a])SLA_CAT[a]=[];var ex=SLA_CAT[a].map(function(p){return p.p;});((SLA_DB.customSLAs||{})[a]||[]).forEach(function(p){if(ex.indexOf(p.p)<0)SLA_CAT[a].push(p);});});SLA_AREAS=Object.keys(SLA_CAT);}
 function slaMkP(a){return(SLA_CAT[a]||[]).map(function(p){return{s:p.s,p:p.p,o:p.o,v:'',c:'',n:''};});}
 function slaMkA(a){return{st:'pendiente',at:null,by:'',cmt:'',notes:'',logs:[],procs:slaMkP(a)};}
@@ -2269,7 +2425,7 @@ function slaRole(){if(!currentUser)return'lider';var r=currentUser.rol;return(r=
 function slaDO(){return slaRole()==='do';}
 async function slaLoad(){if(SLA_OK)return;try{var r=await fetch(SLA_FB+'.json');if(r.ok){var d=await r.json();if(d){SLA_DB=d;if(!SLA_DB.periods)SLA_DB.periods={};if(!SLA_DB.customSLAs)SLA_DB.customSLAs={};if(!SLA_DB.slasEliminados)SLA_DB.slasEliminados={};if(!SLA_DB.customAreas)SLA_DB.customAreas=[];if(!SLA_DB.customAreaColors)SLA_DB.customAreaColors={};slaApply();}}}catch(e){console.warn('SLA:',e);}SLA_OK=true;}
 function slaSave(){if(SLA_ST)clearTimeout(SLA_ST);SLA_ST=setTimeout(async function(){SLA_ST=null;if(SLA_SVG)return;SLA_SVG=true;try{await fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)});}catch(e){toast('Error SLA:'+e.message);}finally{SLA_SVG=false;}},900);}
-function renderSLA(){var el=document.getElementById('sla-content');if(!el)return;if(!SLA_OK){el.innerHTML='<div style="padding:40px;text-align:center;color:var(--hnt)">Cargando SLA...</div>';slaLoad().then(slaRender);return;}slaRender();}
+function renderSLA(){var el=document.getElementById('sla-content');if(!el)return;if(!SLA_OK){el.innerHTML='<div style="padding:40px;text-align:center;color:var(--mut)">Cargando SLA...</div>';slaLoad().then(slaRender);return;}slaRender();}
 function slaRender(){
   var el=document.getElementById('sla-content');if(!el)return;
   slaApply();var p=slaCurP();
@@ -2281,14 +2437,21 @@ function slaRender(){
   var gP=tC?Math.round(fC/tC*100):0;
   var mSel='<select id="s_slames" class="fc" style="padding:4px 7px;font-size:12px;width:auto">'+SLA_MESES.map(function(m){return'<option'+(m===SLA_MES?' selected':'')+'>'+m+'</option>';}).join('')+'</select>';
   var ySel='<select id="s_slaanio" class="fc" style="padding:4px 7px;font-size:12px;width:auto">'+SLA_YEARS.map(function(y){return'<option'+(y===SLA_ANIO?' selected':'')+'>'+y+'</option>';}).join('')+'</select>';
-  function tab(v,l,cnt,col){var on=SLA_V===v;return'<button data-slatv="'+v+'" style="padding:6px 12px;border-radius:6px;border:1px solid '+(on?col:'var(--bdr)')+';background:'+(on?col+'22':'transparent')+';color:'+(on?col:'var(--hnt)')+';cursor:pointer;font-size:12px;font-weight:'+(on?700:400)+'">'+l+(cnt>0?'<span style="background:'+col+';color:#fff;border-radius:10px;padding:0 5px;font-size:10px;margin-left:4px">'+cnt+'</span>':'')+'</button>';}
+  function tab(v,l,cnt,col){var on=SLA_V===v;return'<button data-slatv="'+v+'" style="padding:6px 12px;border-radius:6px;border:1px solid '+(on?col:'#D0DDE8')+';background:'+(on?col+'22':'transparent')+';color:'+(on?col:'#3D6478')+';cursor:pointer;font-size:12px;font-weight:'+(on?700:400)+'">'+l+(cnt>0?'<span style="background:'+col+';color:#fff;border-radius:10px;padding:0 5px;font-size:10px;margin-left:4px">'+cnt+'</span>':'')+'</button>';}
   var tabs='<div id="sla-tabs-row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">';
   tabs+=tab('dash','Dashboard',0,'var(--blu)');
-  if(slaDO()){tabs+=tab('rev','Revisar',pend.length,'#60a5fa');tabs+=tab('apr','Aprobados',apro.length,'var(--grn)');tabs+=tab('rej','Rechazados',rech.length,'var(--red)');tabs+=tab('none','Sin enviar',noen.length,'var(--hnt)');tabs+=tab('fill','Llenar',0,'var(--amb)');tabs+=tab('hist','Historico',0,'var(--pur)');tabs+=tab('gest','Gestionar',0,'var(--pur)');}
+  if(slaDO()){tabs+=tab('rev','Revisar',pend.length,'var(--blu)');tabs+=tab('apr','Aprobados',apro.length,'var(--grn)');tabs+=tab('rej','Rechazados',rech.length,'var(--red)');tabs+=tab('none','Sin enviar',noen.length,'#5A7A90');tabs+=tab('fill','Llenar',0,'var(--amb)');tabs+=tab('hist','Historico',0,'var(--pur)');tabs+=tab('gest','Gestionar',0,'var(--pur)');}
   else{tabs+=tab('mi','Mi area',0,'var(--blu)');tabs+=tab('hist','Historico',0,'var(--pur)');}
   tabs+='</div>';
   var gc=slaCC(gP);
-  var stats='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center"><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Global</div><div style="font-size:20px;font-weight:700;color:'+gc+'">'+gP+'%</div></div><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Aprobadas</div><div style="font-size:20px;font-weight:700;color:var(--grn)">'+apro.length+'/'+SLA_AREAS.length+'</div></div><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Por revisar</div><div style="font-size:20px;font-weight:700;color:#60a5fa">'+pend.length+'</div></div><div class="card" style="margin:0;text-align:center;min-width:85px;padding:10px"><div style="font-size:10px;color:var(--hnt)">Rechazadas</div><div style="font-size:20px;font-weight:700;color:var(--red)">'+rech.length+'</div></div><div style="margin-left:auto;display:flex;gap:6px;align-items:center">'+mSel+ySel+'</div></div>';
+  var stats='<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">'
+    +'<span style="font-size:12px;font-weight:600;color:var(--mut)">'+SLA_MES+' '+SLA_ANIO+'</span>'
+    +'<span class="bdg" style="background:'+(gP>=80?'var(--grn-l)':gP>=60?'var(--amb-l)':'var(--red-l)')+';color:'+(gP>=80?'var(--grn)':gP>=60?'var(--amb)':'var(--red)')+'">'+(gP+'% global')+'</span>'
+    +'<span class="bdg b-gn">'+apro.length+'/'+SLA_AREAS.length+' aprobadas</span>'
+    +(pend.length?'<span class="bdg b-bl">'+pend.length+' por revisar</span>':'')
+    +(rech.length?'<span class="bdg b-rd">'+rech.length+' rechazadas</span>':'')
+    +'<div style="margin-left:auto;display:flex;align-items:center;gap:6px">'+mSel+ySel+'</div>'
+    +'</div>';
   var body='';
   if(SLA_V==='dash')body=slaDash(p,apro);
   else if(SLA_V==='rev')body=slaRev(p,pend);
@@ -2316,24 +2479,24 @@ function slaDash(p,apro){
   var avgs=apro.map(function(a){return slaGAAvg(a,SLA_MES,SLA_ANIO);}).filter(function(v){return v!==null;});
   var ga=avgs.length?avgs.reduce(function(s,v){return s+v;},0)/avgs.length:null;
   var h='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="ctitle">'+SLA_MES+' '+SLA_ANIO+'</div>'+(ga!==null?'<span style="font-size:15px;font-weight:700;color:'+slaPC(ga)+'">Prom.: '+ga.toFixed(1)+'%</span>':'')+'</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Area</th><th>Estado</th><th>Completado</th><th>Promedio</th><th></th></tr></thead><tbody>';
-  SLA_AREAS.forEach(function(area){var ad=p.areas[area]||{procs:[],st:'pendiente'};var av=slaGAAvg(area,SLA_MES,SLA_ANIO);var cmp=slaComp(ad.procs);var cc=slaCC(cmp.pct);h+='<tr><td><span style="font-weight:600;font-size:12px;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span></td><td>'+slaBdg(ad.st||'pendiente')+'</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:55px;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+cmp.pct+'%;background:'+cc+';border-radius:3px"></div></div><span style="font-size:11px;color:'+cc+'">'+cmp.pct+'%</span></div></td><td>'+(av!==null?'<span style="font-weight:700;color:'+slaPC(av)+'">'+av.toFixed(1)+'%</span>':'<span style="color:var(--hnt);font-size:11px">--</span>')+'</td><td><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Ver</button></td></tr>';});
+  SLA_AREAS.forEach(function(area){var ad=p.areas[area]||{procs:[],st:'pendiente'};var av=slaGAAvg(area,SLA_MES,SLA_ANIO);var cmp=slaComp(ad.procs);var cc=slaCC(cmp.pct);h+='<tr><td><span style="font-weight:600;font-size:12px;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span></td><td>'+slaBdg(ad.st||'pendiente')+'</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:55px;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+cmp.pct+'%;background:'+cc+';border-radius:3px"></div></div><span style="font-size:11px;color:'+cc+'">'+cmp.pct+'%</span></div></td><td>'+(av!==null?'<span style="font-weight:700;color:'+slaPC(av)+'">'+av.toFixed(1)+'%</span>':'<span style="color:var(--mut);font-size:11px">--</span>')+'</td><td><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Ver</button></td></tr>';});
   return h+'</tbody></table></div></div>';
 }
 function slaRev(p,pend){
-  if(!pend.length)return'<div class="card"><div style="text-align:center;padding:40px;color:var(--hnt)">Sin areas pendientes.</div></div>';
-  return pend.map(function(area){var ad=p.areas[area];var cmp=slaComp(ad.procs||[]);var av=slaAvg(ad.procs||[]);return'<div class="card mb10"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px"><div style="flex:1"><div style="font-size:14px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+';margin-bottom:6px">'+_esc(area)+'</div>'+slaMbar(av.fil?String(av.avg):'')+'<div style="font-size:11px;color:var(--hnt)">'+cmp.filled+'/'+cmp.total+' campos - '+_esc(ad.by||'')+'</div></div><div style="display:flex;flex-direction:column;gap:6px"><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Detalle</button><button data-slaapr="'+area+'" class="btn btn-bl btn-sm">Aprobar</button><button data-slarej="'+area+'" class="btn btn-rd btn-sm">Rechazar</button></div></div></div>';}).join('');
+  if(!pend.length)return'<div class="card"><div style="text-align:center;padding:40px;color:var(--mut)">Sin areas pendientes.</div></div>';
+  return pend.map(function(area){var ad=p.areas[area];var cmp=slaComp(ad.procs||[]);var av=slaAvg(ad.procs||[]);return'<div class="card mb10"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px"><div style="flex:1"><div style="font-size:14px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+';margin-bottom:6px">'+_esc(area)+'</div>'+slaMbar(av.fil?String(av.avg):'')+'<div style="font-size:11px;color:var(--mut)">'+cmp.filled+'/'+cmp.total+' campos - '+_esc(ad.by||'')+'</div></div><div style="display:flex;flex-direction:column;gap:6px"><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Detalle</button><button data-slaapr="'+area+'" class="btn btn-bl btn-sm">Aprobar</button><button data-slarej="'+area+'" class="btn btn-rd btn-sm">Rechazar</button></div></div></div>';}).join('');
 }
 function slaList(p,areas,tipo){
-  if(!areas.length)return'<div class="card"><div style="text-align:center;padding:40px;color:var(--hnt)">Sin areas.</div></div>';
-  return areas.map(function(area){var ad=p.areas[area]||{procs:[],st:'pendiente'};var av=slaAvg(ad.procs||[]);var cmp=slaComp(ad.procs||[]);return'<div class="card mb10"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"><div style="flex:1"><span style="font-size:13px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span> '+slaBdg(ad.st||'pendiente')+slaMbar(av.fil?String(av.avg):'')+'<div style="font-size:11px;color:var(--hnt)">'+cmp.pct+'% completo'+(ad.cmt&&tipo==='rechazado'?' - '+_esc(ad.cmt):'')+'</div></div><div style="display:flex;gap:6px"><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Ver</button>'+(slaDO()&&tipo==='rechazado'?'<button data-slaapr="'+area+'" class="btn btn-bl btn-sm">Aprobar</button>':'')+(slaDO()&&(tipo==='aprobado'||tipo==='editado')?'<button data-sladap="'+area+'" class="btn btn-gh btn-sm" style="color:var(--amb)">Desaprobar</button>':'')+'</div></div></div>';}).join('');
+  if(!areas.length)return'<div class="card"><div style="text-align:center;padding:40px;color:var(--mut)">Sin areas.</div></div>';
+  return areas.map(function(area){var ad=p.areas[area]||{procs:[],st:'pendiente'};var av=slaAvg(ad.procs||[]);var cmp=slaComp(ad.procs||[]);return'<div class="card mb10"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"><div style="flex:1"><span style="font-size:13px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span> '+slaBdg(ad.st||'pendiente')+slaMbar(av.fil?String(av.avg):'')+'<div style="font-size:11px;color:var(--mut)">'+cmp.pct+'% completo'+(ad.cmt&&tipo==='rechazado'?' - '+_esc(ad.cmt):'')+'</div></div><div style="display:flex;gap:6px"><button data-sladet="'+area+'" class="btn btn-gh btn-sm">Ver</button>'+(slaDO()&&tipo==='rechazado'?'<button data-slaapr="'+area+'" class="btn btn-bl btn-sm">Aprobar</button>':'')+(slaDO()&&(tipo==='aprobado'||tipo==='editado')?'<button data-sladap="'+area+'" class="btn btn-gh btn-sm" style="color:var(--amb)">Desaprobar</button>':'')+'</div></div></div>';}).join('');
 }
 function slaPF(ad,ro){
   var secs={};(ad.procs||[]).forEach(function(p,i){if(!secs[p.s])secs[p.s]=[];secs[p.s].push(Object.assign({},p,{i:i}));});
   var dis=ro?'disabled':'';var h='';
   Object.keys(secs).forEach(function(sec){
-    h+='<div style="background:var(--s2);border-radius:6px;padding:5px 10px;margin:10px 0 6px;font-size:11px;font-weight:700;color:var(--hnt);text-transform:uppercase;letter-spacing:.5px">'+_esc(sec)+'</div>';
+    h+='<div style="background:var(--s2);border-radius:6px;padding:5px 10px;margin:10px 0 6px;font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px">'+_esc(sec)+'</div>';
     secs[sec].forEach(function(p){var em=String(p.c||'').trim()==='';h+='<div style="border:1px solid '+(em&&!ro?'var(--red)':'var(--bdr)')+';border-radius:8px;padding:10px;margin-bottom:7px;background:'+(em&&!ro?'var(--red-l)':'var(--sur)')+'">'
-      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:6px"><div style="flex:1"><div style="font-size:13px;font-weight:600">'+_esc(p.p)+'</div><div style="font-size:11px;color:var(--hnt)">Obj: <span style="color:var(--blu)">'+_esc(p.o)+'</span></div></div>'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:6px"><div style="flex:1"><div style="font-size:13px;font-weight:600">'+_esc(p.p)+'</div><div style="font-size:11px;color:var(--mut)">Obj: <span style="color:var(--blu)">'+_esc(p.o)+'</span></div></div>'
       +'<div style="display:flex;gap:8px;flex-wrap:wrap"><div><label class="fl">Alcance</label><input type="text" '+dis+' data-slai="'+p.i+'" data-slaf="v" value="'+_esc(p.v||'')+'" style="width:100px;padding:5px 8px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;font-size:12px;background:var(--sur);color:var(--txt)"></div>'
       +'<div><label class="fl">% Cumpl.</label><input type="number" min="0" max="100" step="0.01" '+dis+' data-slai="'+p.i+'" data-slaf="c" value="'+_esc(p.c||'')+'" placeholder="0-100" style="width:88px;padding:5px 8px;border:1px solid '+(em&&!ro?'var(--red)':'var(--bdr)')+';border-radius:6px;font-family:inherit;font-size:12px;background:var(--sur);color:'+slaPC(p.c)+'"></div>'
       +'<div><label class="fl" style="color:var(--blu)">Solicitudes</label><input type="number" min="0" '+dis+' data-slai="'+p.i+'" data-slaf="n" value="'+_esc(p.n||'')+'" style="width:70px;padding:5px 8px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;font-size:12px;background:var(--sur);color:var(--blu)"></div>'
@@ -2345,7 +2508,7 @@ function slaDet(p,area){
   var ad=p.areas[area]||{procs:[],st:'pendiente'};var apv=ad.st==='aprobado'||ad.st==='editado';var ro=apv&&!slaDO();
   var av=slaAvg(ad.procs||[]);var cmp=slaComp(ad.procs||[]);var cc=slaCC(cmp.pct);
   var h='<div><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button data-slaback="dash" class="btn btn-gh btn-sm">Volver</button><span style="font-size:15px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span>'+slaBdg(ad.st||'pendiente')+(av.fil?'<span style="margin-left:auto;font-size:20px;font-weight:700;color:'+slaPC(av.avg)+'">'+av.avg.toFixed(1)+'%</span>':'')+'</div>';
-  h+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--s2);border:1px solid var(--bdr);margin-bottom:12px"><span style="font-size:11px;color:var(--hnt);min-width:80px">Completado</span><div style="flex:1;height:7px;background:var(--bdr);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+cmp.pct+'%;background:'+cc+';border-radius:4px"></div></div><span style="font-size:13px;font-weight:700;color:'+cc+'">'+cmp.pct+'%</span><span style="font-size:11px;color:var(--hnt)">'+cmp.filled+'/'+cmp.total+'</span></div>';
+  h+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--s2);border:1px solid var(--bdr);margin-bottom:12px"><span style="font-size:11px;color:var(--mut);min-width:80px">Completado</span><div style="flex:1;height:7px;background:var(--bdr);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+cmp.pct+'%;background:'+cc+';border-radius:4px"></div></div><span style="font-size:13px;font-weight:700;color:'+cc+'">'+cmp.pct+'%</span><span style="font-size:11px;color:var(--mut)">'+cmp.filled+'/'+cmp.total+'</span></div>';
   if(ad.cmt&&ad.st==='rechazado')h+='<div style="background:var(--red-l);border:1px solid var(--red);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--red)"><b>Rechazado:</b> '+_esc(ad.cmt)+'</div>';
   h+='<div class="card">'+slaPF(ad,ro)+'<div style="margin-top:12px"><label class="fl">Notas</label><textarea data-slanotes="1" '+(ro?'disabled':'')+' class="fc" rows="2">'+_esc(ad.notes||'')+'</textarea></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">';
   if(!apv)h+='<button data-slasave="draft" class="btn btn-gh">Borrador</button><button data-slasave="send" class="btn btn-bl">Enviar al DO</button>';
@@ -2354,11 +2517,11 @@ function slaDet(p,area){
   if(ro)h+='<span style="font-size:12px;color:var(--grn);padding:8px 12px;background:var(--grn-l);border-radius:6px">Aprobado. Solo DO puede modificar.</span>';
   return h+'</div></div></div>';
 }
-function slaFillGrid(p){var h='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">';SLA_AREAS.forEach(function(a){var ad=p.areas[a]||{procs:[],st:'pendiente'};var cmp=slaComp(ad.procs||[]);var av=slaAvg(ad.procs||[]);var brd=cmp.pct===100?'border-color:rgba(46,139,53,.3)':cmp.pct>0?'border-color:rgba(196,83,10,.25)':'';h+='<div class="card" style="margin:0;cursor:pointer;'+brd+'" data-slafill="'+a+'"><div style="font-size:11px;font-weight:700;color:'+(SLA_AC[a]||'var(--blu)')+';margin-bottom:4px">'+_esc(a)+'</div>'+slaBdg(ad.st||'pendiente')+'<div style="font-size:18px;font-weight:700;color:'+(av.fil?slaPC(av.avg):'var(--hnt)')+';margin:4px 0">'+(av.fil?av.avg.toFixed(1)+'%':'--')+'</div><div style="font-size:10px;color:var(--hnt)">'+cmp.filled+'/'+cmp.total+' campos</div></div>';});return h+'</div>';}
+function slaFillGrid(p){var h='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">';SLA_AREAS.forEach(function(a){var ad=p.areas[a]||{procs:[],st:'pendiente'};var cmp=slaComp(ad.procs||[]);var av=slaAvg(ad.procs||[]);var brd=cmp.pct===100?'border-color:rgba(46,139,53,.4)':cmp.pct>0?'border-color:rgba(196,83,10,.35)':'border-color:rgba(181,42,42,.2)';h+='<div class="card" style="margin:0;cursor:pointer;'+brd+'" data-slafill="'+a+'"><div style="font-size:11px;font-weight:700;color:'+(SLA_AC[a]||'var(--blu)')+';margin-bottom:4px">'+_esc(a)+'</div>'+slaBdg(ad.st||'pendiente')+'<div style="font-size:18px;font-weight:700;color:'+(av.fil?slaPC(av.avg):'#B0C0CC')+';margin:4px 0">'+(av.fil?av.avg.toFixed(1)+'%':'--')+'</div><div style="font-size:10px;color:var(--mut)">'+cmp.filled+'/'+cmp.total+' campos</div></div>';});return h+'</div>';}
 function slaFillForm(p,area){var ad=p.areas[area]||{procs:[],st:'pendiente'};return'<div><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button data-slaback="fill" class="btn btn-gh btn-sm">Volver</button><span style="font-size:15px;font-weight:700;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</span></div><div class="ai mb14"><div class="ai-d">Al guardar, el area quedara aprobada automaticamente.</div></div><div class="card">'+slaPF(ad,false)+'</div><div style="display:flex;gap:8px;margin-top:12px"><button data-slafillsave="1" class="btn btn-bl" style="flex:1">Guardar y aprobar</button><button data-slaback="fill" class="btn btn-gh">Cancelar</button></div></div>';}
-function slaMi(p){return'<div class="fg"><label class="fl">Tu area</label><select id="s_slama" class="fc" style="max-width:280px">'+SLA_AREAS.map(function(a){return'<option'+(a===SLA_GAREA?' selected':'')+'>'+a+'</option>';}).join('')+'</select></div>'+slaDet(p,SLA_GAREA);}
-function slaHist(){var ySel='<select id="s_slaha" class="fc" style="width:auto;padding:4px 8px;font-size:12px">'+SLA_YEARS.map(function(y){return'<option'+(y===SLA_HANUAL?' selected':'')+'>'+y+'</option>';}).join('')+'</select>';var h='<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><div class="ctitle" style="margin:0">Historico anual</div>'+ySel+'</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Area</th>';SLA_MESES.forEach(function(m){h+='<th style="text-align:center;font-size:10px">'+m.slice(0,3)+'</th>';});h+='<th style="text-align:center">Prom.</th></tr></thead><tbody>';SLA_AREAS.forEach(function(area){var vals=SLA_MESES.map(function(m){return slaGAAvg(area,m,SLA_HANUAL);});var fl=vals.filter(function(v){return v!==null;});var pr=fl.length?fl.reduce(function(s,v){return s+v;},0)/fl.length:null;var prev=null;h+='<tr><td style="font-size:12px;font-weight:600;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</td>';vals.forEach(function(v){var tr=v!==null&&prev!==null?(v>prev?'+':v<prev?'-':'='):'';h+='<td style="text-align:center">'+(v!==null?'<span style="font-size:11px;font-weight:700;color:'+slaPC(v)+'">'+v.toFixed(1)+'%</span><span style="font-size:9px;color:'+(tr==='+'?'var(--grn)':tr==='-'?'var(--red)':'var(--hnt)')+'"> '+tr+'</span>':'<span style="color:var(--hnt);font-size:10px">--</span>')+'</td>';if(v!==null)prev=v;});h+='<td style="text-align:center">'+(pr!==null?'<span style="font-size:12px;font-weight:700;color:'+slaPC(pr)+'">'+pr.toFixed(1)+'%</span>':'--')+'</td></tr>';});return h+'</tbody></table></div></div>';}
-function slaGest(){var procs=SLA_CAT[SLA_GAREA]||[];var custom=(SLA_DB.customSLAs||{})[SLA_GAREA]||[];var elim=(SLA_DB.slasEliminados||{})[SLA_GAREA]||[];var h='<div class="card"><div class="ctitle mb10">Gestionar SLAs</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap"><label class="fl" style="margin:0">Area:</label><select id="s_slaga" class="fc" style="max-width:240px">'+SLA_AREAS.map(function(a){return'<option'+(a===SLA_GAREA?' selected':'')+'>'+a+'</option>';}).join('')+'</select><button data-slanewarea="1" class="btn btn-bl btn-sm">+ Nueva area</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="fw6 tsm">SLAs de '+_esc(SLA_GAREA)+'</span><button data-slanewsla="1" class="btn btn-gh btn-sm">+ Agregar</button></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Seccion</th><th>Proceso</th><th>Objetivo</th><th>Tipo</th><th></th></tr></thead><tbody>';procs.forEach(function(pp){var isE=elim.indexOf(pp.p)>=0;var ep=pp.p.replace(/&/g,'&amp;').replace(/"/g,'&quot;');h+='<tr style="'+(isE?'opacity:.4':'')+'"><td style="color:var(--hnt);font-size:11px">'+_esc(pp.s)+'</td><td>'+(isE?'<s>':'')+_esc(pp.p)+(isE?'</s>':'')+'</td><td style="color:var(--blu);font-size:11px">'+_esc(pp.o)+'</td><td><span style="font-size:10px;color:var(--hnt);background:var(--s2);padding:1px 5px;border-radius:3px">Base</span></td><td>'+(!isE?'<button data-slaelimb="'+ep+'" class="btn btn-gh btn-sm" style="color:var(--red)">Eliminar</button>':'<button data-slarestb="'+ep+'" class="btn btn-gh btn-sm" style="color:var(--grn)">Restaurar</button>')+'</td></tr>';});custom.forEach(function(pp,ci){h+='<tr style="background:rgba(123,31,162,.04)"><td style="color:var(--pur);font-size:11px">'+_esc(pp.s)+'</td><td>'+_esc(pp.p)+'</td><td style="color:var(--blu);font-size:11px">'+_esc(pp.o)+'</td><td><span style="font-size:10px;color:var(--pur);background:var(--pur-l);padding:1px 5px;border-radius:3px">Custom</span></td><td><button data-slaelimcs="'+ci+'" class="btn btn-gh btn-sm" style="color:var(--red)">Eliminar</button></td></tr>';});return h+'</tbody></table></div></div>';}
+function slaMi(p){return'<div class="fg" style="margin-bottom:12px"><label class="fl">Selecciona tu area</label><select id="s_slama" class="fc" style="max-width:280px">'+SLA_AREAS.map(function(a){return'<option'+(a===SLA_GAREA?' selected':'')+'>'+a+'</option>';}).join('')+'</select></div>'+slaDet(p,SLA_GAREA);}
+function slaHist(){var ySel='<select id="s_slaha" class="fc" style="width:auto;padding:4px 8px;font-size:12px">'+SLA_YEARS.map(function(y){return'<option'+(y===SLA_HANUAL?' selected':'')+'>'+y+'</option>';}).join('')+'</select>';var h='<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><div class="ctitle" style="margin:0">Historico anual</div>'+ySel+'</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Area</th>';SLA_MESES.forEach(function(m){h+='<th style="text-align:center;font-size:10px">'+m.slice(0,3)+'</th>';});h+='<th style="text-align:center">Prom.</th></tr></thead><tbody>';SLA_AREAS.forEach(function(area){var vals=SLA_MESES.map(function(m){return slaGAAvg(area,m,SLA_HANUAL);});var fl=vals.filter(function(v){return v!==null;});var pr=fl.length?fl.reduce(function(s,v){return s+v;},0)/fl.length:null;var prev=null;h+='<tr><td style="font-size:12px;font-weight:600;color:'+(SLA_AC[area]||'var(--blu)')+'">'+_esc(area)+'</td>';vals.forEach(function(v){var tr=v!==null&&prev!==null?(v>prev?'+':v<prev?'-':'='):'';h+='<td style="text-align:center">'+(v!==null?'<span style="font-size:11px;font-weight:700;color:'+slaPC(v)+'">'+v.toFixed(1)+'%</span><span style="font-size:9px;color:'+(tr==='+'?'#2E8B35':tr==='-'?'#B52A2A':'#7A9BB0')+'"> '+tr+'</span>':'<span style="color:var(--mut);font-size:10px">--</span>')+'</td>';if(v!==null)prev=v;});h+='<td style="text-align:center">'+(pr!==null?'<span style="font-size:12px;font-weight:700;color:'+slaPC(pr)+'">'+pr.toFixed(1)+'%</span>':'--')+'</td></tr>';});return h+'</tbody></table></div></div>';}
+function slaGest(){var procs=SLA_CAT[SLA_GAREA]||[];var custom=(SLA_DB.customSLAs||{})[SLA_GAREA]||[];var elim=(SLA_DB.slasEliminados||{})[SLA_GAREA]||[];var h='<div class="card"><div class="ctitle mb10">Gestionar SLAs</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap"><label class="fl" style="margin:0">Area:</label><select id="s_slaga" class="fc" style="max-width:240px">'+SLA_AREAS.map(function(a){return'<option'+(a===SLA_GAREA?' selected':'')+'>'+a+'</option>';}).join('')+'</select><button data-slanewarea="1" class="btn btn-bl btn-sm">+ Nueva area</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="fw6 tsm">SLAs de '+_esc(SLA_GAREA)+'</span><button data-slanewsla="1" class="btn btn-gh btn-sm">+ Agregar</button></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Seccion</th><th>Proceso</th><th>Objetivo</th><th>Tipo</th><th></th></tr></thead><tbody>';procs.forEach(function(pp){var isE=elim.indexOf(pp.p)>=0;var ep=pp.p.replace(/&/g,'&amp;').replace(/"/g,'&quot;');h+='<tr style="'+(isE?'opacity:.4':'')+'"><td style="color:var(--mut);font-size:11px">'+_esc(pp.s)+'</td><td>'+(isE?'<s>':'')+_esc(pp.p)+(isE?'</s>':'')+'</td><td style="color:var(--blu);font-size:11px">'+_esc(pp.o)+'</td><td><span style="font-size:10px;color:var(--mut);background:var(--s2);padding:1px 5px;border-radius:3px">Base</span></td><td>'+(!isE?'<button data-slaelimb="'+ep+'" class="btn btn-gh btn-sm" style="color:var(--red)">Eliminar</button>':'<button data-slarestb="'+ep+'" class="btn btn-gh btn-sm" style="color:var(--grn)">Restaurar</button>')+'</td></tr>';});custom.forEach(function(pp,ci){h+='<tr style="background:rgba(123,31,162,.04)"><td style="color:var(--pur);font-size:11px">'+_esc(pp.s)+'</td><td>'+_esc(pp.p)+'</td><td style="color:var(--blu);font-size:11px">'+_esc(pp.o)+'</td><td><span style="font-size:10px;color:var(--pur);background:var(--pur-l);padding:1px 5px;border-radius:3px">Custom</span></td><td><button data-slaelimcs="'+ci+'" class="btn btn-gh btn-sm" style="color:var(--red)">Eliminar</button></td></tr>';});return h+'</tbody></table></div></div>';}
 function slaGuardarArea(area,mode){var ad=slaCurP().areas[area];if(!ad)return;document.querySelectorAll('[data-slai][data-slaf]').forEach(function(el){ad.procs[parseInt(el.dataset.slai)][el.dataset.slaf]=el.value;});var ne=document.querySelector('[data-slanotes]');if(ne)ad.notes=ne.value;if(mode==='edit'){ad.st='editado';ad.at=new Date().toISOString();ad.by=currentUser?currentUser.nombre:'DO';slaLog(ad,'editado',ad.by);toast('Edicion guardada');}else if(mode==='send'){var c=slaComp(ad.procs);if(!c.filled){toast('Llena al menos un proceso.');return;}ad.st='enviado';ad.at=new Date().toISOString();ad.by=currentUser?currentUser.nombre:'';slaLog(ad,'enviado',ad.by);toast('Enviado al DO');}else{ad.by=currentUser?currentUser.nombre:'';slaLog(ad,'borrador',ad.by);toast('Borrador guardado');}slaSave();slaRender();}
 function slaFillSaveArea(area){var ad=slaCurP().areas[area];if(!ad)return;document.querySelectorAll('[data-slai][data-slaf]').forEach(function(el){ad.procs[parseInt(el.dataset.slai)][el.dataset.slaf]=el.value;});ad.st='aprobado';ad.at=new Date().toISOString();ad.by=(currentUser?currentUser.nombre:'DO')+' (DO)';ad.cmt='';slaLog(ad,'aprobado',ad.by);slaSave();toast(area+' aprobado');SLA_V='fill';SLA_DF=null;slaRender();}
 document.addEventListener('click',function(e){
@@ -2463,12 +2626,12 @@ function cargarDatosDemo(){
   DB.colabs=[
     {nombre:'Marco Ruiz',     email:'marco.ruiz@envia.com',    fecha:'2024-03-01',fechaBaja:'',pais:'Mexico',puesto:'Agente CSR',              area:'Operaciones',     lider:'Carlos Perez', proceso:'Activo',           status:'Vigente',usuario:'marco.ruiz',    password:'colab2025',initials:'MR'},
     {nombre:'Sofia Torres',   email:'sofia.torres@envia.com',  fecha:'2024-06-15',fechaBaja:'',pais:'Mexico',puesto:'Analista de Costos',      area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'sofia.torres',  password:'colab2025',initials:'ST'},
-    {nombre:'Diego Mora',     email:'diego.mora@envia.com',    fecha:'2024-09-01',fechaBaja:'',pais:'Mexico',puesto:'Developer',               area:'IT',              lider:'Luis Torres',  proceso:'Primeros 90 dias', status:'Vigente',usuario:'diego.mora',    password:'colab2025',initials:'DM'},
+    {nombre:'Diego Mora',     email:'diego.mora@envia.com',    fecha:'2025-01-15',fechaBaja:'',pais:'Mexico',puesto:'Developer',               area:'IT',              lider:'Luis Torres',  proceso:'Primeros 90 dias', status:'Vigente',usuario:'diego.mora',    password:'colab2025',initials:'DM'},
     {nombre:'Valentina Cruz', email:'valentina.cruz@envia.com',fecha:'2025-01-10',fechaBaja:'',pais:'Mexico',puesto:'HR Business Partner',     area:'Recursos Humanos',lider:'Ana Ramirez',  proceso:'Activo',           status:'Vigente',usuario:'valentina.cruz',password:'colab2025',initials:'VC'},
     {nombre:'Andres Vega',    email:'andres.vega@envia.com',   fecha:'2024-04-20',fechaBaja:'',pais:'Mexico',puesto:'Coordinador Operaciones', area:'Operaciones',     lider:'Carlos Perez', proceso:'Activo',           status:'Vigente',usuario:'andres.vega',   password:'colab2025',initials:'AV'},
     {nombre:'Laura Soto',     email:'laura.soto@envia.com',    fecha:'2023-11-01',fechaBaja:'',pais:'Mexico',puesto:'Tech Lead',              area:'IT',              lider:'Luis Torres',  proceso:'Activo',           status:'Vigente',usuario:'laura.soto',    password:'colab2025',initials:'LS'},
     {nombre:'Roberto Nieto',  email:'roberto.nieto@envia.com', fecha:'2024-08-05',fechaBaja:'',pais:'Mexico',puesto:'Gerente de Finanzas',     area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'roberto.nieto', password:'colab2025',initials:'RN'},
-    {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',  fecha:'2025-02-28',fechaBaja:'',pais:'Mexico',puesto:'Marketing Manager',       area:'Marketing',       lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'camila.reyes',  password:'colab2025',initials:'CR'}
+    {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',  fecha:'2025-02-10',fechaBaja:'',pais:'Mexico',puesto:'Marketing Manager',       area:'Marketing',       lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'camila.reyes',  password:'colab2025',initials:'CR'}
   ];
 
   GLOBAL.valores=[
@@ -2486,18 +2649,21 @@ function cargarDatosDemo(){
     {nombre:'Orientacion a resultados',descripcion:'Cumplir metas con eficiencia',      niveles:['Basico','Intermedio','Avanzado','Experto']}
   ];
 
+  DB.nivelEsperado={0:3,1:3,2:3,3:2,4:3,5:4,6:3,7:3};
+
+  // KPIs evaluacion desempeno
   DB.kpis={
-    0:[{nombre:'Tickets resueltos',    peso:40,meta:150,  tipo:'mayor'},{nombre:'CSAT',                    peso:35,meta:90,  tipo:'mayor'},{nombre:'Tiempo promedio',    peso:25,meta:20,  tipo:'menor'}],
+    0:[{nombre:'Tickets resueltos',    peso:40,meta:150,  tipo:'mayor'},{nombre:'CSAT',                    peso:35,meta:90,  tipo:'mayor'},{nombre:'Tiempo promedio(min)',peso:25,meta:20,  tipo:'menor'}],
     1:[{nombre:'Precision reportes',   peso:45,meta:98,   tipo:'mayor'},{nombre:'Entregas a tiempo',       peso:35,meta:95,  tipo:'mayor'},{nombre:'Errores contables',   peso:20,meta:0,   tipo:'menor'}],
     2:[{nombre:'Bugs cerrados',        peso:40,meta:80,   tipo:'mayor'},{nombre:'Code review',             peso:30,meta:100, tipo:'mayor'},{nombre:'Incidencias prod.',    peso:30,meta:0,   tipo:'menor'}],
-    3:[{nombre:'Contrataciones tiempo',peso:50,meta:100,  tipo:'mayor'},{nombre:'Satisfaccion candidatos', peso:30,meta:90,  tipo:'mayor'},{nombre:'Rotacion 90 dias',     peso:20,meta:5,   tipo:'menor'}],
+    3:[{nombre:'Contrataciones OK',    peso:50,meta:100,  tipo:'mayor'},{nombre:'Satisfaccion candidatos', peso:30,meta:90,  tipo:'mayor'},{nombre:'Rotacion 90d',         peso:20,meta:5,   tipo:'menor'}],
     4:[{nombre:'SLAs cumplidos',       peso:50,meta:95,   tipo:'mayor'},{nombre:'Escalaciones resueltas',  peso:30,meta:80,  tipo:'mayor'},{nombre:'Tickets pendientes',    peso:20,meta:10,  tipo:'menor'}],
     5:[{nombre:'Deploy exitosos',      peso:40,meta:99,   tipo:'mayor'},{nombre:'Uptime servicios',        peso:40,meta:99.5,tipo:'mayor'},{nombre:'Incidentes criticos',   peso:20,meta:0,   tipo:'menor'}],
     6:[{nombre:'Cierre financiero',    peso:40,meta:100,  tipo:'mayor'},{nombre:'Precision forecast',      peso:35,meta:95,  tipo:'mayor'},{nombre:'Ajustes post-cierre',   peso:25,meta:2,   tipo:'menor'}],
     7:[{nombre:'Campanas lanzadas',    peso:35,meta:8,    tipo:'mayor'},{nombre:'Leads generados',         peso:40,meta:500, tipo:'mayor'},{nombre:'Costo por lead',        peso:25,meta:50,  tipo:'menor'}]
   };
-  DB.nivelEsperado={0:3,1:3,2:3,3:2,4:3,5:4,6:3,7:3};
 
+  // KPIs performance mensual (estructura correcta para _calcPerfPromedio)
   DB.perfKpis={
     0:[{nombre:'Tickets resueltos', desc:'Tickets cerrados en el mes',        meta:150,  unidad:'tickets',semVerde:90,semAmarillo:75}],
     1:[{nombre:'Precision reportes',desc:'% reportes sin errores',            meta:98,   unidad:'%',      semVerde:95,semAmarillo:85}],
@@ -2509,43 +2675,96 @@ function cargarDatosDemo(){
     7:[{nombre:'Leads generados',   desc:'Leads calificados del mes',          meta:500,  unidad:'leads',  semVerde:80,semAmarillo:60}]
   };
 
+  // perfData[ci][ano][mes][ki] = {real, obs}
+  // perfAsist[ci][ano][mes] = {puntualidad:0-100, asistencia:0-100} IMPORTANTE: valores 0-100
   var meses=['Enero','Febrero','Marzo'];
-  var reales=   [162,148,155,  99,97,98,  88,76,83,  95,100,92,  97,93,96,  99.8,99.5,99.7,  100,98,100,  520,480,510];
-  var punt=     [0.93,0.90,0.92,0.94,0.91,0.93,0.88,0.85,0.87,0.91,0.93,0.89,0.94,0.91,0.93,0.96,0.95,0.96,0.93,0.91,0.94,0.88,0.85,0.87];
-  var asis=     [0.96,0.94,0.97,0.97,0.95,0.96,0.92,0.90,0.93,0.94,0.96,0.92,0.98,0.95,0.97,0.97,0.97,0.98,0.95,0.94,0.96,0.91,0.90,0.92];
+  var reales=[162,148,155, 99,97,98, 88,76,83, 95,100,92, 97,93,96, 99.8,99.5,99.7, 100,98,100, 520,480,510];
+  var punt= [93,90,92, 94,91,93, 88,85,87, 91,93,89, 94,91,93, 96,95,96, 93,91,94, 88,85,87];
+  var asis= [96,94,97, 97,95,96, 92,90,93, 94,96,92, 98,95,97, 97,97,98, 95,94,96, 91,90,92];
   DB.perfData={};DB.perfAsist={};
   for(var ci=0;ci<8;ci++){
-    DB.perfData[ci]={'2026':{}};DB.perfAsist[ci]={'2026':{}};
+    DB.perfData[ci]={'2026':{}};
+    DB.perfAsist[ci]={'2026':{}};
     for(var mi=0;mi<3;mi++){
       var mes=meses[mi];
-      DB.perfData[ci]['2026'][mes]={0:{real:reales[ci*3+mi],obs:'OK'}};
-      DB.perfAsist[ci]['2026'][mes]={puntualidad:punt[ci*3+mi],asistencia:asis[ci*3+mi]};
+      DB.perfData[ci]['2026'][mes]={0:{real:reales[ci*3+mi],obs:'Registro mensual'}};
+      DB.perfAsist[ci]['2026'][mes]={puntualidad:punt[ci*3+mi],asistencia:asis[ci*3+mi],obs:''};
     }
   }
 
+  // evalDesempeno con estructura CORRECTA que usa renderDesResultados
+  // {colabIdx, colabNombre, trimestre, anio, fechaInicio, fechaFin, fecha, evaluador,
+  //  nivelEsperado, kpiScore, compScore, total, nivel, kpiDetalle, compDetalle,
+  //  fortalezas, areasDesarrollo, compromisos}
   DB.evalDesempeno=[
-    {ci:0,periodo:'Q1-2026',status:'completada',  valorScores:{0:4,1:3,2:4,3:5,4:4},compScores:{0:3,1:2,2:4,3:4,4:3},kpiScores:{},comentarios:'Excelente atencion al cliente.',    liderComent:'Marco muestra gran compromiso.',    fechaFin:'2026-03-31'},
-    {ci:1,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:5,2:3,3:4,4:4},compScores:{0:4,1:2,2:5,3:3,4:5},kpiScores:{},comentarios:'Alta precision en reportes.',       liderComent:'Sofia es muy meticulosa.',          fechaFin:'2026-03-31'},
-    {ci:4,periodo:'Q1-2026',status:'en_progreso', valorScores:{0:3,1:4,2:3,3:5,4:3},compScores:{0:4,1:3,2:3,3:4,4:3},kpiScores:{},comentarios:'',                                 liderComent:'',                                  fechaFin:''},
-    {ci:5,periodo:'Q1-2026',status:'completada',  valorScores:{0:5,1:4,2:5,3:4,4:5},compScores:{0:4,1:5,2:5,3:4,4:5},kpiScores:{},comentarios:'Lidera con excelencia tecnica.',   liderComent:'Laura es referente del equipo.',    fechaFin:'2026-03-31'}
+    {colabIdx:0,colabNombre:'Marco Ruiz',     trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Maria Garcia',nivelEsperado:3,
+     kpiScore:82.5,compScore:76.0,total:80.3,nivel:'Satisfactorio',
+     kpiDetalle:[{nombre:'Tickets resueltos',score:87},{nombre:'CSAT',score:91},{nombre:'Tiempo promedio',score:75}],
+     compDetalle:[{nombre:'Comunicacion efectiva',score:3},{nombre:'Liderazgo',score:2},{nombre:'Pensamiento analitico',score:4},{nombre:'Adaptabilidad',score:4},{nombre:'Orientacion a resultados',score:3}],
+     fortalezas:'Excelente atencion al cliente y manejo de tickets de alta prioridad.',
+     areasDesarrollo:'Mejorar velocidad de resolucion en casos complejos.',
+     compromisos:'Tomar curso de resolucion avanzada de conflictos en Q2.'},
+    {colabIdx:1,colabNombre:'Sofia Torres',   trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Maria Garcia',nivelEsperado:3,
+     kpiScore:91.0,compScore:83.0,total:88.3,nivel:'Alto desempeno',
+     kpiDetalle:[{nombre:'Precision reportes',score:96},{nombre:'Entregas a tiempo',score:93},{nombre:'Errores contables',score:88}],
+     compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:2},{nombre:'Pensamiento analitico',score:5},{nombre:'Adaptabilidad',score:3},{nombre:'Orientacion a resultados',score:5}],
+     fortalezas:'Alta precision en reportes y analisis financieros.',
+     areasDesarrollo:'Desarrollar habilidades de liderazgo para escalar a Manager.',
+     compromisos:'Mentoria con Gerente durante Q2 y Q3.'},
+    {colabIdx:5,colabNombre:'Laura Soto',     trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Luis Torres',nivelEsperado:4,
+     kpiScore:95.0,compScore:90.0,total:93.5,nivel:'Excepcional',
+     kpiDetalle:[{nombre:'Deploy exitosos',score:99},{nombre:'Uptime servicios',score:99},{nombre:'Incidentes criticos',score:88}],
+     compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:5},{nombre:'Pensamiento analitico',score:5},{nombre:'Adaptabilidad',score:4},{nombre:'Orientacion a resultados',score:5}],
+     fortalezas:'Referente tecnico del equipo. Liderazgo sobresaliente.',
+     areasDesarrollo:'Documentar mejor los procesos de rollback.',
+     compromisos:'Crear guia de rollback procedures para Q2.'},
+    {colabIdx:4,colabNombre:'Andres Vega',    trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Carlos Perez',nivelEsperado:3,
+     kpiScore:74.0,compScore:71.0,total:73.1,nivel:'En desarrollo',
+     kpiDetalle:[{nombre:'SLAs cumplidos',score:78},{nombre:'Escalaciones resueltas',score:72},{nombre:'Tickets pendientes',score:70}],
+     compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:3},{nombre:'Pensamiento analitico',score:3},{nombre:'Adaptabilidad',score:4},{nombre:'Orientacion a resultados',score:3}],
+     fortalezas:'Buena disposicion y trabajo en equipo.',
+     areasDesarrollo:'Mejorar cumplimiento de SLAs y reducir tickets pendientes.',
+     compromisos:'Plan de accion mensual con seguimiento semanal del lider.'}
   ];
 
+  // feedback con estructura CORRECTA: {quien, tipo, txt, fecha}
   DB.fbComments={
     0:[
-      {autor:'Carlos Perez',rol:'Lider',      msg:'Marco, excelente manejo de tickets de alta prioridad este mes.',fecha:'2026-03-10',tipo:'positivo'},
-      {autor:'Marco Ruiz',  rol:'Colaborador',msg:'Gracias. Podriamos mejorar el proceso de escalacion.',         fecha:'2026-03-11',tipo:'sugerencia'}
+      {quien:'lider',      tipo:'Reconocimiento',txt:'Marco, excelente manejo de tickets de alta prioridad este mes. Muy buen trabajo.',fecha:'10 mar. 2026'},
+      {quien:'colaborador',tipo:'Sugerencia',    txt:'Gracias. Propongo mejorar el proceso de escalacion para reducir tiempos de espera.',fecha:'11 mar. 2026'}
     ],
-    1:[{autor:'Maria Garcia',rol:'Lider',msg:'Sofia, el cierre de febrero fue impecable. Muy buen trabajo.',fecha:'2026-03-05',tipo:'positivo'}],
+    1:[
+      {quien:'lider',      tipo:'Reconocimiento',txt:'Sofia, el cierre de febrero fue impecable. La precision de tus reportes es destacable.',fecha:'5 mar. 2026'},
+      {quien:'colaborador',tipo:'Retroalimentacion',txt:'Agradezco la confianza. Me gustaria tener mas capacitaciones en analisis avanzado.',fecha:'6 mar. 2026'}
+    ],
     5:[
-      {autor:'Luis Torres',rol:'Lider',       msg:'Laura, el deployment del viernes fue un exito total.',          fecha:'2026-03-15',tipo:'positivo'},
-      {autor:'Laura Soto', rol:'Colaborador', msg:'Faltaria documentar mejor los rollback procedures.',            fecha:'2026-03-16',tipo:'sugerencia'}
+      {quien:'lider',      tipo:'Reconocimiento',txt:'Laura, el deployment del viernes fue un exito total. Gracias por coordinar al equipo.',fecha:'15 mar. 2026'},
+      {quien:'colaborador',tipo:'Sugerencia',    txt:'Faltaria documentar mejor los rollback procedures para el siguiente trimestre.',fecha:'16 mar. 2026'}
+    ],
+    4:[
+      {quien:'lider',tipo:'Area de mejora',txt:'Andres, necesitamos trabajar en reducir los tickets pendientes. Revisemos juntos el flujo.',fecha:'20 mar. 2026'}
+    ],
+    6:[
+      {quien:'lider',tipo:'Reconocimiento',txt:'Roberto, el cierre financiero de Q1 fue entregado antes del plazo. Excelente.',fecha:'2 abr. 2026'}
     ]
   };
 
+  DB.evaluaciones=[
+    {nombre:'Evaluacion 30 dias',proceso:'Primeros 90 dias',
+     preguntas:['Como te has sentido en tu primer mes?','Entiendes claramente tus objetivos y KPIs?','Tienes las herramientas necesarias para tu trabajo?','Como es tu relacion con tu lider y equipo?','Que podriamos mejorar en tu proceso de integracion?']},
+    {nombre:'Evaluacion 60 dias',proceso:'Primeros 90 dias',
+     preguntas:['Has alcanzado los objetivos del primer bimestre?','Que retos has enfrentado y como los resolviste?','Como calificas el acompanamiento de tu lider?','Sientes que tu trabajo aporta valor al equipo?','Que aprendizajes clave te llevas de estos 60 dias?']},
+    {nombre:'Evaluacion 90 dias - Cierre',proceso:'Primeros 90 dias',
+     preguntas:['Alcanzaste los objetivos de los primeros 90 dias?','Como describes tu adaptacion a la cultura de la empresa?','Cuales son tus principales fortalezas identificadas?','En que areas necesitas mas desarrollo o apoyo?','Tienes claridad sobre tu plan de carrera a 6 y 12 meses?','Recomendarias Tendencys como lugar de trabajo?']},
+    {nombre:'Evaluacion cambio de puesto',proceso:'Cambio de puesto',
+     preguntas:['Describes las responsabilidades de tu nuevo puesto?','Como fue el proceso de transicion desde tu rol anterior?','Que conocimientos o habilidades requieres reforzar?','Tienes el apoyo de tu nuevo lider y equipo?','Que expectativas tienes para los proximos 3 meses?']},
+    {nombre:'Evaluacion periodica - Trimestral',proceso:'Evaluacion periodica',
+     preguntas:['Alcanzaste tus KPIs y objetivos del trimestre?','Que iniciativas implementaste por cuenta propia?','Como esta tu nivel de satisfaccion y bienestar laboral?','Que recursos o apoyo necesitas para el siguiente trimestre?','Comparte tus metas personales de desarrollo profesional.']}
+  ];
   DB.semData={};
   DB.notas={};
 
-  // SLA demo data
+  // SLA demo data (estructura correcta del modulo SLA de Talentys)
   slaApply();
   var slaCfgMar={
     'Finanzas':        {st:'aprobado', by:'Maria Garcia',    pct:[95,88,100,92,97,85,91,100,96,100,88,93,90]},
@@ -2585,16 +2804,11 @@ function cargarDatosDemo(){
       var c=cfg[area]||{st:'pendiente',by:'',pct:[]};
       var procs=slaMkP(area);var ps=c.pct||[];
       procs.forEach(function(p,i){
-        var v=ps[i];
-        p.c=(v!==undefined&&v!=='')?String(v):'';
+        p.c=(ps[i]!==undefined&&ps[i]!=='')?String(ps[i]):'';
         p.v=p.c?'Cumplido':'';
         p.n=p.c&&parseFloat(p.c)>0?String(Math.floor(parseFloat(p.c)/10)):'';
       });
-      per.areas[area]={
-        st:c.st||'pendiente',by:c.by||'',
-        at:(c.st==='aprobado'||c.st==='enviado')?new Date().toISOString():null,
-        cmt:c.cmt||'',notes:'',logs:[],procs:procs
-      };
+      per.areas[area]={st:c.st||'pendiente',by:c.by||'',at:(c.st==='aprobado'||c.st==='enviado')?new Date().toISOString():null,cmt:c.cmt||'',notes:'',logs:[],procs:procs};
     });
     return per;
   }
@@ -2604,15 +2818,14 @@ function cargarDatosDemo(){
   SLA_DB.periods['2026_Marzo'] =mkSLAPer(slaCfgMar);
   SLA_OK=true;SLA_LOADED=true;
 
-  // Save to localStorage immediately
+  // Guardar en localStorage
   try{localStorage.setItem('talentys_db',JSON.stringify({DB:DB,GLOBAL:GLOBAL,linea:'envia'}));}catch(e){}
 
-  // Save to Firebase if connected - use batch write directly
+  // Guardar en Firebase si esta conectado
   function guardarEnFirebase(){
     if(!_fbOK||!_db)return;
     var ref=_db.collection('lineas').doc('envia');
     var b=_db.batch();
-    // Clear + rewrite collections
     ['areas','puestos','lideres','colabs','evalDesempeno'].forEach(function(col){
       (DB[col]||[]).forEach(function(item,i){
         var id='demo_'+col+'_'+i;
@@ -2624,17 +2837,15 @@ function cargarDatosDemo(){
       b.set(ref.collection('_meta').doc(f),{v:DB[f]||{}});
     });
     b.commit().then(function(){_fbStatus('Demo guardado','var(--grn)');}).catch(function(e){console.warn(e);});
-    // Save global
     var gb=_db.batch();
     gb.set(_db.collection('_global').doc('valores'),{v:GLOBAL.valores});
     gb.set(_db.collection('_global').doc('competencias'),{v:GLOBAL.competencias});
     gb.commit().catch(function(e){console.warn(e);});
-    // Save SLA
     fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).catch(function(){});
   }
   guardarEnFirebase();
 
-  // Login as admin and render
+  // Login como admin y renderizar
   buildUsersFromDB();
   var adminU=_allUsers.find(function(x){return x.user==='admin';});
   if(adminU){
@@ -2649,7 +2860,7 @@ function cargarDatosDemo(){
     renderAll();
     nav('dash');
   }
-  toast('Datos demo cargados. 8 colabs, 4 lideres, KPIs, SLAs Ene-Mar 2026.');
+  toast('Datos demo cargados correctamente.');
 }
 
 
@@ -2661,6 +2872,151 @@ function renderDemoReset(){
     +'<button onclick="resetTodo()" style="padding:9px 18px;border-radius:8px;border:1px solid var(--red);background:var(--red-l);color:var(--red);cursor:pointer;font-weight:600;font-size:13px">Borrar todo y resetear</button>'
     +'</div>';
 }
+
+// ============================================================
+// CARGA MASIVA DESDE GOOGLE SHEETS / CSV
+// ============================================================
+function extractSheetId(url){var m=url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);return m?m[1]:null;}
+function buildCsvUrl(url,sheetName){var id=extractSheetId(url);if(!id)return null;var base='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=out:csv';if(sheetName&&sheetName.trim())base+='&sheet='+encodeURIComponent(sheetName.trim());return base;}
+function parseCsv(text){var rows=[];var lines=text.split('\n');for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;var cols=[];var inQ=false,cur='';for(var j=0;j<line.length;j++){var ch=line[j];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=ch;}cols.push(cur.trim());rows.push(cols);}return rows;}
+
+var SHEET_CFG={
+  areas:{urlId:'gs-url-areas',sheetId:'gs-sheet-areas',previewId:'preview-areas',btnId:'btn-import-areas',
+    headers:['Nombre','Responsable','Pais','Descripcion'],required:[0],
+    map:function(row){return{nombre:(row[0]||'').trim(),responsable:(row[1]||'').trim(),pais:(row[2]||'').trim(),desc:(row[3]||'').trim()};},
+    validate:function(obj){return obj.nombre.length>0;},
+    insert:function(obj){if(!DB.areas.some(function(a){return a.nombre===obj.nombre;})){DB.areas.push(obj);return true;}return false;}
+  },
+  puestos:{urlId:'gs-url-puestos',sheetId:'gs-sheet-puestos',previewId:'preview-puestos',btnId:'btn-import-puestos',
+    headers:['Nombre','Nivel','Area','Plazas','Vertical','Horizontal','Descripcion'],required:[0],
+    map:function(row){return{nombre:(row[0]||'').trim(),nivel:(row[1]||'').trim(),area:(row[2]||'').trim(),plazas:(row[3]||'').trim(),vertical:(row[4]||'').trim(),horizontal:(row[5]||'').trim(),desc:(row[6]||'').trim()};},
+    validate:function(obj){return obj.nombre.length>0;},
+    insert:function(obj){if(!DB.puestos.some(function(p){return p.nombre===obj.nombre;})){DB.puestos.push(obj);return true;}return false;}
+  },
+  lideres:{urlId:'gs-url-lideres',sheetId:'gs-sheet-lideres',previewId:'preview-lideres',btnId:'btn-import-lideres',
+    headers:['Nombre','Correo','Cargo','Pais','Area','Telefono'],required:[0,1],
+    map:function(row){var n=(row[0]||'').trim();return{nombre:n,email:(row[1]||'').trim(),cargo:(row[2]||'').trim(),pais:(row[3]||'').trim(),area:(row[4]||'').trim(),tel:(row[5]||'').trim(),initials:mkInitials(n)};},
+    validate:function(obj){return obj.nombre.length>0&&obj.email.length>0;},
+    insert:function(obj){if(!DB.lideres.some(function(l){return l.email===obj.email;})){DB.lideres.push(obj);return true;}return false;}
+  },
+  colabs:{urlId:'gs-url-colabs',sheetId:'gs-sheet-colabs',previewId:'preview-colabs',btnId:'btn-import-colabs',
+    headers:['Nombre','Correo','Fecha ingreso','Pais','Puesto','Area','Lider','Proceso'],required:[0,1,2],
+    map:function(row){var n=(row[0]||'').trim();var proc=(row[7]||'Primeros 90 dias').trim();return{nombre:n,email:(row[1]||'').trim(),fecha:(row[2]||'').trim(),fechaBaja:'',pais:(row[3]||'').trim(),puesto:(row[4]||'').trim(),area:(row[5]||'').trim(),lider:(row[6]||'').trim(),proceso:proc,status:'Vigente',initials:mkInitials(n)};},
+    validate:function(obj){return obj.nombre.length>0&&obj.email.length>0&&obj.fecha.length>0;},
+    insert:function(obj){
+      var dupEl=document.getElementById('gs-dup-colabs');
+      var mode=dupEl?dupEl.value:'skip';
+      if(mode==='skip'){if(DB.colabs.some(function(c){return c.email===obj.email;}))return false;}
+      else if(mode==='replace'){var idx=DB.colabs.findIndex(function(c){return c.email===obj.email;});if(idx!==-1){DB.colabs[idx]=obj;return true;}}
+      DB.colabs.push(obj);return true;
+    }
+  }
+};
+
+var _pendingRows={};
+
+function previewSheet(tipo){
+  var cfg=SHEET_CFG[tipo];
+  var url=(document.getElementById(cfg.urlId).value||'').trim();
+  var sheet=(document.getElementById(cfg.sheetId).value||'').trim();
+  var previewEl=document.getElementById(cfg.previewId);
+  var btnEl=document.getElementById(cfg.btnId);
+  if(!url){toast('Pega la URL de tu Google Sheet.');return;}
+  var csvUrl=buildCsvUrl(url,sheet);
+  if(!csvUrl){toast('URL invalida. Verifica que sea una URL de Google Sheets.');return;}
+  previewEl.innerHTML='<div class="th tsm" style="padding:20px;text-align:center">Cargando datos...</div>';
+  if(btnEl){btnEl.disabled=true;btnEl.style.opacity='.5';}
+  fetch(csvUrl).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+  .then(function(text){
+    var rows=parseCsv(text);
+    var dataRows=rows;
+    if(rows.length>0){var first=(rows[0][0]||'').toLowerCase();if(first===cfg.headers[0].toLowerCase()||first==='nombre'||first==='name')dataRows=rows.slice(1);}
+    dataRows=dataRows.filter(function(r){return r.some(function(c){return c.trim().length>0;});});
+    _pendingRows[tipo]=dataRows;
+    if(dataRows.length===0){previewEl.innerHTML='<div class="th tsm" style="padding:20px;text-align:center">No se encontraron datos. Verifica el nombre de la hoja.</div>';return;}
+    var valids=dataRows.filter(function(r){return cfg.validate(cfg.map(r));});
+    var invalid=dataRows.length-valids.length;
+    var h2='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">';
+    h2+='<span class="bdg b-gn">'+dataRows.length+' filas encontradas</span>';
+    h2+='<span class="bdg b-gn">'+valids.length+' validas</span>';
+    if(invalid>0)h2+='<span class="bdg b-rd">'+invalid+' con errores</span>';
+    h2+='</div>';
+    h2+='<div style="overflow-x:auto;max-height:280px;overflow-y:auto"><table class="tbl"><thead><tr>';
+    h2+=cfg.headers.map(function(hd,i){return'<th>'+hd+(cfg.required.indexOf(i)!==-1?' <b style="color:var(--red)">*</b>':'')+'</th>';}).join('');
+    h2+='<th>Estado</th></tr></thead><tbody>';
+    dataRows.slice(0,50).forEach(function(row){
+      var obj=cfg.map(row);var valid=cfg.validate(obj);
+      h2+='<tr>';
+      cfg.headers.forEach(function(hd,i){var val=(row[i]||'').trim();var isEmpty=!val&&cfg.required.indexOf(i)!==-1;h2+='<td style="'+(isEmpty?'color:var(--red)':'')+'">'+(val||'<span class="th">-</span>')+'</td>';});
+      h2+='<td><span class="bdg '+(valid?'b-gn':'b-rd')+'">'+(valid?'OK':'Error')+'</span></td></tr>';
+    });
+    if(dataRows.length>50)h2+='<tr><td colspan="'+(cfg.headers.length+1)+'" style="text-align:center;color:var(--hnt);padding:8px">... y '+(dataRows.length-50)+' filas mas</td></tr>';
+    h2+='</tbody></table></div>';
+    if(valids.length>0)h2+='<div class="th tsm" style="margin-top:10px">'+valids.length+' registros listos para importar.</div>';
+    previewEl.innerHTML=h2;
+    if(valids.length>0&&btnEl){btnEl.disabled=false;btnEl.style.opacity='1';btnEl.textContent='Importar '+valids.length+' '+tipo;}
+  }).catch(function(err){
+    var hint='';
+    if(err.message.indexOf('Failed to fetch')!==-1||err.message.indexOf('NetworkError')!==-1)hint='Asegurate de que la hoja sea publica: Archivo > Compartir > Cualquiera con el enlace.';
+    else if(err.message.indexOf('403')!==-1)hint='Acceso denegado. La hoja debe ser publica.';
+    else if(err.message.indexOf('404')!==-1)hint='Hoja no encontrada. Verifica el nombre de la pestana.';
+    previewEl.innerHTML='<div style="background:var(--red-l);border:1px solid #F7C1C1;border-radius:8px;padding:14px 16px">'
+      +'<div class="fw6 tsm" style="color:var(--red);margin-bottom:6px">Error al conectar con Google Sheets</div>'
+      +'<div class="th tsm">'+(hint||err.message)+'</div>'
+      +'<div style="margin-top:10px;font-size:12px;color:var(--mut)">Pasos: Abre tu Sheet > Compartir > Cualquiera con el enlace puede ver > Copia el enlace y pegalo aqui.</div>'
+      +'</div>';
+  });
+}
+
+function importSheet(tipo){
+  var cfg=SHEET_CFG[tipo];var rows=_pendingRows[tipo];
+  if(!rows||rows.length===0){toast('Primero haz la vista previa.');return;}
+  var inserted=0,skipped=0,errors=0;
+  rows.forEach(function(row){var obj=cfg.map(row);if(!cfg.validate(obj)){errors++;return;}if(cfg.insert(obj))inserted++;else skipped++;});
+  syncSelects();
+  if(tipo==='areas')renderAreas();
+  if(tipo==='puestos')renderPuestos();
+  if(tipo==='lideres')renderLideres();
+  if(tipo==='colabs'){renderColabsAdmin();renderDash();}
+  saveDB();
+  _addImportLog(tipo,inserted,skipped,errors);
+  var msg='Importacion: '+inserted+' '+tipo+' importados';
+  if(skipped>0)msg+=', '+skipped+' omitidos';
+  if(errors>0)msg+=', '+errors+' con errores';
+  toast(msg);
+  _pendingRows[tipo]=[];
+  var btnEl=document.getElementById(cfg.btnId);
+  if(btnEl){btnEl.disabled=true;btnEl.style.opacity='.5';btnEl.textContent='Importar '+tipo;}
+}
+
+function _addImportLog(tipo,inserted,skipped,errors){
+  var logEl=document.getElementById('import-log');if(!logEl)return;
+  var now=new Date().toLocaleString('es-MX',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  var statusCls=errors>0?'b-am':'b-gn';
+  var div=document.createElement('div');
+  div.style.cssText='display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)';
+  div.innerHTML='<span class="bdg b-bl">'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'</span>'
+    +'<div style="flex:1"><div class="fw6 tsm">'+inserted+' importados'+(skipped>0?', '+skipped+' omitidos':'')+(errors>0?', '+errors+' errores':'')+'</div><div class="th" style="font-size:11px">'+now+'</div></div>'
+    +'<span class="bdg '+statusCls+'">'+(errors>0?'Parcial':'Exito')+'</span>';
+  var empty=logEl.querySelector('.th.tsm');
+  if(empty&&empty.textContent.indexOf('No hay')!==-1)empty.remove();
+  logEl.insertBefore(div,logEl.firstChild);
+}
+
+function downloadTemplate(tipo){
+  var templates={
+    areas:'Nombre,Responsable,Pais,Descripcion\nFinanzas,Maria Garcia,Mexico,Area de finanzas y contabilidad\nOperaciones,Carlos Perez,Mexico,Gestion operativa y servicio al cliente',
+    puestos:'Nombre,Nivel,Area,Plazas,Vertical,Horizontal,Descripcion\nAnalista Jr.,L1,Finanzas,3,Analista Semi-Sr.,Coordinador Proyectos,Analisis financiero\nCoordinador,L2,Operaciones,2,Coordinador Sr.,Especialista RRHH,Coordinacion de equipos',
+    lideres:'Nombre,Correo,Cargo,Pais,Area,Telefono\nCarlos Perez,carlos.perez@empresa.com,Lider Operaciones,Mexico,Operaciones,+52 55 1234 5678\nMaria Garcia,maria.garcia@empresa.com,Lider Finanzas,Mexico,Finanzas,+52 55 8765 4321',
+    colabs:'Nombre,Correo,Fecha ingreso,Pais,Puesto,Area,Lider,Proceso\nMarco Ruiz,marco.ruiz@empresa.com,2024-03-01,Mexico,Agente CSR,Operaciones,Carlos Perez,Primeros 90 dias\nSofia Torres,sofia.torres@empresa.com,2024-06-15,Mexico,Analista Jr.,Finanzas,Maria Garcia,Activo'
+  };
+  var content=templates[tipo]||'';
+  var blob=new Blob([content],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='plantilla_'+tipo+'.csv';link.click();
+  toast('Plantilla CSV descargada.');
+}
+
+function syncAllSelects(){syncSelects();}
 </script>
 </body>
 </html>
