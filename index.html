@@ -630,6 +630,50 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
   </div>
 </div>
 
+<div id="pg-sla" class="pg">
+  <div id="sla-content"><div style="padding:40px;text-align:center;color:var(--mut)">Cargando SLAs...</div></div>
+</div>
+
+<div id="pg-performance" class="pg">
+  <div class="tabs">
+    <div class="tab on" onclick="stab(this,'tperf-seguimiento')">Seguimiento mensual</div>
+    <div class="tab" onclick="stab(this,'tperf-historico');renderPerfHistorico()">Historico anual</div>
+  </div>
+  <div id="tperf-seguimiento" class="tc on">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
+      <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador</label>
+        <select class="fc" id="perf-colab-sel" onchange="renderPerfTabla()"><option value="">-- Todos --</option></select>
+      </div>
+      <div class="fg" style="margin:0"><label class="fl">Mes</label>
+        <select class="fc" id="perf-mes-sel" onchange="renderPerfTabla()">
+          <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+          <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+          <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+      </div>
+      <div class="fg" style="margin:0"><label class="fl">Ano</label>
+        <select class="fc" id="perf-ano-sel" onchange="renderPerfTabla()"></select>
+      </div>
+      <button class="btn btn-gh btn-sm" onclick="renderPerfTabla()">Actualizar</button>
+    </div>
+    <div id="perf-tabla-wrap"><div class="th tsm" style="padding:32px;text-align:center">Cargando...</div></div>
+  </div>
+  <div id="tperf-historico" class="tc">
+    <div class="ai"><div class="ai-h"><span class="ai-b">HIST</span><span class="ai-t">Historico anual - Score 70/30 por mes</span></div>
+    <div class="ai-d">Vista de los 12 meses del ano. La fila final muestra el score 70/30 mensual y el promedio anual.</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
+      <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador *</label>
+        <select class="fc" id="perf-hist-colab" onchange="renderPerfHistorico()"><option value="">-- Seleccionar --</option></select>
+      </div>
+      <div class="fg" style="margin:0"><label class="fl">Ano</label>
+        <select class="fc" id="perf-hist-ano" onchange="renderPerfHistorico()"></select>
+      </div>
+    </div>
+    <div id="perf-historico-wrap"><div class="th tsm" style="padding:32px;text-align:center">Selecciona un colaborador.</div></div>
+  </div>
+</div>
+
     </div><!-- end content -->
   </div><!-- end main-wrap -->
 </div><!-- end app-layout -->
@@ -730,51 +774,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
   </div>
 </div>
 
-<div id="pg-sla" class="pg">
-  <div id="sla-content"><div style="padding:40px;text-align:center;color:var(--mut)">Cargando SLAs...</div></div>
-</div>
-
-<div id="toast"></div>
-
-<div id="pg-performance" class="pg">
-  <div class="tabs">
-    <div class="tab on" onclick="stab(this,'tperf-seguimiento')">Seguimiento mensual</div>
-    <div class="tab" onclick="stab(this,'tperf-historico');renderPerfHistorico()">Historico anual</div>
-  </div>
-  <div id="tperf-seguimiento" class="tc on">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
-      <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador</label>
-        <select class="fc" id="perf-colab-sel" onchange="renderPerfTabla()"><option value="">-- Todos --</option></select>
-      </div>
-      <div class="fg" style="margin:0"><label class="fl">Mes</label>
-        <select class="fc" id="perf-mes-sel" onchange="renderPerfTabla()">
-          <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
-          <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
-          <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
-          <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
-        </select>
-      </div>
-      <div class="fg" style="margin:0"><label class="fl">Ano</label>
-        <select class="fc" id="perf-ano-sel" onchange="renderPerfTabla()"></select>
-      </div>
-      <button class="btn btn-gh btn-sm" onclick="renderPerfTabla()">Actualizar</button>
-    </div>
-    <div id="perf-tabla-wrap"><div class="th tsm" style="padding:32px;text-align:center">Cargando...</div></div>
-  </div>
-  <div id="tperf-historico" class="tc">
-    <div class="ai"><div class="ai-h"><span class="ai-b">HIST</span><span class="ai-t">Historico anual - Score 70/30 por mes</span></div>
-    <div class="ai-d">Vista de los 12 meses del ano. La fila final muestra el score 70/30 mensual y el promedio anual.</div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end">
-      <div class="fg" style="margin:0;min-width:200px"><label class="fl">Colaborador *</label>
-        <select class="fc" id="perf-hist-colab" onchange="renderPerfHistorico()"><option value="">-- Seleccionar --</option></select>
-      </div>
-      <div class="fg" style="margin:0"><label class="fl">Ano</label>
-        <select class="fc" id="perf-hist-ano" onchange="renderPerfHistorico()"></select>
-      </div>
-    </div>
-    <div id="perf-historico-wrap"><div class="th tsm" style="padding:32px;text-align:center">Selecciona un colaborador.</div></div>
-  </div>
-</div>
 <div id="m-perf-kpi" class="modal">
   <div class="modal-box" style="width:640px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
@@ -2596,175 +2595,272 @@ function cargarDatosDemo(){
 
   lineaActual={id:'envia',nombre:'envia.com',color:'#0A2035'};
 
+  // -- AREAS --------------------------------------------------
   DB.areas=[
-    {nombre:'Finanzas',        responsable:'Maria Garcia',  pais:'Mexico'},
-    {nombre:'Operaciones',     responsable:'Carlos Perez',  pais:'Mexico'},
-    {nombre:'Recursos Humanos',responsable:'Ana Ramirez',   pais:'Mexico'},
-    {nombre:'IT',              responsable:'Luis Torres',   pais:'Mexico'},
-    {nombre:'Marketing',       responsable:'Sofia Mendez',  pais:'Mexico'},
-    {nombre:'Legal',           responsable:'Roberto Silva', pais:'Mexico'}
+    {nombre:'Finanzas',         responsable:'Maria Garcia',  pais:'Mexico'},
+    {nombre:'Operaciones',      responsable:'Carlos Perez',  pais:'Mexico'},
+    {nombre:'Recursos Humanos', responsable:'Ana Ramirez',   pais:'Mexico'},
+    {nombre:'IT',               responsable:'Luis Torres',   pais:'Mexico'},
+    {nombre:'Marketing',        responsable:'Sofia Mendez',  pais:'Mexico'},
+    {nombre:'Legal',            responsable:'Roberto Silva', pais:'Mexico'}
   ];
 
+  // -- PUESTOS (con vertical y horizontal para Plan de carrera) -
   DB.puestos=[
-    {nombre:'Gerente de Finanzas',     nivel:'Manager',area:'Finanzas'},
-    {nombre:'Analista de Costos',      nivel:'Junior', area:'Finanzas'},
-    {nombre:'Coordinador Operaciones', nivel:'Senior', area:'Operaciones'},
-    {nombre:'Agente CSR',              nivel:'Junior', area:'Operaciones'},
-    {nombre:'HR Business Partner',     nivel:'Senior', area:'Recursos Humanos'},
-    {nombre:'Tech Lead',               nivel:'Senior', area:'IT'},
-    {nombre:'Developer',               nivel:'Junior', area:'IT'},
-    {nombre:'Marketing Manager',       nivel:'Manager',area:'Marketing'}
+    {nombre:'Agente CSR',              nivel:'L1',area:'Operaciones',  plazas:'5',
+     vertical:'Coordinador CSR,Supervisor Operaciones',
+     horizontal:'Agente LTL,Ejecutivo Ventas',
+     desc:'Atencion a clientes y resolucion de tickets.'},
+    {nombre:'Coordinador Operaciones', nivel:'L2',area:'Operaciones',  plazas:'2',
+     vertical:'Supervisor Operaciones,Gerente Operaciones',
+     horizontal:'Coordinador LTL,HRBP',
+     desc:'Coordinacion de equipos de servicio al cliente.'},
+    {nombre:'Supervisor Operaciones',  nivel:'L3',area:'Operaciones',  plazas:'1',
+     vertical:'Gerente Operaciones',
+     horizontal:'Supervisor IT,Supervisor Finanzas',
+     desc:'Supervision y mejora de procesos operativos.'},
+    {nombre:'Analista de Costos',      nivel:'L2',area:'Finanzas',     plazas:'3',
+     vertical:'Senior de Costos,Coordinador Finanzas',
+     horizontal:'Analista IT,Analista RRHH',
+     desc:'Analisis y control de costos operativos.'},
+    {nombre:'Gerente de Finanzas',     nivel:'L4',area:'Finanzas',     plazas:'1',
+     vertical:'Director Finanzas',
+     horizontal:'Gerente Operaciones,Gerente IT',
+     desc:'Gestion financiera y presupuestaria.'},
+    {nombre:'HR Business Partner',     nivel:'L3',area:'Recursos Humanos',plazas:'2',
+     vertical:'Coordinador RRHH,Director RRHH',
+     horizontal:'Coordinador Operaciones,Analista Capacitacion',
+     desc:'Socio estrategico de negocio para RRHH.'},
+    {nombre:'Tech Lead',               nivel:'L4',area:'IT',           plazas:'2',
+     vertical:'Arquitecto de Software,Director IT',
+     horizontal:'Tech Lead FTL,Manager Producto',
+     desc:'Liderazgo tecnico de squads de desarrollo.'},
+    {nombre:'Developer',               nivel:'L2',area:'IT',           plazas:'8',
+     vertical:'Senior Developer,Tech Lead',
+     horizontal:'QA Engineer,DevOps Engineer',
+     desc:'Desarrollo de software y mantenimiento de plataformas.'},
+    {nombre:'Marketing Manager',       nivel:'L3',area:'Marketing',    plazas:'1',
+     vertical:'Director Marketing',
+     horizontal:'Product Manager,Strategy Manager',
+     desc:'Gestion de campanas digitales y generacion de leads.'}
   ];
 
+  // -- LIDERES ------------------------------------------------
   DB.lideres=[
-    {nombre:'Carlos Perez', email:'carlos.perez@envia.com',cargo:'Lider Operaciones',    area:'Operaciones',     usuario:'carlos.perez',password:'lider2025',initials:'CP'},
-    {nombre:'Maria Garcia', email:'maria.garcia@envia.com',cargo:'Lider Finanzas',       area:'Finanzas',        usuario:'maria.garcia', password:'lider2025',initials:'MG'},
-    {nombre:'Luis Torres',  email:'luis.torres@envia.com', cargo:'Lider IT',             area:'IT',              usuario:'luis.torres',  password:'lider2025',initials:'LT'},
-    {nombre:'Ana Ramirez',  email:'ana.ramirez@envia.com', cargo:'Lider RRHH',           area:'Recursos Humanos',usuario:'ana.ramirez',  password:'lider2025',initials:'AR'}
+    {nombre:'Carlos Perez', email:'carlos.perez@envia.com', cargo:'Lider Operaciones',    area:'Operaciones',      usuario:'carlos.perez', password:'lider2025',initials:'CP'},
+    {nombre:'Maria Garcia', email:'maria.garcia@envia.com', cargo:'Lider Finanzas',        area:'Finanzas',         usuario:'maria.garcia',  password:'lider2025',initials:'MG'},
+    {nombre:'Luis Torres',  email:'luis.torres@envia.com',  cargo:'Lider IT',              area:'IT',               usuario:'luis.torres',   password:'lider2025',initials:'LT'},
+    {nombre:'Ana Ramirez',  email:'ana.ramirez@envia.com',  cargo:'Lider RRHH',            area:'Recursos Humanos', usuario:'ana.ramirez',   password:'lider2025',initials:'AR'}
   ];
 
+  // -- COLABORADORES ------------------------------------------
+  // proceso: Activo | Primeros 90 dias | Cambio de puesto
+  var hoy=new Date();
+  var d45=new Date(hoy-45*86400000).toISOString().slice(0,10);
+  var d20=new Date(hoy-20*86400000).toISOString().slice(0,10);
+  var d60=new Date(hoy-60*86400000).toISOString().slice(0,10);
   DB.colabs=[
     {nombre:'Marco Ruiz',     email:'marco.ruiz@envia.com',    fecha:'2024-03-01',fechaBaja:'',pais:'Mexico',puesto:'Agente CSR',              area:'Operaciones',     lider:'Carlos Perez', proceso:'Activo',           status:'Vigente',usuario:'marco.ruiz',    password:'colab2025',initials:'MR'},
     {nombre:'Sofia Torres',   email:'sofia.torres@envia.com',  fecha:'2024-06-15',fechaBaja:'',pais:'Mexico',puesto:'Analista de Costos',      area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'sofia.torres',  password:'colab2025',initials:'ST'},
-    {nombre:'Diego Mora',     email:'diego.mora@envia.com',    fecha:'2025-01-15',fechaBaja:'',pais:'Mexico',puesto:'Developer',               area:'IT',              lider:'Luis Torres',  proceso:'Primeros 90 dias', status:'Vigente',usuario:'diego.mora',    password:'colab2025',initials:'DM'},
+    {nombre:'Diego Mora',     email:'diego.mora@envia.com',    fecha:d45,          fechaBaja:'',pais:'Mexico',puesto:'Developer',               area:'IT',              lider:'Luis Torres',  proceso:'Primeros 90 dias', status:'Vigente',usuario:'diego.mora',    password:'colab2025',initials:'DM'},
     {nombre:'Valentina Cruz', email:'valentina.cruz@envia.com',fecha:'2025-01-10',fechaBaja:'',pais:'Mexico',puesto:'HR Business Partner',     area:'Recursos Humanos',lider:'Ana Ramirez',  proceso:'Activo',           status:'Vigente',usuario:'valentina.cruz',password:'colab2025',initials:'VC'},
-    {nombre:'Andres Vega',    email:'andres.vega@envia.com',   fecha:'2024-04-20',fechaBaja:'',pais:'Mexico',puesto:'Coordinador Operaciones', area:'Operaciones',     lider:'Carlos Perez', proceso:'Activo',           status:'Vigente',usuario:'andres.vega',   password:'colab2025',initials:'AV'},
-    {nombre:'Laura Soto',     email:'laura.soto@envia.com',    fecha:'2023-11-01',fechaBaja:'',pais:'Mexico',puesto:'Tech Lead',              area:'IT',              lider:'Luis Torres',  proceso:'Activo',           status:'Vigente',usuario:'laura.soto',    password:'colab2025',initials:'LS'},
+    {nombre:'Andres Vega',    email:'andres.vega@envia.com',   fecha:'2024-04-20',fechaBaja:'',pais:'Mexico',puesto:'Coordinador Operaciones', area:'Operaciones',     lider:'Carlos Perez', proceso:'Cambio de puesto', status:'Vigente',usuario:'andres.vega',   password:'colab2025',initials:'AV'},
+    {nombre:'Laura Soto',     email:'laura.soto@envia.com',    fecha:'2023-11-01',fechaBaja:'',pais:'Mexico',puesto:'Tech Lead',               area:'IT',              lider:'Luis Torres',  proceso:'Activo',           status:'Vigente',usuario:'laura.soto',    password:'colab2025',initials:'LS'},
     {nombre:'Roberto Nieto',  email:'roberto.nieto@envia.com', fecha:'2024-08-05',fechaBaja:'',pais:'Mexico',puesto:'Gerente de Finanzas',     area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'roberto.nieto', password:'colab2025',initials:'RN'},
-    {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',  fecha:'2025-02-10',fechaBaja:'',pais:'Mexico',puesto:'Marketing Manager',       area:'Marketing',       lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'camila.reyes',  password:'colab2025',initials:'CR'}
+    {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',  fecha:d20,          fechaBaja:'',pais:'Mexico',puesto:'Marketing Manager',       area:'Marketing',       lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'camila.reyes',  password:'colab2025',initials:'CR'},
+    {nombre:'Jorge Mendez',   email:'jorge.mendez@envia.com',  fecha:d60,          fechaBaja:'',pais:'Mexico',puesto:'Agente CSR',              area:'Operaciones',     lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'jorge.mendez',   password:'colab2025',initials:'JM'},
+    {nombre:'Paola Rios',     email:'paola.rios@envia.com',    fecha:'2024-02-01',fechaBaja:'',pais:'Mexico',puesto:'Supervisor Operaciones',   area:'Operaciones',     lider:'Carlos Perez', proceso:'Cambio de puesto', status:'Vigente',usuario:'paola.rios',     password:'colab2025',initials:'PR'}
   ];
 
+  // -- VALORES Y COMPETENCIAS --------------------------------
   GLOBAL.valores=[
-    {nombre:'Excelencia',        descripcion:'Buscar la calidad en cada accion'},
-    {nombre:'Integridad',        descripcion:'Actuar con honestidad y transparencia'},
-    {nombre:'Innovacion',        descripcion:'Proponer ideas y soluciones creativas'},
-    {nombre:'Colaboracion',      descripcion:'Trabajo en equipo y apoyo mutuo'},
-    {nombre:'Enfoque al cliente',descripcion:'Cliente en el centro de cada decision'}
+    {nombre:'Excelencia',        descripcion:'Buscar la calidad en cada accion y entregable.'},
+    {nombre:'Integridad',        descripcion:'Actuar con honestidad y transparencia siempre.'},
+    {nombre:'Innovacion',        descripcion:'Proponer ideas y soluciones creativas constantemente.'},
+    {nombre:'Colaboracion',      descripcion:'Trabajo en equipo y apoyo mutuo entre areas.'},
+    {nombre:'Enfoque al cliente',descripcion:'El cliente es el centro de cada decision que tomamos.'}
   ];
   GLOBAL.competencias=[
-    {nombre:'Comunicacion efectiva',   descripcion:'Expresarse clara y asertivamente',  niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Liderazgo',               descripcion:'Guiar y motivar equipos',           niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Pensamiento analitico',   descripcion:'Resolver problemas con datos',      niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Adaptabilidad',           descripcion:'Responder al cambio con agilidad',  niveles:['Basico','Intermedio','Avanzado','Experto']},
-    {nombre:'Orientacion a resultados',descripcion:'Cumplir metas con eficiencia',      niveles:['Basico','Intermedio','Avanzado','Experto']}
+    {nombre:'Comunicacion efectiva',   descripcion:'Expresarse clara y asertivamente con el equipo.',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Liderazgo',               descripcion:'Guiar, motivar e inspirar a equipos de trabajo.',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Pensamiento analitico',   descripcion:'Resolver problemas complejos con base en datos.',  niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Adaptabilidad',           descripcion:'Responder con agilidad ante el cambio y la incertidumbre.',niveles:['Basico','Intermedio','Avanzado','Experto']},
+    {nombre:'Orientacion a resultados',descripcion:'Enfocarse en cumplir metas con eficiencia y calidad.',niveles:['Basico','Intermedio','Avanzado','Experto']}
   ];
 
-  DB.nivelEsperado={0:3,1:3,2:3,3:2,4:3,5:4,6:3,7:3};
+  // -- USUARIOS ADICIONALES (Admin) --------------------------
+  GLOBAL.usuarios=[
+    {user:'hrbp.demo', pass:'hrbp2025', nombre:'Patricia Leal',   email:'pleal@envia.com',  rol:'HRBP',       linea:null,initials:'PL'},
+    {user:'lider.it',  pass:'lider2025',nombre:'Luis Torres',     email:'ltorres@envia.com',rol:'Lider',      linea:'envia',initials:'LT'}
+  ];
 
-  // KPIs evaluacion desempeno
+  // -- NIVEL ESPERADO POR COLABORADOR ------------------------
+  DB.nivelEsperado={0:3,1:3,2:2,3:3,4:3,5:4,6:3,7:2,8:1,9:3};
+
+  // -- KPIS EVALUACION DESEMPENO -----------------------------
   DB.kpis={
-    0:[{nombre:'Tickets resueltos',    peso:40,meta:150,  tipo:'mayor'},{nombre:'CSAT',                    peso:35,meta:90,  tipo:'mayor'},{nombre:'Tiempo promedio(min)',peso:25,meta:20,  tipo:'menor'}],
-    1:[{nombre:'Precision reportes',   peso:45,meta:98,   tipo:'mayor'},{nombre:'Entregas a tiempo',       peso:35,meta:95,  tipo:'mayor'},{nombre:'Errores contables',   peso:20,meta:0,   tipo:'menor'}],
-    2:[{nombre:'Bugs cerrados',        peso:40,meta:80,   tipo:'mayor'},{nombre:'Code review',             peso:30,meta:100, tipo:'mayor'},{nombre:'Incidencias prod.',    peso:30,meta:0,   tipo:'menor'}],
-    3:[{nombre:'Contrataciones OK',    peso:50,meta:100,  tipo:'mayor'},{nombre:'Satisfaccion candidatos', peso:30,meta:90,  tipo:'mayor'},{nombre:'Rotacion 90d',         peso:20,meta:5,   tipo:'menor'}],
-    4:[{nombre:'SLAs cumplidos',       peso:50,meta:95,   tipo:'mayor'},{nombre:'Escalaciones resueltas',  peso:30,meta:80,  tipo:'mayor'},{nombre:'Tickets pendientes',    peso:20,meta:10,  tipo:'menor'}],
-    5:[{nombre:'Deploy exitosos',      peso:40,meta:99,   tipo:'mayor'},{nombre:'Uptime servicios',        peso:40,meta:99.5,tipo:'mayor'},{nombre:'Incidentes criticos',   peso:20,meta:0,   tipo:'menor'}],
-    6:[{nombre:'Cierre financiero',    peso:40,meta:100,  tipo:'mayor'},{nombre:'Precision forecast',      peso:35,meta:95,  tipo:'mayor'},{nombre:'Ajustes post-cierre',   peso:25,meta:2,   tipo:'menor'}],
-    7:[{nombre:'Campanas lanzadas',    peso:35,meta:8,    tipo:'mayor'},{nombre:'Leads generados',         peso:40,meta:500, tipo:'mayor'},{nombre:'Costo por lead',        peso:25,meta:50,  tipo:'menor'}]
+    0:[{nombre:'Tickets resueltos',    peso:40,meta:150,  tipo:'mayor'},{nombre:'CSAT',                    peso:35,meta:90,  tipo:'mayor'},{nombre:'Tiempo promedio(min)',peso:25,meta:20,tipo:'menor'}],
+    1:[{nombre:'Precision reportes',   peso:45,meta:98,   tipo:'mayor'},{nombre:'Entregas a tiempo',       peso:35,meta:95,  tipo:'mayor'},{nombre:'Errores contables',   peso:20,meta:0, tipo:'menor'}],
+    2:[{nombre:'Bugs cerrados',        peso:40,meta:80,   tipo:'mayor'},{nombre:'Code review',             peso:30,meta:100, tipo:'mayor'},{nombre:'Incidencias prod.',    peso:30,meta:0, tipo:'menor'}],
+    3:[{nombre:'Contrataciones OK',    peso:50,meta:100,  tipo:'mayor'},{nombre:'Satisfaccion candidatos', peso:30,meta:90,  tipo:'mayor'},{nombre:'Rotacion 90d',         peso:20,meta:5, tipo:'menor'}],
+    4:[{nombre:'SLAs cumplidos',       peso:50,meta:95,   tipo:'mayor'},{nombre:'Escalaciones resueltas',  peso:30,meta:80,  tipo:'mayor'},{nombre:'Tickets pendientes',    peso:20,meta:10,tipo:'menor'}],
+    5:[{nombre:'Deploy exitosos',      peso:40,meta:99,   tipo:'mayor'},{nombre:'Uptime servicios',        peso:40,meta:99.5,tipo:'mayor'},{nombre:'Incidentes criticos',   peso:20,meta:0, tipo:'menor'}],
+    6:[{nombre:'Cierre financiero',    peso:40,meta:100,  tipo:'mayor'},{nombre:'Precision forecast',      peso:35,meta:95,  tipo:'mayor'},{nombre:'Ajustes post-cierre',   peso:25,meta:2, tipo:'menor'}],
+    7:[{nombre:'Campanas lanzadas',    peso:35,meta:8,    tipo:'mayor'},{nombre:'Leads generados',         peso:40,meta:500, tipo:'mayor'},{nombre:'Costo por lead',        peso:25,meta:50,tipo:'menor'}],
+    8:[{nombre:'Tickets resueltos',    peso:60,meta:100,  tipo:'mayor'},{nombre:'CSAT',                    peso:40,meta:85,  tipo:'mayor'}],
+    9:[{nombre:'SLAs cumplidos',       peso:60,meta:90,   tipo:'mayor'},{nombre:'Escalaciones',            peso:40,meta:70,  tipo:'mayor'}]
   };
 
-  // KPIs performance mensual (estructura correcta para _calcPerfPromedio)
+  // -- KPIS PERFORMANCE MENSUAL ------------------------------
   DB.perfKpis={
     0:[{nombre:'Tickets resueltos', desc:'Tickets cerrados en el mes',        meta:150,  unidad:'tickets',semVerde:90,semAmarillo:75}],
     1:[{nombre:'Precision reportes',desc:'% reportes sin errores',            meta:98,   unidad:'%',      semVerde:95,semAmarillo:85}],
     2:[{nombre:'Bugs cerrados',     desc:'Issues resueltos en el sprint',     meta:80,   unidad:'bugs',   semVerde:90,semAmarillo:75}],
     3:[{nombre:'Contrataciones',    desc:'% posiciones cubiertas a tiempo',   meta:100,  unidad:'%',      semVerde:90,semAmarillo:75}],
     4:[{nombre:'SLAs cumplidos',    desc:'% SLAs dentro del tiempo acordado', meta:95,   unidad:'%',      semVerde:95,semAmarillo:80}],
-    5:[{nombre:'Uptime',            desc:'% disponibilidad servicios',         meta:99.5, unidad:'%',      semVerde:99,semAmarillo:95}],
+    5:[{nombre:'Uptime',            desc:'% disponibilidad servicios',        meta:99.5, unidad:'%',      semVerde:99,semAmarillo:95}],
     6:[{nombre:'Cierre financiero', desc:'% entregas de cierre a tiempo',     meta:100,  unidad:'%',      semVerde:95,semAmarillo:85}],
-    7:[{nombre:'Leads generados',   desc:'Leads calificados del mes',          meta:500,  unidad:'leads',  semVerde:80,semAmarillo:60}]
+    7:[{nombre:'Leads generados',   desc:'Leads calificados del mes',         meta:500,  unidad:'leads',  semVerde:80,semAmarillo:60}],
+    8:[{nombre:'Tickets resueltos', desc:'Tickets cerrados en el mes',        meta:100,  unidad:'tickets',semVerde:85,semAmarillo:70}],
+    9:[{nombre:'SLAs cumplidos',    desc:'% SLAs dentro del tiempo acordado', meta:90,   unidad:'%',      semVerde:90,semAmarillo:75}]
   };
 
-  // perfData[ci][ano][mes][ki] = {real, obs}
-  // perfAsist[ci][ano][mes] = {puntualidad:0-100, asistencia:0-100} IMPORTANTE: valores 0-100
-  var meses=['Enero','Febrero','Marzo'];
-  var reales=[162,148,155, 99,97,98, 88,76,83, 95,100,92, 97,93,96, 99.8,99.5,99.7, 100,98,100, 520,480,510];
-  var punt= [93,90,92, 94,91,93, 88,85,87, 91,93,89, 94,91,93, 96,95,96, 93,91,94, 88,85,87];
-  var asis= [96,94,97, 97,95,96, 92,90,93, 94,96,92, 98,95,97, 97,97,98, 95,94,96, 91,90,92];
+  // -- PERFORMANCE DATA (mes=1-12 integer) -------------------
+  // reales[ci][mes-1] = valor real del KPI 0
+  var reales=[
+    [162,148,155,158,161,153,149,156,163,157,151,160],
+    [99, 97, 98, 96, 99, 98, 97, 99, 98, 97, 96, 99],
+    [88, 76, 83, 79, 85, 81, 77, 84, 87, 82, 78, 86],
+    [95,100, 92, 97, 98, 94, 96,100, 95, 93, 97, 99],
+    [97, 93, 96, 94, 95, 92, 96, 98, 95, 93, 94, 97],
+    [99.8,99.5,99.7,99.6,99.9,99.7,99.5,99.8,99.9,99.6,99.7,99.8],
+    [100, 98,100, 99,100,100, 98,100,100, 99,100,100],
+    [520,480,510,495,530,505,488,515,525,500,492,518],
+    [110, 95,105,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [88,  85, 90,  0,  0,  0,  0,  0,  0,  0,  0,  0]
+  ];
+  var punt=[
+    [93,90,92,91,94,93,90,92,93,91,90,93],
+    [94,91,93,92,95,94,91,93,94,92,91,94],
+    [88,85,87,86,89,88,85,87,88,86,85,88],
+    [91,93,89,90,92,91,93,89,91,90,93,91],
+    [94,91,93,92,95,94,91,93,94,92,91,94],
+    [96,95,96,95,97,96,95,96,97,95,95,96],
+    [93,91,94,92,94,93,91,94,94,92,91,93],
+    [88,85,87,86,89,88,85,87,88,86,85,88],
+    [90,88,91,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [85, 82,87,  0,  0,  0,  0,  0,  0,  0,  0,  0]
+  ];
+  var asis=[
+    [96,94,97,95,97,96,94,97,97,95,94,96],
+    [97,95,96,95,97,97,95,96,97,95,95,97],
+    [92,90,93,91,93,92,90,93,93,91,90,92],
+    [94,96,92,93,95,94,96,92,94,93,96,94],
+    [98,95,97,96,98,98,95,97,98,96,95,98],
+    [97,97,98,97,98,97,97,98,98,97,97,97],
+    [95,94,96,95,96,95,94,96,96,95,94,95],
+    [91,90,92,91,92,91,90,92,92,91,90,91],
+    [93,91,94,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [88, 85,89,  0,  0,  0,  0,  0,  0,  0,  0,  0]
+  ];
   DB.perfData={};DB.perfAsist={};
-  for(var ci=0;ci<8;ci++){
+  for(var ci=0;ci<10;ci++){
     DB.perfData[ci]={'2026':{}};
     DB.perfAsist[ci]={'2026':{}};
-    for(var mi=0;mi<3;mi++){
-      var mes=meses[mi];
-      DB.perfData[ci]['2026'][mes]={0:{real:reales[ci*3+mi],obs:'Registro mensual'}};
-      DB.perfAsist[ci]['2026'][mes]={puntualidad:punt[ci*3+mi],asistencia:asis[ci*3+mi],obs:''};
+    for(var m=1;m<=12;m++){
+      var rv=reales[ci]?reales[ci][m-1]:0;
+      var pv=punt[ci]?punt[ci][m-1]:0;
+      var av=asis[ci]?asis[ci][m-1]:0;
+      if(rv>0){
+        DB.perfData[ci]['2026'][m]={0:{real:rv,obs:'Registro mensual'}};
+        DB.perfAsist[ci]['2026'][m]={puntualidad:pv,asistencia:av,obs:''};
+      }
     }
   }
 
-  // evalDesempeno con estructura CORRECTA que usa renderDesResultados
-  // {colabIdx, colabNombre, trimestre, anio, fechaInicio, fechaFin, fecha, evaluador,
-  //  nivelEsperado, kpiScore, compScore, total, nivel, kpiDetalle, compDetalle,
-  //  fortalezas, areasDesarrollo, compromisos}
+  // -- EVALUACIONES DE DESEMPENO (DB.evalDesempeno) ----------
   DB.evalDesempeno=[
-    {colabIdx:0,colabNombre:'Marco Ruiz',     trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Maria Garcia',nivelEsperado:3,
+    {colabIdx:0,colabNombre:'Marco Ruiz',     trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Carlos Perez',nivelEsperado:3,
      kpiScore:82.5,compScore:76.0,total:80.3,nivel:'Satisfactorio',
      kpiDetalle:[{nombre:'Tickets resueltos',score:87},{nombre:'CSAT',score:91},{nombre:'Tiempo promedio',score:75}],
      compDetalle:[{nombre:'Comunicacion efectiva',score:3},{nombre:'Liderazgo',score:2},{nombre:'Pensamiento analitico',score:4},{nombre:'Adaptabilidad',score:4},{nombre:'Orientacion a resultados',score:3}],
-     fortalezas:'Excelente atencion al cliente y manejo de tickets de alta prioridad.',
-     areasDesarrollo:'Mejorar velocidad de resolucion en casos complejos.',
-     compromisos:'Tomar curso de resolucion avanzada de conflictos en Q2.'},
+     fortalezas:'Excelente atencion al cliente y manejo de tickets urgentes.',
+     areasDesarrollo:'Mejorar velocidad en casos complejos y reducir tiempo promedio.',
+     compromisos:'Tomar curso de resolucion avanzada en Q2.'},
     {colabIdx:1,colabNombre:'Sofia Torres',   trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Maria Garcia',nivelEsperado:3,
      kpiScore:91.0,compScore:83.0,total:88.3,nivel:'Alto desempeno',
      kpiDetalle:[{nombre:'Precision reportes',score:96},{nombre:'Entregas a tiempo',score:93},{nombre:'Errores contables',score:88}],
      compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:2},{nombre:'Pensamiento analitico',score:5},{nombre:'Adaptabilidad',score:3},{nombre:'Orientacion a resultados',score:5}],
-     fortalezas:'Alta precision en reportes y analisis financieros.',
-     areasDesarrollo:'Desarrollar habilidades de liderazgo para escalar a Manager.',
-     compromisos:'Mentoria con Gerente durante Q2 y Q3.'},
+     fortalezas:'Alta precision y confiabilidad en reportes financieros.',
+     areasDesarrollo:'Desarrollar habilidades de liderazgo para roles futuros.',
+     compromisos:'Mentoria mensual con gerente durante Q2 y Q3.'},
     {colabIdx:5,colabNombre:'Laura Soto',     trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Luis Torres',nivelEsperado:4,
      kpiScore:95.0,compScore:90.0,total:93.5,nivel:'Excepcional',
      kpiDetalle:[{nombre:'Deploy exitosos',score:99},{nombre:'Uptime servicios',score:99},{nombre:'Incidentes criticos',score:88}],
      compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:5},{nombre:'Pensamiento analitico',score:5},{nombre:'Adaptabilidad',score:4},{nombre:'Orientacion a resultados',score:5}],
-     fortalezas:'Referente tecnico del equipo. Liderazgo sobresaliente.',
-     areasDesarrollo:'Documentar mejor los procesos de rollback.',
-     compromisos:'Crear guia de rollback procedures para Q2.'},
+     fortalezas:'Referente tecnico. Liderazgo y calidad de codigo sobresalientes.',
+     areasDesarrollo:'Documentar procesos de rollback y guias tecnicas.',
+     compromisos:'Crear guia de rollback procedures Q2.'},
     {colabIdx:4,colabNombre:'Andres Vega',    trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Carlos Perez',nivelEsperado:3,
      kpiScore:74.0,compScore:71.0,total:73.1,nivel:'En desarrollo',
      kpiDetalle:[{nombre:'SLAs cumplidos',score:78},{nombre:'Escalaciones resueltas',score:72},{nombre:'Tickets pendientes',score:70}],
      compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:3},{nombre:'Pensamiento analitico',score:3},{nombre:'Adaptabilidad',score:4},{nombre:'Orientacion a resultados',score:3}],
-     fortalezas:'Buena disposicion y trabajo en equipo.',
+     fortalezas:'Buena actitud y disposicion para aprender.',
      areasDesarrollo:'Mejorar cumplimiento de SLAs y reducir tickets pendientes.',
-     compromisos:'Plan de accion mensual con seguimiento semanal del lider.'}
+     compromisos:'Plan de accion quincenal con lider durante Q2.'},
+    {colabIdx:6,colabNombre:'Roberto Nieto',  trimestre:'Q1',anio:'2026',fechaInicio:'Ene 2026',fechaFin:'Mar 2026',fecha:'31 mar. 2026',evaluador:'Maria Garcia',nivelEsperado:3,
+     kpiScore:88.0,compScore:84.0,total:86.8,nivel:'Alto desempeno',
+     kpiDetalle:[{nombre:'Cierre financiero',score:92},{nombre:'Precision forecast',score:88},{nombre:'Ajustes post-cierre',score:85}],
+     compDetalle:[{nombre:'Comunicacion efectiva',score:4},{nombre:'Liderazgo',score:4},{nombre:'Pensamiento analitico',score:5},{nombre:'Adaptabilidad',score:3},{nombre:'Orientacion a resultados',score:4}],
+     fortalezas:'Dominio financiero y entregas consistentes antes del plazo.',
+     areasDesarrollo:'Mejorar precision del forecast en escenarios complejos.',
+     compromisos:'Capacitacion en modelado financiero avanzado Q2.'}
   ];
 
-  // feedback con estructura CORRECTA: {quien, tipo, txt, fecha}
+  // -- FEEDBACK ----------------------------------------------
   DB.fbComments={
     0:[
-      {quien:'lider',      tipo:'Reconocimiento',txt:'Marco, excelente manejo de tickets de alta prioridad este mes. Muy buen trabajo.',fecha:'10 mar. 2026'},
-      {quien:'colaborador',tipo:'Sugerencia',    txt:'Gracias. Propongo mejorar el proceso de escalacion para reducir tiempos de espera.',fecha:'11 mar. 2026'}
+      {quien:'lider',      tipo:'Reconocimiento',  txt:'Marco, excelente manejo de tickets urgentes este mes. Gran actitud.',fecha:'10 mar. 2026'},
+      {quien:'colaborador',tipo:'Sugerencia',       txt:'Propongo mejorar el proceso de escalacion para reducir tiempos.',   fecha:'11 mar. 2026'}
     ],
     1:[
-      {quien:'lider',      tipo:'Reconocimiento',txt:'Sofia, el cierre de febrero fue impecable. La precision de tus reportes es destacable.',fecha:'5 mar. 2026'},
-      {quien:'colaborador',tipo:'Retroalimentacion',txt:'Agradezco la confianza. Me gustaria tener mas capacitaciones en analisis avanzado.',fecha:'6 mar. 2026'}
-    ],
-    5:[
-      {quien:'lider',      tipo:'Reconocimiento',txt:'Laura, el deployment del viernes fue un exito total. Gracias por coordinar al equipo.',fecha:'15 mar. 2026'},
-      {quien:'colaborador',tipo:'Sugerencia',    txt:'Faltaria documentar mejor los rollback procedures para el siguiente trimestre.',fecha:'16 mar. 2026'}
+      {quien:'lider',      tipo:'Reconocimiento',  txt:'Sofia, el cierre de febrero fue impecable. Muy buen trabajo.',      fecha:'5 mar. 2026'},
+      {quien:'colaborador',tipo:'Retroalimentacion',txt:'Me gustaria tener mas capacitaciones en analisis avanzado.',        fecha:'6 mar. 2026'}
     ],
     4:[
-      {quien:'lider',tipo:'Area de mejora',txt:'Andres, necesitamos trabajar en reducir los tickets pendientes. Revisemos juntos el flujo.',fecha:'20 mar. 2026'}
+      {quien:'lider',      tipo:'Area de mejora',  txt:'Andres, necesitamos bajar los tickets pendientes. Revisemos el flujo juntos.',fecha:'20 mar. 2026'},
+      {quien:'colaborador',tipo:'Sugerencia',       txt:'Propongo reorganizar la cola de tickets por prioridad automaticamente.',    fecha:'21 mar. 2026'}
+    ],
+    5:[
+      {quien:'lider',      tipo:'Reconocimiento',  txt:'Laura, el deployment fue un exito total. Gracias por coordinar.',   fecha:'15 mar. 2026'},
+      {quien:'colaborador',tipo:'Sugerencia',       txt:'Faltaria documentar mejor los rollback procedures del equipo.',     fecha:'16 mar. 2026'}
     ],
     6:[
-      {quien:'lider',tipo:'Reconocimiento',txt:'Roberto, el cierre financiero de Q1 fue entregado antes del plazo. Excelente.',fecha:'2 abr. 2026'}
+      {quien:'lider',      tipo:'Reconocimiento',  txt:'Roberto, el cierre Q1 entregado antes del plazo. Excelente.',       fecha:'2 abr. 2026'}
+    ],
+    3:[
+      {quien:'lider',      tipo:'Reconocimiento',  txt:'Valentina, los indicadores de reclutamiento este trimestre fueron excelentes.',fecha:'8 abr. 2026'},
+      {quien:'colaborador',tipo:'Retroalimentacion',txt:'El proceso de induccion podria ser mas estructurado para nuevos ingresos.', fecha:'9 abr. 2026'}
     ]
   };
 
+  // -- BANCO DE EVALUACIONES ---------------------------------
   DB.evaluaciones=[
     {nombre:'Evaluacion 30 dias',proceso:'Primeros 90 dias',
-     preguntas:['Como te has sentido en tu primer mes?','Entiendes claramente tus objetivos y KPIs?','Tienes las herramientas necesarias para tu trabajo?','Como es tu relacion con tu lider y equipo?','Que podriamos mejorar en tu proceso de integracion?']},
+     preguntas:['Como te has sentido en tu primer mes en la empresa?','Entiendes claramente tus objetivos y KPIs del puesto?','Tienes las herramientas y accesos necesarios para trabajar?','Como es tu relacion con tu lider y companeros de equipo?','Que podriamos mejorar en tu proceso de integracion?']},
     {nombre:'Evaluacion 60 dias',proceso:'Primeros 90 dias',
-     preguntas:['Has alcanzado los objetivos del primer bimestre?','Que retos has enfrentado y como los resolviste?','Como calificas el acompanamiento de tu lider?','Sientes que tu trabajo aporta valor al equipo?','Que aprendizajes clave te llevas de estos 60 dias?']},
+     preguntas:['Has alcanzado los objetivos planteados para el primer bimestre?','Que retos has enfrentado y como los resolviste?','Como calificas el acompanamiento de tu lider (1-5)?','Sientes que tu trabajo aporta valor real al equipo y empresa?','Que aprendizajes clave tienes de estos 60 dias?']},
     {nombre:'Evaluacion 90 dias - Cierre',proceso:'Primeros 90 dias',
-     preguntas:['Alcanzaste los objetivos de los primeros 90 dias?','Como describes tu adaptacion a la cultura de la empresa?','Cuales son tus principales fortalezas identificadas?','En que areas necesitas mas desarrollo o apoyo?','Tienes claridad sobre tu plan de carrera a 6 y 12 meses?','Recomendarias Tendencys como lugar de trabajo?']},
+     preguntas:['Alcanzaste los objetivos de los primeros 90 dias?','Como describes tu adaptacion a la cultura de Tendencys?','Cuales son tus principales fortalezas en este puesto?','En que areas necesitas mas desarrollo o apoyo del equipo?','Tienes claridad sobre tu plan de carrera a 6 y 12 meses?','Recomendarias Tendencys como lugar de trabajo a otras personas?']},
     {nombre:'Evaluacion cambio de puesto',proceso:'Cambio de puesto',
-     preguntas:['Describes las responsabilidades de tu nuevo puesto?','Como fue el proceso de transicion desde tu rol anterior?','Que conocimientos o habilidades requieres reforzar?','Tienes el apoyo de tu nuevo lider y equipo?','Que expectativas tienes para los proximos 3 meses?']},
-    {nombre:'Evaluacion periodica - Trimestral',proceso:'Evaluacion periodica',
-     preguntas:['Alcanzaste tus KPIs y objetivos del trimestre?','Que iniciativas implementaste por cuenta propia?','Como esta tu nivel de satisfaccion y bienestar laboral?','Que recursos o apoyo necesitas para el siguiente trimestre?','Comparte tus metas personales de desarrollo profesional.']}
+     preguntas:['Describes bien las responsabilidades de tu nuevo puesto?','Como fue la transicion desde tu rol anterior?','Que conocimientos o habilidades necesitas reforzar?','Tienes el apoyo de tu nuevo lider y equipo?','Cuales son tus expectativas para los proximos 3 meses?']},
+    {nombre:'Evaluacion periodica trimestral',proceso:'Evaluacion periodica',
+     preguntas:['Alcanzaste tus KPIs y objetivos del trimestre?','Que iniciativas implementaste por iniciativa propia?','Como esta tu nivel de satisfaccion y bienestar laboral (1-10)?','Que recursos o apoyo necesitas para el siguiente trimestre?','Comparte tus metas personales de desarrollo profesional.']}
   ];
-  DB.semData={};
-  DB.notas={};
 
-  // SLA demo data (estructura correcta del modulo SLA de Talentys)
+  DB.semData={};DB.notas={};
+
+  // -- SLA DEMO DATA -----------------------------------------
   slaApply();
   var slaCfgMar={
     'Finanzas':        {st:'aprobado', by:'Maria Garcia',    pct:[95,88,100,92,97,85,91,100,96,100,88,93,90]},
@@ -2787,15 +2883,18 @@ function cargarDatosDemo(){
     'Marketing':       {st:'aprobado', by:'Sofia Mendez',    pct:[87,92,85,90,82]},
     'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',     pct:[98,92,88,83,85,90,98]},
     'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez', pct:[100,99,92,99.5,98,85,95]},
+    'Strategy BI':     {st:'aprobado', by:'Osvaldo Melendez',pct:[90,86,83,88]},
     'Growth':          {st:'aprobado', by:'Director Growth', pct:[98,100,93,90,98]}
   };
   var slaCfgEne={
     'Finanzas':        {st:'aprobado', by:'Maria Garcia',    pct:[90,82,95,86,92,80,87,98,91,96,83,88,85]},
     'Operaciones':     {st:'aprobado', by:'Carlos Perez',    pct:[96,92,88,91,94,90]},
     'IT':              {st:'aprobado', by:'Luis Torres',      pct:[99.2,100,80,88,0,83]},
+    'LTL':             {st:'aprobado', by:'Ivan Gallegos',   pct:[85,88,82,84,79,77,88]},
     'Marketing':       {st:'aprobado', by:'Sofia Mendez',    pct:[85,90,82,88,80]},
     'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',     pct:[96,90,86,81,83,88,95]},
     'Fulfillment':     {st:'aprobado', by:'Roberto Alvarez', pct:[98,97,90,98,96,83,93]},
+    'Strategy BI':     {st:'aprobado', by:'Osvaldo Melendez',pct:[88,84,81,86]},
     'Growth':          {st:'aprobado', by:'Director Growth', pct:[96,98,91,88,96]}
   };
   function mkSLAPer(cfg){
@@ -2813,15 +2912,13 @@ function cargarDatosDemo(){
     return per;
   }
   SLA_DB={periods:{},customSLAs:{},slasEliminados:{},customAreas:[],customAreaColors:{}};
-  SLA_DB.periods['2026_Enero'] =mkSLAPer(slaCfgEne);
+  SLA_DB.periods['2026_Enero']  =mkSLAPer(slaCfgEne);
   SLA_DB.periods['2026_Febrero']=mkSLAPer(slaCfgFeb);
-  SLA_DB.periods['2026_Marzo'] =mkSLAPer(slaCfgMar);
+  SLA_DB.periods['2026_Marzo']  =mkSLAPer(slaCfgMar);
   SLA_OK=true;SLA_LOADED=true;
 
-  // Guardar en localStorage
+  // -- GUARDAR -----------------------------------------------
   try{localStorage.setItem('talentys_db',JSON.stringify({DB:DB,GLOBAL:GLOBAL,linea:'envia'}));}catch(e){}
-
-  // Guardar en Firebase si esta conectado
   function guardarEnFirebase(){
     if(!_fbOK||!_db)return;
     var ref=_db.collection('lineas').doc('envia');
@@ -2836,16 +2933,16 @@ function cargarDatosDemo(){
     ['kpis','nivelEsperado','perfKpis','perfData','perfAsist'].forEach(function(f){
       b.set(ref.collection('_meta').doc(f),{v:DB[f]||{}});
     });
-    b.commit().then(function(){_fbStatus('Demo guardado','var(--grn)');}).catch(function(e){console.warn(e);});
+    b.commit().catch(function(e){console.warn(e);});
     var gb=_db.batch();
     gb.set(_db.collection('_global').doc('valores'),{v:GLOBAL.valores});
     gb.set(_db.collection('_global').doc('competencias'),{v:GLOBAL.competencias});
+    gb.set(_db.collection('_global').doc('usuarios'),{v:GLOBAL.usuarios});
     gb.commit().catch(function(e){console.warn(e);});
     fetch(SLA_FB+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(SLA_DB)}).catch(function(){});
   }
   guardarEnFirebase();
 
-  // Login como admin y renderizar
   buildUsersFromDB();
   var adminU=_allUsers.find(function(x){return x.user==='admin';});
   if(adminU){
@@ -2856,12 +2953,11 @@ function cargarDatosDemo(){
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app-layout').style.display='';
     var cv=document.getElementById('col-view');if(cv)cv.style.display='none';
-    updateLineaBadge();
-    renderAll();
-    nav('dash');
+    updateLineaBadge();renderAll();nav('dash');
   }
-  toast('Datos demo cargados correctamente.');
+  toast('Datos demo cargados: 10 colabs, 9 puestos, KPIs, Performance, SLAs, Evaluaciones.');
 }
+
 
 
 function renderDemoReset(){
@@ -3018,5 +3114,6 @@ function downloadTemplate(tipo){
 
 function syncAllSelects(){syncSelects();}
 </script>
+<div id="toast"></div>
 </body>
 </html>
