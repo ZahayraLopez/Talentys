@@ -1284,14 +1284,17 @@ function nav(id){
   });
   var t=document.getElementById('header-title');
   if(t)t.textContent=TITLES[id]||id;
+  if(id==='dash')renderDash();
+  if(id==='p90')renderP90();
+  if(id==='cambio')renderCambio();
+  if(id==='carrera')renderCarrera();
+  if(id==='performance')renderPerformance();
   if(id==='desempeno')renderDesempeno();
+  if(id==='eval')renderEvalBanco();
+  if(id==='feedback')renderFeedbackList();
   if(id==='reportes')renderReportes();
   if(id==='admin'){renderColabsAdmin();renderAreas();renderPuestos();renderLideres();renderUsuariosLinea();renderDemoReset();}
   if(id==='lineas')renderLineasAdmin();
-  if(id==='p90')renderP90();
-  if(id==='carrera')renderCarrera();
-  if(id==='eval')renderEvalBanco();
-  if(id==='feedback')renderFeedbackList();
   if(id==='sla')renderSLA();
 }
 
@@ -1525,7 +1528,7 @@ function syncSelects(){
     el.value=v;
   });
   // Colabs for feedback/desempeno
-  ['fb-colab','fb-filter','kpi-colab-sel','des-eval-colab'].forEach(function(id){
+  ['fb-colab','fb-filter','kpi-colab-sel','des-eval-colab','perf-colab-sel','perf-hist-colab'].forEach(function(id){
     var el=document.getElementById(id);if(!el)return;
     var v=el.value;
     var empty=id==='fb-filter'?'<option value="">Todos</option>':'<option value="">-- Seleccionar --</option>';
@@ -1535,9 +1538,17 @@ function syncSelects(){
 }
 
 function renderAll(){
-  syncSelects();renderDash();renderP90();renderEvalBanco();renderFeedbackList();
+  syncSelects();
+  renderDash();
+  renderP90();
+  renderCambio();
+  renderCarrera();
+  renderPerformance();
+  renderEvalBanco();
+  renderFeedbackList();
   renderColabsAdmin();renderAreas();renderPuestos();renderLideres();
   renderDesResultados();
+  renderReportes();
 }
 
 // ============================================================
@@ -1619,11 +1630,48 @@ function renderP90(){
       +'<span>90d: '+(dias>=90?'OK':'en '+(90-dias)+' dias')+'</span></div>'
       +'</div>';
   }).join('');
+  // Banner para vencidos (>90 dias pero aun en proceso)
+  if(typeof vencidos!=='undefined'&&vencidos.length){
+    list.innerHTML+='<div style="background:var(--amb-l);border:1px solid var(--amb);border-radius:10px;padding:14px 16px;margin-top:12px">'
+      +'<div class="fw6 tsm" style="color:var(--amb);margin-bottom:8px">Completaron 90 dias - Actualizar proceso ('+vencidos.length+')</div>'
+      +vencidos.map(function(c){
+        var ci=DB.colabs.indexOf(c);
+        var dias=calcDias(c.fecha);
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(196,83,10,.15);flex-wrap:wrap;gap:8px">'
+          +'<div><span class="fw6 tsm">'+_esc(c.nombre)+'</span>'
+          +'<span class="th tsm" style="margin-left:8px">Dia '+dias+'</span></div>'
+          +'<button onclick="_graduarP90('+ci+')" class="btn btn-gh btn-sm" style="color:var(--grn)">Marcar como Activo</button>'
+          +'</div>';
+      }).join('')+'</div>';
+  }
 }
+function _graduarP90(ci){
+  if(!DB.colabs[ci])return;
+  DB.colabs[ci].proceso='Activo';
+  saveDB();renderP90();renderDash();
+  toast(DB.colabs[ci].nombre+' marcado como Activo.');
+}
+
 
 // ============================================================
 // PLAN DE CARRERA
 // ============================================================
+
+function renderCambio(){
+  var list=document.getElementById('cambio-list');if(!list)return;
+  var cols=(DB.colabs||[]).filter(function(c){return c.proceso==='Cambio de puesto';});
+  if(isLider()&&currentUser)cols=cols.filter(function(c){return c.lider===currentUser.nombre;});
+  if(!cols.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">No hay colaboradores en cambio de puesto actualmente.</div>';return;}
+  var avColors=['av-bl','av-gn','av-pu','av-am','av-tl'];
+  list.innerHTML=cols.map(function(c,i){
+    var pOld=c.puestoAnterior||'';
+    var pNew=c.puesto||'-';
+    var diasCambio=calcDias(c.fechaCambio||c.fecha);
+    return '<div class="card mb10">'      +'<div class="fr mb10"><div class="av '+avColors[i%avColors.length]+'">'+c.initials+'</div>'      +'<div class="f1"><div class="fw6 tsm">'+_esc(c.nombre)+'</div>'      +'<div class="th" style="font-size:11px">Lider: '+(c.lider||'-')+'</div></div>'      +'<div style="text-align:right"><span class="bdg b-am">En transicion</span><div class="th tsm" style="font-size:11px;margin-top:3px">Dia '+diasCambio+'</div></div>'      +'</div>'      +'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'      +(pOld?'<div style="background:var(--s2);border-radius:8px;padding:8px 12px;flex:1;min-width:140px"><div class="th" style="font-size:10px;margin-bottom:3px">PUESTO ANTERIOR</div><div class="fw6 tsm">'+_esc(pOld)+'</div></div>':'')
+      +'<div style="font-size:18px;color:var(--hnt)">&#8594;</div>'      +'<div style="background:var(--blu-l);border-radius:8px;padding:8px 12px;flex:1;min-width:140px"><div class="th" style="font-size:10px;margin-bottom:3px;color:var(--blu)">NUEVO PUESTO</div><div class="fw6 tsm" style="color:var(--blu)">'+_esc(pNew)+'</div></div>'      +'</div>'      +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'      +'<div class="th tsm">Area: <span class="fw6">'+_esc(c.area||'-')+'</span></div>'      +'<div class="th tsm">Ingreso: <span class="fw6">'+(c.fecha||'-')+'</span></div>'      +'</div>'      +'</div>';
+  }).join('');
+}
+
 function renderCarrera(){
   var list=document.getElementById('carrera-list');if(!list)return;
   var cols=(DB.colabs||[]);
@@ -2664,12 +2712,12 @@ function cargarDatosDemo(){
     {nombre:'Sofia Torres',   email:'sofia.torres@envia.com',  fecha:'2024-06-15',fechaBaja:'',pais:'Mexico',puesto:'Analista de Costos',      area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'sofia.torres',  password:'colab2025',initials:'ST'},
     {nombre:'Diego Mora',     email:'diego.mora@envia.com',    fecha:d45,          fechaBaja:'',pais:'Mexico',puesto:'Developer',               area:'IT',              lider:'Luis Torres',  proceso:'Primeros 90 dias', status:'Vigente',usuario:'diego.mora',    password:'colab2025',initials:'DM'},
     {nombre:'Valentina Cruz', email:'valentina.cruz@envia.com',fecha:'2025-01-10',fechaBaja:'',pais:'Mexico',puesto:'HR Business Partner',     area:'Recursos Humanos',lider:'Ana Ramirez',  proceso:'Activo',           status:'Vigente',usuario:'valentina.cruz',password:'colab2025',initials:'VC'},
-    {nombre:'Andres Vega',    email:'andres.vega@envia.com',   fecha:'2024-04-20',fechaBaja:'',pais:'Mexico',puesto:'Coordinador Operaciones', area:'Operaciones',     lider:'Carlos Perez', proceso:'Cambio de puesto', status:'Vigente',usuario:'andres.vega',   password:'colab2025',initials:'AV'},
+    {nombre:'Andres Vega',    email:'andres.vega@envia.com',   fecha:'2024-04-20',fechaBaja:'',pais:'Mexico',puesto:'Coordinador Operaciones', puestoAnterior:'Agente CSR',fechaCambio:new Date(Date.now()-15*86400000).toISOString().slice(0,10),area:'Operaciones',     lider:'Carlos Perez', proceso:'Cambio de puesto', status:'Vigente',usuario:'andres.vega',   password:'colab2025',initials:'AV'},
     {nombre:'Laura Soto',     email:'laura.soto@envia.com',    fecha:'2023-11-01',fechaBaja:'',pais:'Mexico',puesto:'Tech Lead',               area:'IT',              lider:'Luis Torres',  proceso:'Activo',           status:'Vigente',usuario:'laura.soto',    password:'colab2025',initials:'LS'},
     {nombre:'Roberto Nieto',  email:'roberto.nieto@envia.com', fecha:'2024-08-05',fechaBaja:'',pais:'Mexico',puesto:'Gerente de Finanzas',     area:'Finanzas',        lider:'Maria Garcia', proceso:'Activo',           status:'Vigente',usuario:'roberto.nieto', password:'colab2025',initials:'RN'},
     {nombre:'Camila Reyes',   email:'camila.reyes@envia.com',  fecha:d20,          fechaBaja:'',pais:'Mexico',puesto:'Marketing Manager',       area:'Marketing',       lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'camila.reyes',  password:'colab2025',initials:'CR'},
     {nombre:'Jorge Mendez',   email:'jorge.mendez@envia.com',  fecha:d60,          fechaBaja:'',pais:'Mexico',puesto:'Agente CSR',              area:'Operaciones',     lider:'Carlos Perez', proceso:'Primeros 90 dias', status:'Vigente',usuario:'jorge.mendez',   password:'colab2025',initials:'JM'},
-    {nombre:'Paola Rios',     email:'paola.rios@envia.com',    fecha:'2024-02-01',fechaBaja:'',pais:'Mexico',puesto:'Supervisor Operaciones',   area:'Operaciones',     lider:'Carlos Perez', proceso:'Cambio de puesto', status:'Vigente',usuario:'paola.rios',     password:'colab2025',initials:'PR'}
+    {nombre:'Paola Rios',     email:'paola.rios@envia.com',    fecha:'2024-02-01',fechaBaja:'',pais:'Mexico',puesto:'Supervisor Operaciones', puestoAnterior:'Coordinador Operaciones',fechaCambio:new Date(Date.now()-30*86400000).toISOString().slice(0,10),area:'Operaciones',     lider:'Carlos Perez', proceso:'Cambio de puesto', status:'Vigente',usuario:'paola.rios',     password:'colab2025',initials:'PR'}
   ];
 
   // -- VALORES Y COMPETENCIAS --------------------------------
