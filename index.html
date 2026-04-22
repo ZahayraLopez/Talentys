@@ -1777,8 +1777,22 @@ var BULK_CFG={
 
 function uploadBulk(tipo){
   var inp=document.createElement('input');inp.type='file';inp.accept='.csv,.txt';
-  inp.onchange=function(){var file=inp.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){var rows=_parsePerfText(e.target.result);if(rows.length){var fl=(rows[0][0]||'').toLowerCase();var hdrs=BULK_CFG[tipo]&&BULK_CFG[tipo].headers;if(hdrs&&fl===(hdrs[0]||'').toLowerCase())rows=rows.slice(1);}if(!rows.length){toast('Archivo vacio.');return;}_bulkProcess(tipo,rows);toast('CSV leido: '+rows.length+' filas.');};reader.readAsText(file,'UTF-8');};
-  document.body.appendChild(inp);inp.click();document.body.removeChild(inp);
+  inp.onchange=function(){
+    var file=inp.files[0];if(!file)return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var rows=_parsePerfText(e.target.result);
+      if(!rows||!rows.length){toast('Archivo vacio o sin formato valido.');return;}
+      // Strip header row if it matches expected headers
+      var fl=(rows[0][0]||'').toLowerCase();
+      var hdrs=BULK_CFG[tipo]&&BULK_CFG[tipo].headers;
+      if(hdrs&&fl===(hdrs[0]||'').toLowerCase())rows=rows.slice(1);
+      if(!rows.length){toast('Archivo sin datos (solo encabezado).');return;}
+      _bulkProcess(tipo,rows);
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
 }
 
 function processBulkPaste(tipo){
@@ -2629,8 +2643,7 @@ function _addNewOpt(selectId,promptTxt,addFn){
   cancel.textContent='Cancelar';cancel.className='btn btn-gh btn-sm';cancel.type='button';
   function doAdd(){
     var v=inp.value.trim();if(!v)return;
-    addFn(v);
-    syncSelects();
+    addFn(v);syncSelects();
     setTimeout(function(){var s=document.getElementById(selectId);if(s)s.value=v;},100);
     wrap.remove();
   }
@@ -2641,17 +2654,15 @@ function _addNewOpt(selectId,promptTxt,addFn){
   inp.focus();
 }
 function _watchCustomSel(id,promptTxt,addFn){
-  var el=document.getElementById(id);if(!el||el._hasAddListener)return;
-  el._hasAddListener=true;
-  el.addEventListener('change',function(){
-    if(el.value==='__nuevo__'){
-      var nombre=(prompt(promptTxt)||'').trim();
-      if(!nombre){el.value='';return;}
-      addFn(nombre);
-      syncSelects();
-      setTimeout(function(){var e=document.getElementById(id);if(e)e.value=nombre;},80);
-    }
-  });
+  var el=document.getElementById(id);if(!el)return;
+  el.onchange=function(){
+    if(el.value!=='__nuevo__')return;
+    var nombre=(prompt(promptTxt)||'').trim();
+    if(!nombre){el.value='';return;}
+    addFn(nombre);
+    syncSelects();
+    setTimeout(function(){var e=document.getElementById(id);if(e)e.value=nombre;},80);
+  };
 }
 
 function syncSelects(){
