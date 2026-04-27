@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Talentys - Tendencys</title>
+<title>Talentys v2.0 - Tendencys</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-app-compat.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-firestore-compat.min.js"></script>
@@ -105,6 +105,20 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto}
 .modal.on{display:flex}
 .modal-box{background:var(--sur);border-radius:12px;padding:24px;width:500px;max-width:96vw;margin-bottom:48px}
+.rBtn{width:36px;height:36px;border:2px solid var(--bdr);border-radius:6px;background:var(--bg);color:var(--txt);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.rBtn:hover{border-color:var(--blu);color:var(--blu);background:var(--blu-l);}
+.rBtn.sel{border-color:var(--blu);background:var(--blu);color:#fff;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;}
+.overlay.on{display:flex;}
+.b-grn{background:#C8EAC9;color:#1A5E1F;}
+.b-blu{background:#DBEAFE;color:#1e40af;}
+.file-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--bdr);border-radius:8px;margin-bottom:6px;}
+.mt12{margin-top:12px;}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.modal-title{font-size:15px;font-weight:600;}
+.modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--hnt);line-height:1;padding:0;}
+.b-red{background:#FECACA;color:#991B1B;}
+.sh{display:flex;align-items:center;justify-content:space-between;}
 </style>
 </head>
 <body>
@@ -135,7 +149,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
 <div id="app-layout" style="display:none">
   <!-- SIDEBAR -->
   <div class="sb">
-    <div class="sb-top">
+    <div class="sb-top" title="v2.0 - 633KB">
       <div class="sb-bars">
         <div class="sb-bar" style="height:8px;background:#E8470A"></div>
         <div class="sb-bar" style="height:14px;background:#1B6CA8"></div>
@@ -171,6 +185,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       </div>
       <div class="sb-sec">
         <div class="sb-lbl">Herramientas</div>
+        <div class="sbi" onclick="nav('clima')" data-page="clima"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 7c0-1.66 1.34-3 3-3s3 1.34 3 3-1.34 3-3 3" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="1" fill="currentColor"/></svg>Clima Laboral</div>
+        <div class="sbi" onclick="nav('eval360')" data-page="eval360"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Eval 360</div>
         <div class="sbi" onclick="nav('eval')" data-page="eval"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8L7 10L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Evaluaciones</div>
         <div class="sbi" onclick="nav('feedback')" data-page="feedback"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M14 10a2 2 0 01-2 2H5l-3 2V4a2 2 0 012-2h8a2 2 0 012 2v6z" stroke="currentColor" stroke-width="1.5"/></svg>Feedback</div>
         <div class="sbi" onclick="nav('reportes')" data-page="reportes"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 10V8M8 10V6M11 10V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Reportes</div>
@@ -178,6 +194,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       <div class="sb-sec">
         <div class="sb-lbl">Sistema</div>
         <div class="sbi" onclick="nav('sla')" data-page="sla"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><rect x="0" y="1" width="14" height="2" rx="1" fill="currentColor" opacity=".5"/><rect x="0" y="5.5" width="9" height="2" rx="1" fill="currentColor" opacity=".7"/><rect x="0" y="10" width="11" height="2" rx="1" fill="currentColor"/></svg>SLAs</div>
+        <div class="sbi" onclick="nav('salida')" data-page="salida"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M9 1H3a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V5L9 1z" stroke="currentColor" stroke-width="1.3"/><path d="M9 1v4h4M5 7h4M5 9.5h2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Entrevista Salida</div>
         <div class="sbi" onclick="nav('docs')" data-page="docs"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 1.5h7l2.5 2.5v8a.5.5 0 01-.5.5H2a.5.5 0 01-.5-.5V2a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5v3h3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M4 7.5h5M4 9.5h3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Documentos</div>
         <div class="sbi" onclick="nav('admin')" data-page="admin"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Administracion</div>
         <div class="sbi" onclick="nav('lineas')" data-page="lineas" id="sb-lineas" style="display:none"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>Lineas de negocio</div>
@@ -262,8 +279,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
   </div><!-- end teval-banco -->
   <div id="teval-carga" class="tc">
     <div id="teval-carga-wrap"><div class="th tsm" style="padding:32px;text-align:center">Cargando...</div></div>
-  </div>
-</div>
+  
+
 
 <!-- EVALUACION DE DESEMPENO TRIMESTRAL -->
 <div id="pg-desempeno" class="pg">
@@ -519,6 +536,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
         <button class="btn btn-or" onclick="saveConfig()">Guardar configuracion</button>
         <div class="div"></div>
         <div class="ctitle mb8">Datos demo</div>
+</div>
+</div>
+</div>
+</div>
+
         <p class="th tsm mb10">Carga datos de muestra para explorar todas las funciones, o borra todo para empezar desde cero.</p>
         <div id="pg-admin-demobtn2" style="display:flex;gap:10px;flex-wrap:wrap">
           <button onclick="cargarDatosDemo()" class="btn btn-bl">Cargar datos demo</button>
@@ -545,6 +567,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       </div>
     </div>
 
+    </div>
   <div id="ta-carga" class="tc">
       <div class="ai"><div class="ai-h"><span class="ai-b">SHEETS</span><span class="ai-t">Carga masiva desde Google Sheets</span></div>
         <div class="ai-d">Importa areas, puestos, lideres o colaboradores desde una hoja de Google Sheets publica. Previsualiza antes de importar. O descarga la plantilla CSV de ejemplo.</div>
@@ -692,7 +715,325 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       <!-- LOG -->
       <div class="card" style="margin-top:16px">
         <div class="ctitle mb10">Historial de importaciones</div>
-        <div id="import-log"><div class="th tsm" style="padding:12px 0;text-align:center">No hay importaciones registradas.</div></div>
+        <div id="import-log"><div class="th tsm" style="padding:12px 0;text-align:center">No hay importaciones registradas.</div>
+      
+    
+  
+
+
+<!-- ENTREVISTA DE SALIDA -->
+<div id="pg-salida" class="pg">
+  <div class="tabs mb12">
+    <div class="tab on" onclick="stab(this,'tsal-nueva')">Nueva entrevista</div>
+    <div class="tab" onclick="stab(this,'tsal-historial')">Historial</div>
+    <div class="tab" onclick="stab(this,'tsal-dashboard')">Dashboard</div>
+    <div class="tab" onclick="stab(this,'tsal-ia')">Reporte IA</div>
+  </div>
+  <div id="tsal-nueva" class="tc on">
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb14">Datos del colaborador</div>
+        <div class="fg"><label class="fl">Colaborador *</label>
+          <select class="fc" id="sal-colab" onchange="salLoadColab()"><option value="">-- Seleccionar --</option></select></div>
+        <div id="sal-colab-info" style="display:none;background:var(--s2);border-radius:8px;padding:10px 14px;margin-bottom:14px">
+          <div class="g2" style="gap:6px;font-size:12px">
+            <div><span class="th">Puesto:</span> <span id="sali-puesto" class="fw6"></span></div>
+            <div><span class="th">Area:</span> <span id="sali-area" class="fw6"></span></div>
+            <div><span class="th">Lider:</span> <span id="sali-lider" class="fw6"></span></div>
+            <div><span class="th">Pais:</span> <span id="sali-pais" class="fw6"></span></div>
+            <div><span class="th">Ingreso:</span> <span id="sali-ingreso" class="fw6"></span></div>
+            <div><span class="th">Antiguedad:</span> <span id="sali-ant" class="fw6"></span></div>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Fecha de baja *</label><input type="date" class="fc" id="sal-fecha-baja"></div>
+        <div class="fg"><label class="fl">Motivo principal *</label>
+          <select class="fc" id="sal-motivo"><option value="">-- Seleccionar --</option>
+            <option>Mejor oferta economica</option><option>Crecimiento profesional</option>
+            <option>Clima laboral</option><option>Conflicto con lider</option>
+            <option>Distancia / traslado</option><option>Salud o familia</option>
+            <option>Termino de contrato</option><option>Desempeno insatisfactorio</option>
+            <option>Cambio de industria</option><option>Otro</option>
+          </select></div>
+        <div class="fg"><label class="fl">Tipo de salida</label>
+          <select class="fc" id="sal-tipo"><option>Voluntaria</option><option>Involuntaria</option><option>Mutuo acuerdo</option><option>Fin de contrato</option></select></div>
+        <div class="fg"><label class="fl">Recontratacion posible?</label>
+          <select class="fc" id="sal-recontrat"><option value="">--</option><option>Si, sin restricciones</option><option>Si, con condiciones</option><option>No recomendado</option></select></div>
+      </div>
+      <div class="card"><div class="ctitle mb14">Evaluacion de experiencia (1-5)</div><div id="sal-preguntas"></div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><div class="ctitle mb10">Comentarios del colaborador</div>
+      <textarea class="fc" id="sal-coment-colab" rows="3" placeholder="Lo que el colaborador compartio durante la entrevista..."></textarea></div>
+    <div class="card" style="margin-top:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div class="ctitle" style="margin:0">Notas internas de RR.HH. / Administracion</div>
+        <span class="bdg b-am" style="font-size:10px">Solo Admin/HRBP</span>
+      </div>
+      <textarea class="fc" id="sal-notas-admin" rows="3" placeholder="Hallazgos, contexto, acuerdos de baja, observaciones del proceso..."></textarea>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+      <button class="btn btn-bl" onclick="salGuardar()">Guardar entrevista</button>
+      <button class="btn btn-gh" onclick="salLimpiar()">Limpiar</button>
+    </div>
+  </div>
+  <div id="tsal-historial" class="tc">
+    <div class="sh mb12"><div class="ctitle" style="margin:0">Entrevistas registradas</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="text" class="fc" id="sal-buscar" placeholder="Buscar..." style="width:160px" oninput="salRenderHistorial()">
+        <select class="fc" id="sal-fil-tipo" style="width:auto" onchange="salRenderHistorial()"><option value="">Todos los tipos</option><option>Voluntaria</option><option>Involuntaria</option><option>Mutuo acuerdo</option><option>Fin de contrato</option></select>
+        <select class="fc" id="sal-fil-motivo" style="width:auto" onchange="salRenderHistorial()"><option value="">Todos los motivos</option><option>Mejor oferta economica</option><option>Crecimiento profesional</option><option>Clima laboral</option><option>Conflicto con lider</option><option>Distancia / traslado</option><option>Salud o familia</option><option>Termino de contrato</option><option>Desempeno insatisfactorio</option><option>Cambio de industria</option><option>Otro</option></select>
+      </div>
+    </div>
+    <div id="sal-historial-list"><div class="th tsm" style="padding:24px;text-align:center">Sin entrevistas registradas.</div></div>
+  </div>
+  <div id="tsal-dashboard" class="tc">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <select class="fc" id="sald-lider" style="width:auto" onchange="salRenderDash()"><option value="">Todos los lideres</option></select>
+      <select class="fc" id="sald-area" style="width:auto" onchange="salRenderDash()"><option value="">Todas las areas</option></select>
+      <select class="fc" id="sald-puesto" style="width:auto" onchange="salRenderDash()"><option value="">Todos los puestos</option></select>
+      <select class="fc" id="sald-pais" style="width:auto" onchange="salRenderDash()"><option value="">Todos los paises</option></select>
+      <select class="fc" id="sald-mes" style="width:auto" onchange="salRenderDash()"><option value="">Todos los meses</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select>
+      <select class="fc" id="sald-q" style="width:auto" onchange="salRenderDash()"><option value="">Todos los Q</option><option value="1">Q1 (Ene-Mar)</option><option value="2">Q2 (Abr-Jun)</option><option value="3">Q3 (Jul-Sep)</option><option value="4">Q4 (Oct-Dic)</option></select>
+    </div>
+    <div id="sal-dash-content"><div class="th tsm" style="padding:40px;text-align:center">Sin datos.</div></div>
+  </div>
+  <div id="tsal-ia" class="tc">
+    <div class="card mb14">
+      <div class="sh mb12">
+        <div><div class="fw6 tsm">Analisis de hallazgos con IA</div><div class="th" style="font-size:11px">Genera reporte automatico basado en las entrevistas registradas</div></div>
+        <button class="btn btn-bl" onclick="salGenerarIA()">Generar reporte</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <select class="fc" id="salia-area" style="width:auto"><option value="">Todas las areas</option></select>
+        <select class="fc" id="salia-lider" style="width:auto"><option value="">Todos los lideres</option></select>
+        <select class="fc" id="salia-q" style="width:auto"><option value="">Todos los Q</option><option value="1">Q1</option><option value="2">Q2</option><option value="3">Q3</option><option value="4">Q4</option></select>
+      </div>
+    </div>
+    <div id="sal-ia-result"><div class="th tsm" style="padding:40px;text-align:center">Presiona "Generar reporte" para analizar con IA.</div></div>
+  </div>
+</div>
+
+<!-- EVALUACION 360/180/90 -->
+<div id="pg-eval360" class="pg">
+  <div class="ai"><div class="ai-h"><span class="ai-b">EVAL360</span><span class="ai-t">Evaluacion 360 / 180 / 90 grados</span></div>
+  <div class="ai-d">Crea, lanza y gestiona evaluaciones de feedback multifuente. Envia automaticamente por area o lider, o carga en masa con plantilla CSV.</div></div>
+  <div class="tabs mb12">
+    <div class="tab on" onclick="stab(this,'t360-crear')">Crear evaluacion</div>
+    <div class="tab" onclick="stab(this,'t360-lanzar')">Lanzar</div>
+    <div class="tab" onclick="stab(this,'t360-responder')">Respuestas</div>
+    <div class="tab" onclick="stab(this,'t360-resultados')">Resultados</div>
+    <div class="tab" onclick="stab(this,'t360-plantilla')">Carga masiva</div>
+  </div>
+  <div id="t360-crear" class="tc on">
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb14">Nueva evaluacion</div>
+        <div class="fg"><label class="fl">Nombre de la evaluacion *</label>
+          <input type="text" class="fc" id="e360-nombre" placeholder="Ej. Evaluacion 360 Q1 2026"></div>
+        <div class="fg"><label class="fl">Tipo *</label>
+          <select class="fc" id="e360-tipo">
+            <option>360 grados</option><option>180 grados</option><option>90 grados</option>
+          </select></div>
+        <div class="fg"><label class="fl">Descripcion (opcional)</label>
+          <textarea class="fc" id="e360-desc" rows="2" placeholder="Contexto o instrucciones para los evaluadores..."></textarea></div>
+        <div class="fg"><label class="fl">Fecha limite *</label>
+          <input type="date" class="fc" id="e360-deadline"></div>
+        <div class="ctitle mb8">Preguntas de la evaluacion</div>
+        <div id="e360-preguntas-list" style="margin-bottom:10px"></div>
+        <button class="btn btn-gh btn-sm" onclick="e360AddPregunta()" style="margin-bottom:12px">+ Agregar pregunta</button>
+        <div class="fg"><label class="fl">Escala de respuesta</label>
+          <select class="fc" id="e360-escala">
+            <option value="5">1-5 (Nunca a Siempre)</option>
+            <option value="10">1-10 (Escala numerica)</option>
+            <option value="texto">Texto abierto</option>
+            <option value="mixto">Mixto (escala + comentario)</option>
+          </select></div>
+        <button class="btn btn-bl" onclick="e360Guardar()">Guardar evaluacion</button>
+      </div>
+      <div class="card">
+        <div class="ctitle mb12">Plantillas predefinidas</div>
+        <div id="e360-templates"><div class="th tsm" style="padding:12px;text-align:center">Cargando...</div></div>
+      </div>
+    </div>
+  </div>
+  <div id="t360-lanzar" class="tc">
+    <div class="card mb12">
+      <div class="ctitle mb12">Seleccionar evaluacion a lanzar</div>
+      <div class="fg"><label class="fl">Evaluacion *</label>
+        <select class="fc" id="e360-sel-eval" onchange="e360OnSelEval()"><option value="">-- Seleccionar --</option></select></div>
+      <div id="e360-sel-info" style="display:none;background:var(--s2);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px"></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb12">Envio automatico por criterio</div>
+        <div class="fg"><label class="fl">Filtrar por area (opcional)</label>
+          <select class="fc" id="e360-fil-area"><option value="">Todas las areas</option></select></div>
+        <div class="fg"><label class="fl">Filtrar por lider (opcional)</label>
+          <select class="fc" id="e360-fil-lider"><option value="">Todos los lideres</option></select></div>
+        <div class="fg"><label class="fl">Quien evalua a quien</label>
+          <select class="fc" id="e360-direccion">
+            <option value="360">360: Lider + Pares + Colaborador mismo</option>
+            <option value="180">180: Lider y colaborador (bidireccional)</option>
+            <option value="90">90: Solo el lider evalua al colaborador</option>
+          </select></div>
+        <div id="e360-preview-colabs" style="margin-bottom:10px"></div>
+        <button class="btn btn-bl" onclick="e360LanzarAuto()">Lanzar automaticamente</button>
+      </div>
+      <div class="card">
+        <div class="ctitle mb12">Asignar manualmente</div>
+        <div class="fg"><label class="fl">Evaluado *</label>
+          <select class="fc" id="e360-man-evaluado"><option value="">-- Seleccionar --</option></select></div>
+        <div class="fg"><label class="fl">Evaluadores</label>
+          <div id="e360-man-evaluadores" style="max-height:180px;overflow-y:auto;border:1px solid var(--bdr);border-radius:6px;padding:8px"></div>
+        </div>
+        <button class="btn btn-gh" onclick="e360LanzarManual()" style="margin-top:8px">Asignar y lanzar</button>
+      </div>
+    </div>
+  </div>
+  <div id="t360-responder" class="tc">
+    <div class="sh mb12">
+      <div class="ctitle" style="margin:0">Evaluaciones pendientes de respuesta</div>
+      <select class="fc" id="e360-resp-fil" style="width:auto" onchange="e360RenderPendientes()"><option value="">Todas las evaluaciones</option></select>
+    </div>
+    <div id="e360-pendientes-list"><div class="th tsm" style="padding:24px;text-align:center">Sin evaluaciones pendientes.</div></div>
+  </div>
+  <div id="t360-resultados" class="tc">
+    <div class="sh mb12">
+      <div class="ctitle" style="margin:0">Resultados por evaluado</div>
+      <div style="display:flex;gap:8px">
+        <select class="fc" id="e360-res-eval" style="width:auto" onchange="e360RenderResultados()"><option value="">Todas las evaluaciones</option></select>
+        <select class="fc" id="e360-res-colab" style="width:auto" onchange="e360RenderResultados()"><option value="">Todos los colaboradores</option></select>
+      </div>
+    </div>
+    <div id="e360-resultados-wrap"><div class="th tsm" style="padding:24px;text-align:center">Selecciona una evaluacion para ver resultados.</div></div>
+  </div>
+  <div id="t360-plantilla" class="tc">
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb12">Descargar plantilla</div>
+        <div class="th tsm mb12">Descarga la plantilla CSV, completa las respuestas y sube el archivo para importar evaluaciones en masa.</div>
+        <div class="fg"><label class="fl">Evaluacion *</label>
+          <select class="fc" id="e360-tmpl-eval"><option value="">-- Seleccionar --</option></select></div>
+        <button class="btn btn-gh mb8" onclick="e360DescargarPlantilla()">Descargar plantilla CSV</button>
+        <div class="th tsm" style="font-size:11px">Columnas: evaluado, evaluador, relacion, pregunta_1 ... pregunta_N, comentario</div>
+      </div>
+      <div class="card">
+        <div class="ctitle mb12">Cargar respuestas</div>
+        <div id="e360-upload-dz" style="border:2px dashed var(--blu);border-radius:10px;padding:24px;text-align:center;cursor:pointer;background:var(--bg);margin-bottom:12px"
+          onclick="document.getElementById('e360-file-inp').click()"
+          ondragover="event.preventDefault();this.style.background='#e8f0fa'"
+          ondragleave="this.style.background='var(--bg)'"
+          ondrop="e360HandleDrop(event)">
+          <div style="font-weight:500;font-size:13px">Arrastra el CSV o haz clic</div>
+          <div id="e360-file-name" style="margin-top:6px;font-size:12px;color:var(--blu)"></div>
+        </div>
+        <input type="file" id="e360-file-inp" accept=".csv,.txt" style="display:none" onchange="e360FileSelected(this)">
+        <div id="e360-upload-preview"></div>
+        <button class="btn btn-bl" onclick="e360ImportarCSV()" style="margin-top:8px">Importar respuestas</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIMA LABORAL -->
+<div id="pg-clima" class="pg">
+  <div class="ai"><div class="ai-h"><span class="ai-b">CLIMA</span><span class="ai-t">Clima Laboral</span></div>
+  <div class="ai-d">Lanza encuestas de clima, analiza resultados por area, pais, lider y periodo. Compara historicamente y detecta tendencias.</div></div>
+  <div class="tabs mb12">
+    <div class="tab on" onclick="stab(this,'tclm-encuestas')">Encuestas</div>
+    <div class="tab" onclick="stab(this,'tclm-lanzar')">Lanzar</div>
+    <div class="tab" onclick="stab(this,'tclm-responder')">Responder</div>
+    <div class="tab" onclick="stab(this,'tclm-dashboard')">Dashboard</div>
+    <div class="tab" onclick="stab(this,'tclm-masiva')">Carga masiva</div>
+  </div>
+  <div id="tclm-encuestas" class="tc on">
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb12">Nueva encuesta</div>
+        <div class="fg"><label class="fl">Nombre *</label><input type="text" class="fc" id="clm-nombre" placeholder="Ej. Clima Q1 2026"></div>
+        <div class="fg"><label class="fl">Periodo</label><select class="fc" id="clm-periodo"><option value="mensual">Mensual</option><option value="trimestral" selected>Trimestral</option><option value="semestral">Semestral</option><option value="anual">Anual</option></select></div>
+        <div class="fg"><label class="fl">Ano</label><select class="fc" id="clm-ano"></select></div>
+        <div class="fg"><label class="fl">Mes / Trimestre</label><select class="fc" id="clm-mes"><option value="Q1">Q1 (Ene-Mar)</option><option value="Q2">Q2 (Abr-Jun)</option><option value="Q3">Q3 (Jul-Sep)</option><option value="Q4">Q4 (Oct-Dic)</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option><option value="S1">Semestre 1</option><option value="S2">Semestre 2</option></select></div>
+        <div class="fg"><label class="fl">Anonima</label><select class="fc" id="clm-anonima"><option value="1">Si, respuestas anonimas</option><option value="0">No, identificada</option></select></div>
+        <div class="fg"><label class="fl">Fecha limite</label><input type="date" class="fc" id="clm-deadline"></div>
+        <div class="sh mb8"><div class="ctitle" style="margin:0">Preguntas</div><button class="btn btn-gh btn-sm" onclick="clmAddPregunta()">+ Agregar</button></div>
+        <div id="clm-pregs-list" style="margin-bottom:10px"></div>
+        <button class="btn btn-bl" onclick="clmGuardar()">Guardar encuesta</button>
+      </div>
+      <div class="card">
+        <div class="ctitle mb12">Plantillas predefinidas</div>
+        <div id="clm-templates"></div>
+        <div class="ctitle mb8 mt12">Encuestas guardadas</div>
+        <div id="clm-banco"></div>
+      </div>
+    </div>
+  </div>
+  <div id="tclm-lanzar" class="tc">
+    <div class="card mb12">
+      <div class="ctitle mb12">Seleccionar encuesta</div>
+      <div class="fg"><label class="fl">Encuesta *</label><select class="fc" id="clm-sel-enc" onchange="clmOnSelEnc()"><option value="">-- Seleccionar --</option></select></div>
+      <div id="clm-enc-info" style="display:none;background:var(--s2);border-radius:8px;padding:10px 14px;font-size:12px"></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb12">Envio automatico por criterio</div>
+        <div class="fg"><label class="fl">Area (opcional)</label><select class="fc" id="clm-fil-area"><option value="">Todas</option></select></div>
+        <div class="fg"><label class="fl">Pais (opcional)</label><select class="fc" id="clm-fil-pais"><option value="">Todos</option></select></div>
+        <div class="fg"><label class="fl">Lider (opcional)</label><select class="fc" id="clm-fil-lider"><option value="">Todos</option></select></div>
+        <div class="fg"><label class="fl">Proceso (opcional)</label><select class="fc" id="clm-fil-proceso"><option value="">Todos</option><option>Activo</option><option>Primeros 90 dias</option><option>Cambio de puesto</option></select></div>
+        <div id="clm-preview-count" style="font-size:12px;color:var(--mut);margin-bottom:10px"></div>
+        <button class="btn btn-bl" onclick="clmLanzarAuto()">Lanzar a todos los colaboradores</button>
+      </div>
+      <div class="card">
+        <div class="ctitle mb12">Asignar manualmente</div>
+        <div class="fg"><label class="fl">Colaboradores</label><div id="clm-man-colabs" style="max-height:220px;overflow-y:auto;border:1px solid var(--bdr);border-radius:6px;padding:8px"></div></div>
+        <button class="btn btn-gh" onclick="clmLanzarManual()" style="margin-top:8px">Asignar seleccionados</button>
+      </div>
+    </div>
+  </div>
+  <div id="tclm-responder" class="tc">
+    <div class="sh mb12">
+      <div class="ctitle" style="margin:0">Encuestas pendientes</div>
+      <select class="fc" id="clm-resp-fil" style="width:auto" onchange="clmRenderPendientes()"><option value="">Todas</option></select>
+    </div>
+    <div id="clm-pendientes-list"><div class="th tsm" style="padding:24px;text-align:center">Sin encuestas pendientes.</div></div>
+  </div>
+  <div id="tclm-dashboard" class="tc">
+    <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:12px 16px;margin-bottom:14px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+        <div><div class="th tsm mb4" style="font-size:10px">ENCUESTA</div><select class="fc" id="clmd-enc" style="min-width:180px" onchange="clmRenderDash()"><option value="">Todas las encuestas</option></select></div>
+        <div><div class="th tsm mb4" style="font-size:10px">ANO</div><select class="fc" id="clmd-ano" style="width:90px" onchange="clmRenderDash()"><option value="">Todos</option></select></div>
+        <div><div class="th tsm mb4" style="font-size:10px">PERIODO</div><select class="fc" id="clmd-periodo" style="width:120px" onchange="clmRenderDash()"><option value="">Todos</option><option value="Q1">Q1</option><option value="Q2">Q2</option><option value="Q3">Q3</option><option value="Q4">Q4</option><option value="S1">S1</option><option value="S2">S2</option></select></div>
+        <div><div class="th tsm mb4" style="font-size:10px">AREA</div><select class="fc" id="clmd-area" style="width:140px" onchange="clmRenderDash()"><option value="">Todas</option></select></div>
+        <div><div class="th tsm mb4" style="font-size:10px">PAIS</div><select class="fc" id="clmd-pais" style="width:120px" onchange="clmRenderDash()"><option value="">Todos</option></select></div>
+        <div><div class="th tsm mb4" style="font-size:10px">LIDER</div><select class="fc" id="clmd-lider" style="width:140px" onchange="clmRenderDash()"><option value="">Todos</option></select></div>
+        <div><div class="th tsm mb4" style="font-size:10px">MODO</div><select class="fc" id="clmd-modo" style="width:120px" onchange="clmRenderDash()"><option value="resumen">Resumen</option><option value="preguntas">Por pregunta</option><option value="comparar">Comparar periodos</option></select></div>
+      </div>
+    </div>
+    <div id="clm-dash-content"><div class="th tsm" style="padding:40px;text-align:center">Aplica filtros para ver el dashboard.</div></div>
+  </div>
+  <div id="tclm-masiva" class="tc">
+    <div class="g2">
+      <div class="card">
+        <div class="ctitle mb10">Descargar plantilla</div>
+        <div class="th tsm mb10">Descarga el CSV con las preguntas de la encuesta, completa las respuestas de cada colaborador y vuelve a subir.</div>
+        <div class="fg"><label class="fl">Encuesta *</label><select class="fc" id="clm-tmpl-enc"><option value="">-- Seleccionar --</option></select></div>
+        <button class="btn btn-gh mb8" onclick="clmDescargarPlantilla()">Descargar plantilla CSV</button>
+        <div class="th tsm" style="font-size:11px">Columnas: colaborador, area, pais, lider, pregunta_1 ... pregunta_N, comentario</div>
+      </div>
+      <div class="card">
+        <div class="ctitle mb10">Cargar respuestas</div>
+        <div id="clm-dz" style="border:2px dashed var(--blu);border-radius:10px;padding:24px;text-align:center;cursor:pointer;background:var(--bg);margin-bottom:10px"
+          onclick="document.getElementById('clm-file-inp').click()"
+          ondragover="event.preventDefault();this.style.background='#e8f0fa'"
+          ondragleave="this.style.background='var(--bg)'"
+          ondrop="clmHandleDrop(event)">
+          <div style="font-weight:500;font-size:13px">Arrastra el CSV o haz clic</div>
+          <div id="clm-file-name" style="margin-top:6px;font-size:12px;color:var(--blu)"></div>
+        </div>
+        <input type="file" id="clm-file-inp" accept=".csv,.txt" style="display:none" onchange="clmFileSelected(this)">
+        <div class="fg"><label class="fl">Encuesta destino *</label><select class="fc" id="clm-imp-enc"><option value="">-- Seleccionar --</option></select></div>
+        <div id="clm-upload-preview"></div>
+        <button class="btn btn-bl" onclick="clmImportarCSV()" style="margin-top:8px">Importar respuestas</button>
       </div>
     </div>
   </div>
@@ -926,6 +1267,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
     </div>
     <div style="text-align:right"><button class="btn btn-bl" onclick="closeM('m-perf-kpi');renderPerfTabla()">Listo</button></div>
  
+<script>
 // Suppress noisy Firebase WebChannel warnings that don't affect functionality
 (function(){
   var _warn=console.warn;
@@ -2047,7 +2389,7 @@ var EVAL_BASE=[
    preguntas:['Alcanzaste tus KPIs y objetivos del trimestre?','Que iniciativas implementaste por iniciativa propia?','Como esta tu nivel de satisfaccion y bienestar laboral (1-10)?','Que recursos o apoyo necesitas para el siguiente trimestre?','Comparte tus metas personales de desarrollo profesional.']}
 ];
 var DB = {
-  areas:[], puestos:[], lideres:[], colabs:[],
+  areas:[], puestos:[], lideres:[], colabs:[], p90act:{}, cambioact:{}, desact:{}, salida:[], eval360:[], clima:[],
   evaluaciones:EVAL_BASE.map(function(e){return Object.assign({},e,{preguntas:e.preguntas.slice()});}), fbComments:{}, semData:{}, notas:{},
   evalDesempeno:[], kpis:{}, nivelEsperado:{},
   perfKpis:{}, perfData:{}, perfAsist:{},
@@ -2065,7 +2407,7 @@ var _desEvalData = {};
 var TITLES = {performance:'Performance - KPIs mensuales',sla:'SLAs Tendencys 2026',
   dash:'Dashboard', p90:'Primeros 90 dias', cambio:'Cambio de puesto',
   carrera:'Plan de carrera', desempeno:'Evaluacion de Desempeno Trimestral',
-  docs:'Documentos', eval:'Evaluaciones', feedback:'Feedback', reportes:'Reportes',
+  docs:'Documentos', salida:'Entrevista de Salida', clima:'Clima Laboral', eval360:'Evaluacion 360/180/90', eval:'Evaluaciones', feedback:'Feedback', reportes:'Reportes',
   admin:'Administracion', lineas:'Lineas de negocio'
 };
 
@@ -2079,10 +2421,10 @@ var NIVELES_DESC = [
 // ROLES
 // ============================================================
 var ROLE_PERMS = {
-  Administrador:{pages:['dash','p90','cambio','carrera','desempeno','performance','eval','feedback','reportes','sla','docs','admin','lineas'],canAdmin:true,allLineas:true},
-  HRBP:         {pages:['dash','p90','cambio','carrera','desempeno','performance','eval','feedback','reportes','sla','docs','admin'],canAdmin:true,allLineas:true},
-  AdminLinea:   {pages:['dash','p90','cambio','carrera','desempeno','performance','eval','feedback','reportes','sla','docs','admin'],canAdmin:true,allLineas:false},
-  Lider:        {pages:['dash','p90','cambio','desempeno','performance','eval','feedback','docs','reportes','sla'],canAdmin:false,allLineas:false},
+  Administrador:{pages:['dash','p90','cambio','carrera','desempeno','performance','clima','eval360','eval','feedback','reportes','sla','docs','salida','admin','lineas'],canAdmin:true,allLineas:true},
+  HRBP:         {pages:['dash','p90','cambio','carrera','desempeno','performance','clima','eval360','eval','feedback','reportes','sla','docs','salida','admin'],canAdmin:true,allLineas:true},
+  AdminLinea:   {pages:['dash','p90','cambio','carrera','desempeno','performance','clima','eval360','eval','feedback','reportes','sla','docs','salida','admin'],canAdmin:true,allLineas:false},
+  Lider:        {pages:['dash','p90','cambio','desempeno','performance','clima','eval360','eval','feedback','docs','salida','reportes','sla'],canAdmin:false,allLineas:false},
   Colaborador:  {pages:[],canAdmin:false,allLineas:false}
 };
 function getRolPerms(){return ROLE_PERMS[currentUser&&currentUser.rol]||ROLE_PERMS.Colaborador;}
@@ -2333,6 +2675,7 @@ function nav(id){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   var pg=document.getElementById('pg-'+id);
   if(pg)pg.classList.add('on');
+  var mc=document.getElementById('main-content');if(mc)mc.scrollTop=0;
   document.querySelectorAll('.sbi').forEach(function(n){
     n.classList.toggle('on',n.getAttribute('data-page')===id);
   });
@@ -2342,13 +2685,16 @@ function nav(id){
   if(id==='p90')renderP90();
   if(id==='cambio')renderCambio();
   if(id==='carrera')renderCarrera();
-  if(id==='performance'){renderPerformance();renderPerfDash();renderPerfDash();}
+  if(id==='performance'){renderPerformance();renderPerfDash();}
   if(id==='desempeno')renderDesempeno();
   if(id==='docs'){renderDocs();}
+  if(id==='salida'){renderSalida();}
+  if(id==='clima'){renderClima();if(DB.clima&&DB.clima.length){stab(document.querySelector('#pg-clima .tabs .tab:nth-child(4)'),'tclm-dashboard');clmRenderDash();}}
+  if(id==='eval360'){renderEval360();}
   if(id==='eval')renderEvalBanco();
   if(id==='feedback')renderFeedbackList();
   if(id==='reportes')renderReportes();
-  if(id==='admin'){renderColabsAdmin();renderAreas();renderPuestos();renderLideres();renderUsuariosLinea();renderDemoReset();}
+  if(id==='admin'){renderColabsAdmin();renderAreas();renderPuestos();renderLideres();renderUsuariosLinea();renderDemoReset();_fillConfigForm();}
   if(id==='lineas')renderLineasAdmin();
   if(id==='sla')renderSLA();
 }
@@ -2702,12 +3048,17 @@ function syncSelects(){
 
 function renderAll(){
   renderDocs();
+  renderSalida();
+  renderClima();
+  renderEval360();
   syncSelects();
   renderDash();
   renderP90();
   renderCambio();
   renderCarrera();
   renderPerformance();
+  renderPerfDash();
+  renderSLA();
   renderEvalBanco();
   renderFeedbackList();
   renderColabsAdmin();renderAreas();renderPuestos();renderLideres();
@@ -2778,39 +3129,202 @@ function renderP90(){
     var dias=calcDias(c.fecha);
     var pct=Math.min(Math.round(dias/90*100),100);
     var color=dias<30?'var(--org)':dias<60?'var(--amb)':'var(--grn)';
-    return '<div class="card" style="margin-bottom:10px">'
+    var key=c.nombre;
+    var safeKey=key.replace(/'/g,"&#39;");
+    var acts=(DB.p90act&&DB.p90act[key])||[];
+    var actsDone=acts.filter(function(a){return a.done;}).length;
+    var evals=(DB.notas&&DB.notas['p90eval_'+key])||[];
+    var lastEval=evals.length?evals[evals.length-1]:null;
+
+    var actsHtml='';
+    if(acts.length){
+      actsHtml=acts.map(function(a,ai){
+        return '<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start">'
+          +'<input type="checkbox"'+(a.done?' checked':'')+' data-key="'+safeKey+'" data-ai="'+ai+'" onchange="p90ToggleAct(this)" style="margin-top:3px;flex-shrink:0">'
+          +'<span class="tsm" style="flex:1;'+(a.done?'text-decoration:line-through;color:var(--hnt)':'')+'">'+_esc(a.texto)+'</span>'
+          +(a.fecha?'<span class="tsm" style="color:var(--hnt);flex-shrink:0;font-size:10px">'+a.fecha+'</span>':'')
+          +'<button data-key="'+safeKey+'" data-ai="'+ai+'" onclick="p90DelAct(this)" style="background:none;border:none;color:var(--hnt);cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;padding:0 2px">&times;</button>'
+          +'</div>';
+      }).join('');
+    } else {
+      actsHtml='<div class="th tsm" style="padding:6px 0;font-size:11px">Sin actividades asignadas.</div>';
+    }
+
+    var evalHtml='';
+    if(lastEval){
+      evalHtml='<div style="background:var(--s2);border-radius:6px;padding:8px 10px;font-size:11px">'
+        +'<div class="fw6 tsm" style="margin-bottom:4px">Dia '+lastEval.dia+' &mdash; '+lastEval.fecha+'</div>'
+        +'<div style="display:flex;gap:10px">'
+          +'<span>L&rarr;C: <b>'+lastEval.lc+'/5</b></span>'
+          +'<span>C&rarr;L: <b>'+lastEval.cl+'/5</b></span>'
+        +'</div>'
+        +(lastEval.nota?'<div class="th tsm" style="margin-top:3px;font-size:10px">'+_esc(lastEval.nota)+'</div>':'')
+      +'</div>';
+    } else {
+      evalHtml='<div class="th tsm" style="padding:6px 0;font-size:11px">Sin evaluaciones aun.</div>';
+    }
+
+    return '<div class="card" style="margin-bottom:12px">'
       +'<div class="fr" style="margin-bottom:10px">'
-      +'<div class="av '+avColors[i%avColors.length]+'">'+c.initials+'</div>'
-      +'<div class="f1"><div class="fw6 tsm">'+c.nombre+'</div>'
-      +'<div class="th" style="font-size:11px">'+(c.puesto||'-')+' - Lider: '+(c.lider||'-')+'</div></div>'
-      +'<div style="text-align:right"><div style="font-size:22px;font-weight:700;color:'+color+'">Dia '+dias+'</div>'
-      +'<div class="th" style="font-size:11px">de 90</div></div>'
+        +'<div class="av '+avColors[i%avColors.length]+'">'+c.initials+'</div>'
+        +'<div class="f1">'
+          +'<div class="fw6 tsm">'+_esc(c.nombre)+'</div>'
+          +'<div class="th" style="font-size:11px">'+(c.puesto||'-')+' &middot; Lider: '+(c.lider||'-')+'</div>'
+        +'</div>'
+        +'<div style="text-align:right">'
+          +'<div style="font-size:22px;font-weight:700;color:'+color+'">Dia '+dias+'</div>'
+          +'<div class="th" style="font-size:11px">de 90</div>'
+        +'</div>'
       +'</div>'
-      +'<div style="height:8px;background:var(--bdr);border-radius:10px">'
-      +'<div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:10px;transition:.5s"></div></div>'
-      +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--hnt);margin-top:4px">'
-      +'<span>Evaluacion 30d: '+(dias>=30?'OK':'en '+(30-dias)+' dias')+'</span>'
-      +'<span>60d: '+(dias>=60?'OK':'en '+(60-dias)+' dias')+'</span>'
-      +'<span>90d: '+(dias>=90?'OK':'en '+(90-dias)+' dias')+'</span></div>'
+      +'<div style="height:8px;background:var(--bdr);border-radius:10px;margin-bottom:6px">'
+        +'<div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:10px;transition:.5s"></div>'
       +'</div>'
-      +'<div id="p90docs-'+ci+'" style="margin-top:8px"></div>'
-      +'<button class="btn btn-gh btn-sm" style="margin-top:6px;font-size:11px" onclick="docsIrASubir(\'' + _esc(c.nombre) + '\')">+ Subir documento</button>';
+      +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--hnt);margin-bottom:12px">'
+        +'<span>30d: '+(dias>=30?'OK':'en '+(30-dias)+' dias')+'</span>'
+        +'<span>60d: '+(dias>=60?'OK':'en '+(60-dias)+' dias')+'</span>'
+        +'<span>90d: '+(dias>=90?'OK':'en '+(90-dias)+' dias')+'</span>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">'
+        +'<div>'
+          +'<div class="fr mb8" style="align-items:center">'
+            +'<div class="ctitle" style="margin:0;font-size:11px">Actividades ('+actsDone+'/'+acts.length+')</div>'
+            +'<button class="btn btn-gh btn-sm" style="font-size:10px;padding:2px 8px" data-key="'+safeKey+'" onclick="p90AddActModal(this.dataset.key)">+ Agregar</button>'
+          +'</div>'
+          +'<div style="max-height:140px;overflow-y:auto">'+actsHtml+'</div>'
+        +'</div>'
+        +'<div>'
+          +'<div class="fr mb8" style="align-items:center">'
+            +'<div class="ctitle" style="margin:0;font-size:11px">Eval. bidireccional</div>'
+            +'<button class="btn btn-bl btn-sm" style="font-size:10px;padding:2px 8px" data-key="'+safeKey+'" onclick="p90OpenEval(this.dataset.key)">Evaluar</button>'
+          +'</div>'
+          +evalHtml
+        +'</div>'
+      +'</div>'
+      +'<button class="btn btn-gh btn-sm" style="font-size:11px" onclick="docsIrASubir(this.dataset.n)" data-n="'+_esc(c.nombre)+'">+ Documento</button>'
+    +'</div>';
   }).join('');
-  // Banner para vencidos (>90 dias pero aun en proceso)
-  if(typeof vencidos!=='undefined'&&vencidos.length){
+  if(vencidos&&vencidos.length){
     list.innerHTML+='<div style="background:var(--amb-l);border:1px solid var(--amb);border-radius:10px;padding:14px 16px;margin-top:12px">'
-      +'<div class="fw6 tsm" style="color:var(--amb);margin-bottom:8px">Completaron 90 dias - Actualizar proceso ('+vencidos.length+')</div>'
+      +'<div class="fw6 tsm" style="color:var(--amb);margin-bottom:8px">Completaron 90 dias ('+vencidos.length+')</div>'
       +vencidos.map(function(c){
         var ci=DB.colabs.indexOf(c);
-        var dias=calcDias(c.fecha);
         return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(196,83,10,.15);flex-wrap:wrap;gap:8px">'
-          +'<div><span class="fw6 tsm">'+_esc(c.nombre)+'</span>'
-          +'<span class="th tsm" style="margin-left:8px">Dia '+dias+'</span></div>'
+          +'<div><span class="fw6 tsm">'+_esc(c.nombre)+'</span><span class="th tsm" style="margin-left:8px">Dia '+calcDias(c.fecha)+'</span></div>'
           +'<button onclick="_graduarP90('+ci+')" class="btn btn-gh btn-sm" style="color:var(--grn)">Marcar como Activo</button>'
-          +'</div>';
+        +'</div>';
       }).join('')+'</div>';
   }
 }
+
+function p90AddActModal(key){
+  var m=document.getElementById('m-p90act');
+  if(!m){
+    m=document.createElement('div');m.id='m-p90act';m.className='overlay';
+    document.body.appendChild(m);
+  }
+  m.innerHTML='<div class="modal" style="width:400px">'
+    +'<div class="modal-hdr"><div class="modal-title">Agregar actividad</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-p90act\')">&times;</button></div>'
+    +'<div class="fg"><label class="fl">Colaborador</label>'
+    +'<div class="fw6 tsm" style="padding:4px 0">'+key+'</div></div>'
+    +'<div class="fg"><label class="fl">Descripcion *</label>'
+    +'<input type="text" class="fc" id="p90act-txt" placeholder="Ej. Reunion con equipo de IT">'
+    +'</div>'
+    +'<div class="fg"><label class="fl">Fecha limite (opcional)</label>'
+    +'<input type="date" class="fc" id="p90act-fecha"></div>'
+    +'<div class="flex g8">'
+    +'<button class="btn btn-bl" onclick="p90SaveAct(\''+key.replace(/'/g,'\\\'')+'\')" >Guardar</button>'
+    +'<button class="btn btn-gh" onclick="closeM(\'m-p90act\')">Cancelar</button>'
+    +'</div></div>';
+  openM('m-p90act');
+  setTimeout(function(){var e=document.getElementById('p90act-txt');if(e)e.focus();},100);
+}
+
+function p90SaveAct(key){
+  var txt=(document.getElementById('p90act-txt').value||'').trim();
+  if(!txt){toast('Escribe la descripcion.');return;}
+  var fecha=document.getElementById('p90act-fecha').value||'';
+  if(!DB.p90act)DB.p90act={};
+  if(!Array.isArray(DB.p90act[key]))DB.p90act[key]=[];
+  DB.p90act[key].push({texto:txt,fecha:fecha,done:false});
+  saveDB();closeM('m-p90act');renderP90();
+  toast('Actividad agregada.');
+}
+
+function p90ToggleAct(cb){
+  var key=cb.dataset.key;var ai=parseInt(cb.dataset.ai);
+  if(!DB.p90act||!Array.isArray(DB.p90act[key]))return;
+  DB.p90act[key][ai].done=cb.checked;
+  saveDB();renderP90();
+}
+
+function p90DelAct(btn){
+  var key=btn.dataset.key;var ai=parseInt(btn.dataset.ai);
+  if(!DB.p90act||!Array.isArray(DB.p90act[key]))return;
+  DB.p90act[key].splice(ai,1);
+  saveDB();renderP90();
+}
+
+var _p90R={};
+function p90OpenEval(key){
+  _p90R={};
+  var c=(DB.colabs||[]).find(function(x){return x.nombre===key;});
+  var dias=c?calcDias(c.fecha):0;
+  var QLDR=[{f:'lc1',l:'Cumplimiento de objetivos'},{f:'lc2',l:'Integracion al equipo'},{f:'lc3',l:'Iniciativa y actitud'}];
+  var QCOL=[{f:'cl1',l:'Claridad de objetivos'},{f:'cl2',l:'Disponibilidad y apoyo'},{f:'cl3',l:'Calidad del feedback'}];
+  function rRow(p){
+    return '<div class="fg"><label class="fl" style="font-size:10px">'+p.l+'</label>'
+      +'<div style="display:flex;gap:4px" id="p90r-'+p.f+'">'
+      +[1,2,3,4,5].map(function(n){return '<button type="button" class="rBtn" data-f="'+p.f+'" data-v="'+n+'" onclick="p90Rate(this)">'+n+'</button>';}).join('')
+      +'</div></div>';
+  }
+  var m=document.getElementById('m-p90eval');
+  if(!m){m=document.createElement('div');m.id='m-p90eval';m.className='overlay';document.body.appendChild(m);}
+  m.innerHTML='<div class="modal" style="width:500px">'
+    +'<div class="modal-hdr"><div class="modal-title">Evaluacion bidireccional &mdash; '+_esc(key)+'</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-p90eval\')">&times;</button></div>'
+    +'<div class="th tsm" style="margin-bottom:12px">Dia '+dias+' de 90</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">'
+      +'<div><div class="ctitle mb8">Lider &rarr; Colaborador</div>'+QLDR.map(rRow).join('')+'</div>'
+      +'<div><div class="ctitle mb8">Colaborador &rarr; Lider</div>'+QCOL.map(rRow).join('')+'</div>'
+    +'</div>'
+    +'<div class="fg"><label class="fl">Notas</label>'
+    +'<textarea class="fc" id="p90eval-nota" rows="2" placeholder="Observaciones..."></textarea></div>'
+    +'<div class="flex g8">'
+    +'<button class="btn btn-bl" data-key="'+key.replace(/'/g,'\\\'').replace(/"/g,'&quot;')+'" data-dias="'+dias+'" onclick="p90SaveEval(this)">Guardar</button>'
+    +'<button class="btn btn-gh" onclick="closeM(\'m-p90eval\')">Cancelar</button>'
+    +'</div></div>';
+  openM('m-p90eval');
+}
+
+function p90Rate(btn){
+  var f=btn.dataset.f;var v=parseInt(btn.dataset.v);
+  _p90R[f]=v;
+  var row=document.getElementById('p90r-'+f);
+  if(row)row.querySelectorAll('.rBtn').forEach(function(b){b.classList.toggle('sel',parseInt(b.dataset.v)===v);});
+}
+
+function p90SaveEval(btn){
+  var key=btn.dataset.key;var dias=parseInt(btn.dataset.dias)||0;
+  var r=_p90R;
+  var lcVals=[r.lc1||0,r.lc2||0,r.lc3||0];
+  var clVals=[r.cl1||0,r.cl2||0,r.cl3||0];
+  var lcSum=lcVals.reduce(function(a,b){return a+b;},0);
+  var clSum=clVals.reduce(function(a,b){return a+b;},0);
+  var lcCount=lcVals.filter(function(v){return v>0;}).length;
+  var clCount=clVals.filter(function(v){return v>0;}).length;
+  if(!lcSum&&!clSum){toast('Selecciona al menos una calificacion.');return;}
+  var lc=lcCount?Math.round(lcSum/lcCount*10)/10:'-';
+  var cl=clCount?Math.round(clSum/clCount*10)/10:'-';
+  var nota=(document.getElementById('p90eval-nota').value||'').trim();
+  if(!DB.notas)DB.notas={};
+  var ekey='p90eval_'+key;
+  if(!Array.isArray(DB.notas[ekey]))DB.notas[ekey]=[];
+  DB.notas[ekey].push({dia:dias,lc:lc,cl:cl,lc1:r.lc1||0,lc2:r.lc2||0,lc3:r.lc3||0,cl1:r.cl1||0,cl2:r.cl2||0,cl3:r.cl3||0,nota:nota,fecha:new Date().toISOString().slice(0,10)});
+  saveDB();closeM('m-p90eval');renderP90();
+  toast('Evaluacion guardada. L->C: '+lc+'/5  C->L: '+cl+'/5');
+}
+
 function _graduarP90(ci){
   if(!DB.colabs[ci])return;
   DB.colabs[ci].proceso='Activo';
@@ -2827,17 +3341,57 @@ function renderCambio(){
   var list=document.getElementById('cambio-list');if(!list)return;
   var cols=(DB.colabs||[]).filter(function(c){return c.proceso==='Cambio de puesto';});
   if(isLider()&&currentUser)cols=cols.filter(function(c){return c.lider===currentUser.nombre;});
-  if(!cols.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">No hay colaboradores en cambio de puesto actualmente.</div>';return;}
+  if(!cols.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">No hay colaboradores en cambio de puesto.</div>';return;}
   var avColors=['av-bl','av-gn','av-pu','av-am','av-tl'];
   list.innerHTML=cols.map(function(c,i){
-    var pOld=c.puestoAnterior||'';
-    var pNew=c.puesto||'-';
-    var diasCambio=calcDias(c.fechaCambio||c.fecha);
-    return '<div class="card mb10">'      +'<div class="fr mb10"><div class="av '+avColors[i%avColors.length]+'">'+c.initials+'</div>'      +'<div class="f1"><div class="fw6 tsm">'+_esc(c.nombre)+'</div>'      +'<div class="th" style="font-size:11px">Lider: '+(c.lider||'-')+'</div></div>'      +'<div style="text-align:right"><span class="bdg b-am">En transicion</span><div class="th tsm" style="font-size:11px;margin-top:3px">Dia '+diasCambio+'</div></div>'      +'</div>'      +'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'      +(pOld?'<div style="background:var(--s2);border-radius:8px;padding:8px 12px;flex:1;min-width:140px"><div class="th" style="font-size:10px;margin-bottom:3px">PUESTO ANTERIOR</div><div class="fw6 tsm">'+_esc(pOld)+'</div></div>':'')
-      +'<div style="font-size:18px;color:var(--hnt)">&#8594;</div>'      +'<div style="background:var(--blu-l);border-radius:8px;padding:8px 12px;flex:1;min-width:140px"><div class="th" style="font-size:10px;margin-bottom:3px;color:var(--blu)">NUEVO PUESTO</div><div class="fw6 tsm" style="color:var(--blu)">'+_esc(pNew)+'</div></div>'      +'</div>'      +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'      +'<div class="th tsm">Area: <span class="fw6">'+_esc(c.area||'-')+'</span></div>'      +'<div class="th tsm">Ingreso: <span class="fw6">'+(c.fecha||'-')+'</span></div>'      +'</div>'      +'</div>'
-      +'<button class="btn btn-gh btn-sm" style="margin-top:6px;font-size:11px" onclick="docsIrASubir(\''+_esc(c.nombre)+'\')">'+'+ Subir documento</button>';
+    var pOld=c.puestoAnterior||'';var pNew=c.puesto||'-';
+    var dias=calcDias(c.fechaCambio||c.fecha);
+    var key=c.nombre;var sk=key.replace(/"/g,'&quot;');
+    var acts=(DB.cambioact&&DB.cambioact[key])||[];
+    var done=acts.filter(function(a){return a.done;}).length;
+    var evs=(DB.notas&&DB.notas['cambioeval_'+key])||[];
+    var ev=evs.length?evs[evs.length-1]:null;
+    var actsH=acts.length?acts.map(function(a,ai){
+      return '<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start">'
+        +'<input type="checkbox"'+(a.done?' checked':'')+' data-mod="cambio" data-key="'+sk+'" data-ai="'+ai+'" onchange="modToggleAct(this)" style="margin-top:3px;flex-shrink:0">'
+        +'<span class="tsm" style="flex:1;'+(a.done?'text-decoration:line-through;color:var(--hnt)':'')+'">'+ _esc(a.texto)+'</span>'
+        +(a.fecha?'<span class="tsm" style="color:var(--hnt);flex-shrink:0;font-size:10px">'+a.fecha+'</span>':'')
+        +'<button data-mod="cambio" data-key="'+sk+'" data-ai="'+ai+'" onclick="modDelAct(this)" style="background:none;border:none;color:var(--hnt);cursor:pointer;font-size:15px;line-height:1;padding:0 2px">&times;</button>'
+      +'</div>';
+    }).join('')
+    :'<div class="th tsm" style="padding:6px 0;font-size:11px">Sin actividades.</div>';
+    var evH=ev
+      ?'<div style="background:var(--s2);border-radius:6px;padding:8px 10px;font-size:11px">'
+        +'<div class="fw6 tsm" style="margin-bottom:4px">Dia '+ev.dia+' &mdash; '+ev.fecha+'</div>'
+        +'<div style="display:flex;gap:10px"><span>L&#8594;C: <b>'+ev.lc+'/5</b></span><span>C&#8594;L: <b>'+ev.cl+'/5</b></span></div>'
+        +(ev.nota?'<div class="th tsm" style="margin-top:3px;font-size:10px">'+_esc(ev.nota)+'</div>':'')+      '</div>'
+      :'<div class="th tsm" style="padding:6px 0;font-size:11px">Sin evaluaciones aun.</div>';
+    return '<div class="card mb10">'
+      +'<div class="fr mb10"><div class="av '+avColors[i%avColors.length]+'">'+c.initials+'</div>'
+      +'<div class="f1"><div class="fw6 tsm">'+_esc(c.nombre)+'</div>'
+      +'<div class="th" style="font-size:11px">Lider: '+(c.lider||'-')+'</div></div>'
+      +'<div style="text-align:right"><span class="bdg b-am">En transicion</span>'
+      +'<div class="th tsm" style="font-size:11px;margin-top:3px">Dia '+dias+'</div></div></div>'
+      +(pOld?'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px">'
+        +'<div style="background:var(--s2);border-radius:8px;padding:8px 12px;flex:1;min-width:120px"><div class="th" style="font-size:10px">ANTERIOR</div><div class="fw6 tsm">'+_esc(pOld)+'</div></div>'
+        +'<div style="font-size:18px;color:var(--hnt)">&#8594;</div>'
+        +'<div style="background:var(--blu-l);border-radius:8px;padding:8px 12px;flex:1;min-width:120px"><div class="th" style="font-size:10px;color:var(--blu)">NUEVO PUESTO</div><div class="fw6 tsm;color:var(--blu)">'+_esc(pNew)+'</div></div>'
+      +'</div>':'')
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">'
+        +'<div><div class="fr mb8" style="align-items:center">'
+          +'<div class="ctitle" style="margin:0;font-size:11px">Actividades ('+done+'/'+acts.length+')</div>'
+          +'<button class="btn btn-gh btn-sm" style="font-size:10px;padding:2px 8px" data-mod="cambio" data-key="'+sk+'" onclick="modAddActModal(this)">+ Agregar</button>'
+        +'</div><div style="max-height:130px;overflow-y:auto">'+actsH+'</div></div>'
+        +'<div><div class="fr mb8" style="align-items:center">'
+          +'<div class="ctitle" style="margin:0;font-size:11px">Eval. bidireccional</div>'
+          +'<button class="btn btn-bl btn-sm" style="font-size:10px;padding:2px 8px" data-mod="cambio" data-key="'+sk+'" data-dias="'+dias+'" onclick="modOpenEval(this)">Evaluar</button>'
+        +'</div>'+evH+'</div>'
+      +'</div>'
+      +'<button class="btn btn-gh btn-sm" style="font-size:11px" onclick="docsIrASubir(this.dataset.n)" data-n="'+_esc(c.nombre)+'">+ Documento</button>'
+    +'</div>';
   }).join('');
 }
+
 
 function renderCarrera(){
   var list=document.getElementById('carrera-list');if(!list)return;
@@ -3314,6 +3868,41 @@ function loadDesEvalForm(ci){
     +'<button class="btn btn-or" style="width:100%;justify-content:center;padding:12px" onclick="submitDesEval('+ci+')">Calcular y guardar evaluacion</button>'
     +'<div id="des-resultado" style="margin-top:12px"></div></div>';
 
+    // Actividades de desarrollo
+  var desKey=c.nombre;var desSk=desKey.replace(/"/g,'&quot;');
+  var desActs=(DB.desact&&DB.desact[desKey])||[];
+  var desDone=desActs.filter(function(a){return a.done;}).length;
+  var desEvs=(DB.notas&&DB.notas['deseval_'+desKey])||[];
+  var desEv=desEvs.length?desEvs[desEvs.length-1]:null;
+  var desActsH=desActs.length
+    ?desActs.map(function(a,ai){
+      return '<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start">'
+        +'<input type="checkbox"'+(a.done?' checked':'')+' data-mod="des" data-key="'+desSk+'" data-ai="'+ai+'" onchange="modToggleAct(this)" style="margin-top:3px;flex-shrink:0">'
+        +'<span class="tsm" style="flex:1;'+(a.done?'text-decoration:line-through;color:var(--hnt)':'')+'">'+ _esc(a.texto)+'</span>'
+        +(a.fecha?'<span class="tsm" style="color:var(--hnt);flex-shrink:0;font-size:10px">'+a.fecha+'</span>':'' )
+        +'<button data-mod="des" data-key="'+desSk+'" data-ai="'+ai+'" onclick="modDelAct(this)" style="background:none;border:none;color:var(--hnt);cursor:pointer;font-size:15px;line-height:1;padding:0 2px">&times;</button>'
+      +'</div>';
+    }).join('')
+    :'<div class="th tsm" style="padding:6px 0;font-size:11px">Sin actividades de desarrollo.</div>';
+  var desEvH=desEv
+    ?'<div style="background:var(--s2);border-radius:6px;padding:8px 10px;font-size:11px">'
+      +'<div class="fw6 tsm" style="margin-bottom:4px">'+desEv.fecha+'</div>'
+      +'<div style="display:flex;gap:10px"><span>L&#8594;C: <b>'+desEv.lc+'/5</b></span><span>C&#8594;L: <b>'+desEv.cl+'/5</b></span></div>'
+      +(desEv.nota?'<div class="th tsm" style="margin-top:3px;font-size:10px">'+ _esc(desEv.nota)+'</div>':'' )
+    +'</div>'
+    :'<div class="th tsm" style="padding:6px 0;font-size:11px">Sin evaluaciones aun.</div>';
+  h+='<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">'
+    +'<div class="card" style="padding:14px 16px">'
+      +'<div class="fr mb8" style="align-items:center">'
+        +'<div class="ctitle" style="margin:0;font-size:11px">Actividades de desarrollo ('+desDone+'/'+desActs.length+')</div>'
+        +'<button class="btn btn-gh btn-sm" style="font-size:10px;padding:2px 8px" data-mod="des" data-key="'+desSk+'" onclick="modAddActModal(this)">+ Agregar</button>'
+      +'</div><div style="max-height:150px;overflow-y:auto">'+desActsH+'</div></div>'
+    +'<div class="card" style="padding:14px 16px">'
+      +'<div class="fr mb8" style="align-items:center">'
+        +'<div class="ctitle" style="margin:0;font-size:11px">Eval. bidireccional</div>'
+        +'<button class="btn btn-bl btn-sm" style="font-size:10px;padding:2px 8px" data-mod="des" data-key="'+desSk+'" data-dias="0" onclick="modOpenEval(this)">Evaluar</button>'
+      +'</div>'+desEvH+'</div>'
+  +'</div>';
   container.innerHTML=h;
 }
 
@@ -5171,6 +5760,283 @@ function cargarDatosDemo(){
   SLA_DB.periods['2026_Marzo']  =mkSLAPer(slaCfgMar);
   SLA_OK=true;SLA_LOADED=true;try{localStorage.setItem('talentys_sla',JSON.stringify(SLA_DB));}catch(e){}
 
+
+  // -- P90 ACTIVIDADES ----------------------------------------
+  DB.p90act={};
+  // Diego Mora (ci=2) - 45 dias en proceso
+  DB.p90act['Diego Mora']=[
+    {texto:'Completar onboarding de plataformas IT',fecha:'',done:true},
+    {texto:'Primera entrega de feature asignada',fecha:'',done:true},
+    {texto:'Sesion 1:1 semanal con lider',fecha:'',done:false},
+    {texto:'Code review de componente existente',fecha:'',done:false},
+    {texto:'Documentar proceso de deploy',fecha:'',done:false}
+  ];
+  // Camila Reyes (ci=7) - 20 dias en proceso
+  DB.p90act['Camila Reyes']=[
+    {texto:'Presentacion de bienvenida al equipo',fecha:'',done:true},
+    {texto:'Definir plan de marketing Q2',fecha:'',done:false},
+    {texto:'Reunion con equipo de ventas',fecha:'',done:false}
+  ];
+  // Jorge Mendez (ci=8) - 60 dias en proceso
+  DB.p90act['Jorge Mendez']=[
+    {texto:'Certificacion de producto completada',fecha:'',done:true},
+    {texto:'Manejo autonomo de cola de tickets',fecha:'',done:true},
+    {texto:'Primer mes sin escalaciones',fecha:'',done:true},
+    {texto:'Plan de mejora continua presentado al lider',fecha:'',done:false}
+  ];
+
+  // -- P90 EVALUACIONES BIDIRECCIONALES -----------------------
+  DB.notas['p90eval_Diego Mora']=[
+    {dia:30,lc:3.7,cl:4.0,lc1:4,lc2:3,lc3:4,cl1:4,cl2:4,cl3:4,nota:'Buena integracion. Reforzar documentacion.',fecha:'2026-03-15'}
+  ];
+  DB.notas['p90eval_Camila Reyes']=[
+    {dia:15,lc:4.0,cl:3.7,lc1:4,lc2:4,lc3:4,cl1:4,cl2:3,cl3:4,nota:'Excelente actitud. Clarificar objetivos.',fecha:'2026-04-10'}
+  ];
+  DB.notas['p90eval_Jorge Mendez']=[
+    {dia:30,lc:3.3,cl:3.7,lc1:3,lc2:3,lc3:4,cl1:4,cl2:4,cl3:3,nota:'En proceso. Continuar acompanamiento.',fecha:'2026-03-01'},
+    {dia:60,lc:4.0,cl:4.3,lc1:4,lc2:4,lc3:4,cl1:4,cl2:5,cl3:4,nota:'Mejora notable. Encaminado a certificarse.',fecha:'2026-04-01'}
+  ];
+
+  // -- CAMBIO DE PUESTO ACTIVIDADES ---------------------------
+  DB.cambioact={};
+  DB.cambioact['Andres Vega']=[
+    {texto:'Shadowing con Coordinador actual',fecha:'',done:true},
+    {texto:'Capacitacion en herramientas de coordinacion',fecha:'',done:true},
+    {texto:'Primera semana liderando al equipo',fecha:'',done:false},
+    {texto:'Reporte de transicion semana 2',fecha:'',done:false}
+  ];
+  DB.cambioact['Paola Rios']=[
+    {texto:'Entrega formal de responsabilidades del area',fecha:'',done:true},
+    {texto:'Reunion de alineacion con el equipo supervisor',fecha:'',done:true},
+    {texto:'KPIs de supervision definidos',fecha:'',done:false},
+    {texto:'Primera evaluacion de desempeno como supervisor',fecha:'',done:false}
+  ];
+
+  // Cambio evaluaciones bidireccionales
+  DB.notas['cambioeval_Andres Vega']=[
+    {dia:15,lc:3.7,cl:4.0,lc1:4,lc2:3,lc3:4,cl1:4,cl2:4,cl3:4,nota:'Adaptacion positiva. Reforzar toma de decisiones.',fecha:'2026-04-05'}
+  ];
+  DB.notas['cambioeval_Paola Rios']=[
+    {dia:30,lc:4.3,cl:4.7,lc1:4,lc2:5,lc3:4,cl1:5,cl2:4,cl3:5,nota:'Excelente transicion. Lista para el nuevo rol.',fecha:'2026-04-10'}
+  ];
+
+  // -- EVAL DESEMPENO ACTIVIDADES ----------------------------
+  DB.desact={};
+  DB.desact['Marco Ruiz']=[
+    {texto:'Curso: Atencion al cliente avanzada',fecha:'2026-05-30',done:false},
+    {texto:'Practica semanal de resolucion de casos complejos',fecha:'',done:true}
+  ];
+  DB.desact['Sofia Torres']=[
+    {texto:'Mentoria de liderazgo con gerente',fecha:'2026-06-30',done:false},
+    {texto:'Capacitacion: Analisis financiero avanzado',fecha:'2026-05-15',done:false}
+  ];
+  DB.desact['Laura Soto']=[
+    {texto:'Crear guia de rollback procedures',fecha:'2026-05-31',done:false},
+    {texto:'Tech talk mensual al equipo IT',fecha:'',done:true}
+  ];
+
+  DB.notas['deseval_Marco Ruiz']=[
+    {dia:0,lc:3.3,cl:3.7,lc1:3,lc2:3,lc3:4,cl1:4,cl2:3,cl3:4,nota:'Comprometido. Seguir plan de accion Q2.',fecha:'2026-04-01'}
+  ];
+  DB.notas['deseval_Laura Soto']=[
+    {dia:0,lc:4.7,cl:4.3,lc1:5,lc2:4,lc3:5,cl1:4,cl2:4,cl3:5,nota:'Referente del equipo. Excelente ciclo.',fecha:'2026-04-01'}
+  ];
+
+  // -- DOCUMENTOS --------------------------------------------
+  DB.notas.docs=[
+    {id:'doc001',colab:'Marco Ruiz',    tipo:'Contrato',      proceso:'General',      vigencia:'2027-03-01',notas:'Contrato inicial firmado',nombre:'Contrato_Marco_Ruiz_2024.pdf',fecha:'1 Mar 2024',estado:'valido'},
+    {id:'doc002',colab:'Sofia Torres',  tipo:'Evaluacion',    proceso:'General',      vigencia:'',          notas:'Evaluacion Q1 2026',     nombre:'Eval_Q1_2026_Sofia.pdf',       fecha:'31 Mar 2026',estado:'valido'},
+    {id:'doc003',colab:'Diego Mora',    tipo:'Contrato',      proceso:'Primeros 90 dias',vigencia:'2027-04-01',notas:'Contrato primer empleo',nombre:'Contrato_Diego_2025.pdf',   fecha:'15 Abr 2025',estado:'valido'},
+    {id:'doc004',colab:'Diego Mora',    tipo:'Capacitacion',  proceso:'Primeros 90 dias',vigencia:'',        notas:'Certificado onboarding IT',nombre:'Cert_Onboarding_Diego.pdf', fecha:'10 May 2025',estado:'valido'},
+    {id:'doc005',colab:'Andres Vega',   tipo:'Plan de carrera','proceso':'Cambio de puesto',vigencia:'',    notas:'Plan de transicion coordinador',nombre:'Plan_Carrera_Andres.pdf',fecha:'20 Mar 2026',estado:'valido'},
+    {id:'doc006',colab:'Laura Soto',    tipo:'Evaluacion',    proceso:'General',      vigencia:'',          notas:'Evaluacion excepcional Q1',nombre:'Eval_Q1_Laura_Excepcional.pdf',fecha:'31 Mar 2026',estado:'valido'},
+    {id:'doc007',colab:'Valentina Cruz','tipo':'Contrato',    proceso:'General',      vigencia:'2026-01-10',notas:'Contrato vigente',         nombre:'Contrato_Valentina_2025.pdf',  fecha:'10 Ene 2025',estado:'valido'},
+    {id:'doc008',colab:'Paola Rios',    tipo:'Identificacion','proceso':'General',    vigencia:'2028-01-01',notas:'INE actualizado',          nombre:'INE_Paola_Rios.pdf',           fecha:'5 Feb 2026',estado:'valido'},
+    {id:'doc009',colab:'Roberto Nieto', tipo:'Evaluacion',    proceso:'General',      vigencia:'',          notas:'Cierre Q1 financiero',    nombre:'Eval_Q1_Roberto.pdf',          fecha:'2 Abr 2026',estado:'valido'},
+    {id:'doc010',colab:'Camila Reyes',  tipo:'Contrato',      proceso:'Primeros 90 dias',vigencia:'2027-04-05',notas:'Contrato nueva ingresa',nombre:'Contrato_Camila_2026.pdf',  fecha:'5 Abr 2026',estado:'valido'}
+  ];
+
+  // -- ENTREVISTA DE SALIDA ----------------------------------
+  // Nota: agregamos un ex-colaborador como salida demo
+  DB.salida=[
+    {
+      id:'sal_demo_001',ci:-1,
+      nombre:'Carlos Mendez',puesto:'Agente CSR',area:'Operaciones',
+      lider:'Carlos Perez',pais:'Mexico',fecha:'2024-01-15',
+      fechaBaja:'2026-02-28',
+      motivo:'Mejor oferta economica',tipo:'Voluntaria',
+      recontrat:'Si, sin restricciones',
+      scores:{'sal-q1':4,'sal-q2':4,'sal-q3':5,'sal-q4':2,'sal-q5':3,'sal-q6':3,'sal-q7':4},
+      promedio:3.6,
+      comentColab:'Me voy por una oportunidad economica mejor, pero fue una buena experiencia trabajar aqui. El equipo es excelente.',
+      notasAdmin:'Salida voluntaria por oferta 25% superior. Candidato recontratble. Hay oportunidad de mejora en tabla salarial de Operaciones.',
+      fecha_reg:'2026-02-28'
+    },
+    {
+      id:'sal_demo_002',ci:-1,
+      nombre:'Patricia Solano',puesto:'Analista de Costos',area:'Finanzas',
+      lider:'Maria Garcia',pais:'Mexico',fecha:'2023-08-01',
+      fechaBaja:'2026-01-31',
+      motivo:'Crecimiento profesional',tipo:'Voluntaria',
+      recontrat:'Si, con condiciones',
+      scores:{'sal-q1':3,'sal-q2':2,'sal-q3':3,'sal-q4':1,'sal-q5':3,'sal-q6':4,'sal-q7':3},
+      promedio:2.7,
+      comentColab:'Siento que no hubo suficiente oportunidad de crecimiento. Mi lider no siempre estuvo disponible para retroalimentarme.',
+      notasAdmin:'Salida relacionada con percepcion de falta de desarrollo. Revisar plan de carrera en Finanzas. Retroalimentacion para Maria Garcia.',
+      fecha_reg:'2026-01-31'
+    },
+    {
+      id:'sal_demo_003',ci:-1,
+      nombre:'Oscar Fuentes',puesto:'Developer',area:'IT',
+      lider:'Luis Torres',pais:'Mexico',fecha:'2024-05-10',
+      fechaBaja:'2025-12-15',
+      motivo:'Mejor oferta economica',tipo:'Voluntaria',
+      recontrat:'No recomendado',
+      scores:{'sal-q1':2,'sal-q2':3,'sal-q3':2,'sal-q4':2,'sal-q5':2,'sal-q6':1,'sal-q7':2},
+      promedio:2.0,
+      comentColab:'La carga de trabajo era excesiva y no habia balance vida-trabajo. Los procesos eran muy burocraticos.',
+      notasAdmin:'Segundo dev que sale en 6 meses por carga laboral. Urgente revisar workload del equipo IT con Luis Torres.',
+      fecha_reg:'2025-12-15'
+    }
+  ];
+
+  // -- EVALUACION 360 ----------------------------------------
+  DB.eval360=[
+    {
+      id:'ev360_demo_001',
+      nombre:'Evaluacion 360 Q1 2026 - Liderazgo',
+      tipo:'360 grados',
+      desc:'Evaluacion de competencias de liderazgo para lideres y colaboradores clave.',
+      escala:'5',
+      preguntas:[
+        'Demuestra comunicacion efectiva con su equipo',
+        'Toma iniciativa y propone soluciones ante los problemas',
+        'Colabora y apoya a sus companeros de equipo',
+        'Cumple con los objetivos y plazos establecidos',
+        'Muestra disposicion para aprender y adaptarse al cambio',
+        'Actua con integridad y da el ejemplo',
+        'Gestiona efectivamente su tiempo y prioridades'
+      ],
+      deadline:'2026-04-30',
+      creado:'2026-03-01',
+      asignaciones:[
+        {evaluadoCi:0, evaluadores:[{ci:0,rol:'autoevaluacion'},{ci:1,rol:'lider'},{ci:4,rol:'par'},{ci:8,rol:'par'}], lanzado:'2026-03-01', completado:true},
+        {evaluadoCi:5, evaluadores:[{ci:5,rol:'autoevaluacion'},{ci:2,rol:'lider'},{ci:6,rol:'par'}], lanzado:'2026-03-01', completado:false}
+      ],
+      respuestas:[
+        {evalId:'ev360_demo_001',evaluadoCi:0,evaluadorCi:0,respuestas:{0:4,1:4,2:5,3:4,4:4,5:5,6:3},comentarios:{},coment:'Me considero comprometido y colaborador.',fecha:'2026-03-15'},
+        {evalId:'ev360_demo_001',evaluadoCi:0,evaluadorCi:1,respuestas:{0:4,1:3,2:5,3:5,4:4,5:4,6:4},comentarios:{},coment:'Marco es un jugador de equipo solido. Mejorar proactividad.',fecha:'2026-03-18'},
+        {evalId:'ev360_demo_001',evaluadoCi:0,evaluadorCi:4,respuestas:{0:5,1:4,2:5,3:4,4:5,5:5,6:4},comentarios:{},coment:'Siempre disponible para apoyar al equipo.',fecha:'2026-03-20'},
+        {evalId:'ev360_demo_001',evaluadoCi:0,evaluadorCi:8,respuestas:{0:4,1:3,2:4,3:4,4:4,5:5,6:3},comentarios:{},coment:'Buen companero, muy confiable.',fecha:'2026-03-22'},
+        {evalId:'ev360_demo_001',evaluadoCi:5,evaluadorCi:5,respuestas:{0:5,1:5,2:4,3:5,4:5,5:5,6:4},comentarios:{},coment:'Busco siempre la excelencia tecnica y el desarrollo del equipo.',fecha:'2026-03-16'}
+      ]
+    },
+    {
+      id:'ev360_demo_002',
+      nombre:'Evaluacion 180 Q1 2026 - IT',
+      tipo:'180 grados',
+      desc:'Evaluacion bidireccional entre lideres y sus reportes directos en IT.',
+      escala:'5',
+      preguntas:[
+        'Comunica claramente las expectativas y objetivos',
+        'Provee retroalimentacion constructiva y oportuna',
+        'Apoya el desarrollo profesional del equipo',
+        'Toma decisiones de manera efectiva',
+        'Crea un ambiente de trabajo positivo'
+      ],
+      deadline:'2026-04-30',
+      creado:'2026-03-05',
+      asignaciones:[
+        {evaluadoCi:2, evaluadores:[{ci:2,rol:'autoevaluacion'},{ci:5,rol:'lider'}], lanzado:'2026-03-05', completado:true}
+      ],
+      respuestas:[
+        {evalId:'ev360_demo_002',evaluadoCi:2,evaluadorCi:2,respuestas:{0:4,1:3,2:4,3:4,4:5},comentarios:{},coment:'Estoy aprendiendo rapido y me siento apoyado.',fecha:'2026-03-10'},
+        {evalId:'ev360_demo_002',evaluadoCi:2,evaluadorCi:5,respuestas:{0:4,1:4,2:5,3:3,4:4},comentarios:{},coment:'Diego muestra mucho potencial. Necesita mas autonomia en decision tecnica.',fecha:'2026-03-12'}
+      ]
+    }
+  ];
+
+  // -- CLIMA LABORAL -----------------------------------------
+  var hoy2=new Date();
+  var Q1deadline='2026-03-31';
+  var Q4_2025deadline='2025-12-31';
+
+  DB.clima=[
+    {
+      id:'clm_demo_001',
+      nombre:'Clima Laboral Q1 2026',
+      periodo:'trimestral',ano:'2026',mes:'Q1',
+      anonima:true,
+      deadline:Q1deadline,
+      preguntas:[
+        'Me siento valorado/a en mi trabajo',
+        'Mi lider me da retroalimentacion util y oportuna',
+        'Tengo claros mis objetivos y responsabilidades',
+        'El ambiente de trabajo en mi equipo es positivo',
+        'Cuento con las herramientas necesarias para trabajar bien',
+        'Recomendaria esta empresa como buen lugar para trabajar',
+        'Me siento seguro/a para expresar mis ideas sin miedo',
+        'Existe comunicacion efectiva entre los equipos',
+        'La empresa me ofrece oportunidades de crecimiento',
+        'La carga de trabajo que tengo es razonable'
+      ],
+      creado:'2026-01-05',
+      asignaciones:[
+        {ci:0,lanzado:'2026-01-07'},{ci:1,lanzado:'2026-01-07'},
+        {ci:2,lanzado:'2026-01-07'},{ci:3,lanzado:'2026-01-07'},
+        {ci:4,lanzado:'2026-01-07'},{ci:5,lanzado:'2026-01-07'},
+        {ci:6,lanzado:'2026-01-07'},{ci:7,lanzado:'2026-01-07'},
+        {ci:8,lanzado:'2026-01-07'},{ci:9,lanzado:'2026-01-07'}
+      ],
+      respuestas:[
+        {encId:'clm_demo_001',ci:-1,area:'Operaciones',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:5,1:4,2:5,3:5,4:4,5:5,6:4,7:3,8:3,9:4},coment:'Muy buen equipo, me siento comodo.',fecha:'2026-01-20'},
+        {encId:'clm_demo_001',ci:-1,area:'Finanzas',pais:'Mexico',lider:'Maria Garcia',respuestas:{0:4,1:5,2:5,3:4,4:5,5:4,6:5,7:4,8:4,9:3},coment:'Excelente liderazgo. La carga a veces es alta en cierre.',fecha:'2026-01-21'},
+        {encId:'clm_demo_001',ci:-1,area:'IT',pais:'Mexico',lider:'Luis Torres',respuestas:{0:3,1:3,2:4,3:4,4:5,5:3,6:3,7:3,8:2,9:2},coment:'Las herramientas son buenas pero la carga es muy alta. Necesitamos mas personas.',fecha:'2026-01-22'},
+        {encId:'clm_demo_001',ci:-1,area:'Recursos Humanos',pais:'Mexico',lider:'Ana Ramirez',respuestas:{0:5,1:5,2:5,3:5,4:4,5:5,6:5,7:4,8:5,9:4},coment:'Muy satisfecha con el ambiente y el liderazgo.',fecha:'2026-01-23'},
+        {encId:'clm_demo_001',ci:-1,area:'Operaciones',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:4,1:4,2:4,3:4,4:4,5:4,6:4,7:4,8:3,9:4},coment:'Todo bien. El equipo es colaborativo.',fecha:'2026-01-24'},
+        {encId:'clm_demo_001',ci:-1,area:'IT',pais:'Mexico',lider:'Luis Torres',respuestas:{0:5,1:4,2:5,3:4,4:5,5:5,6:4,7:4,8:4,9:2},coment:'Gran equipo tecnico. La carga de trabajo es el principal reto.',fecha:'2026-01-25'},
+        {encId:'clm_demo_001',ci:-1,area:'Finanzas',pais:'Mexico',lider:'Maria Garcia',respuestas:{0:4,1:4,2:4,3:3,4:4,5:4,6:3,7:3,8:3,9:3},coment:'El ambiente podria mejorar entre areas. Comunicacion interdepartamental debil.',fecha:'2026-01-26'},
+        {encId:'clm_demo_001',ci:-1,area:'Marketing',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:4,1:3,2:3,3:4,4:3,5:4,6:4,7:3,8:3,9:4},coment:'Primera semana fue dificil por falta de onboarding estructurado.',fecha:'2026-01-27'},
+        {encId:'clm_demo_001',ci:-1,area:'Operaciones',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:4,1:4,2:5,3:5,4:4,5:4,6:4,7:3,8:3,9:3},coment:'Buen ambiente general.',fecha:'2026-01-28'},
+        {encId:'clm_demo_001',ci:-1,area:'Operaciones',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:3,1:3,2:4,3:4,4:4,5:3,6:3,7:3,8:2,9:3},coment:'Mejorar la comunicacion entre turnos.',fecha:'2026-01-29'}
+      ]
+    },
+    {
+      id:'clm_demo_002',
+      nombre:'Clima Laboral Q4 2025',
+      periodo:'trimestral',ano:'2025',mes:'Q4',
+      anonima:true,
+      deadline:Q4_2025deadline,
+      preguntas:[
+        'Me siento valorado/a en mi trabajo',
+        'Mi lider me da retroalimentacion util y oportuna',
+        'Tengo claros mis objetivos y responsabilidades',
+        'El ambiente de trabajo en mi equipo es positivo',
+        'Cuento con las herramientas necesarias para trabajar bien',
+        'Recomendaria esta empresa como buen lugar para trabajar',
+        'Me siento seguro/a para expresar mis ideas sin miedo',
+        'Existe comunicacion efectiva entre los equipos',
+        'La empresa me ofrece oportunidades de crecimiento',
+        'La carga de trabajo que tengo es razonable'
+      ],
+      creado:'2025-10-01',
+      asignaciones:[
+        {ci:0,lanzado:'2025-10-03'},{ci:1,lanzado:'2025-10-03'},
+        {ci:3,lanzado:'2025-10-03'},{ci:4,lanzado:'2025-10-03'},
+        {ci:5,lanzado:'2025-10-03'},{ci:6,lanzado:'2025-10-03'}
+      ],
+      respuestas:[
+        {encId:'clm_demo_002',ci:-1,area:'Operaciones',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:4,1:3,2:4,3:4,4:3,5:4,6:3,7:3,8:3,9:3},coment:'Trimestre pesado pero el equipo respondio.',fecha:'2025-11-15'},
+        {encId:'clm_demo_002',ci:-1,area:'Finanzas',pais:'Mexico',lider:'Maria Garcia',respuestas:{0:3,1:4,2:4,3:3,4:4,5:3,6:4,7:3,8:3,9:2},coment:'Cierre de ano muy estresante. Necesitamos mas recursos.',fecha:'2025-11-16'},
+        {encId:'clm_demo_002',ci:-1,area:'Recursos Humanos',pais:'Mexico',lider:'Ana Ramirez',respuestas:{0:5,1:5,2:5,3:5,4:4,5:5,6:5,7:4,8:4,9:4},coment:'Excelente trimestre en RRHH.',fecha:'2025-11-17'},
+        {encId:'clm_demo_002',ci:-1,area:'Operaciones',pais:'Mexico',lider:'Carlos Perez',respuestas:{0:3,1:3,2:3,3:3,4:3,5:3,6:3,7:3,8:2,9:2},coment:'Muchas presiones de fin de ano. Comunicacion mejorable.',fecha:'2025-11-18'},
+        {encId:'clm_demo_002',ci:-1,area:'IT',pais:'Mexico',lider:'Luis Torres',respuestas:{0:4,1:4,2:4,3:4,4:5,5:4,6:4,7:3,8:3,9:2},coment:'El proyecto de fin de ano nos sobre-exigio.',fecha:'2025-11-19'},
+        {encId:'clm_demo_002',ci:-1,area:'Finanzas',pais:'Mexico',lider:'Maria Garcia',respuestas:{0:4,1:4,2:4,3:4,4:4,5:4,6:4,7:3,8:3,9:3},coment:'Estable. Podria mejorar la comunicacion entre finanzas y operaciones.',fecha:'2025-11-20'}
+      ]
+    }
+  ];
+
+
   // -- GUARDAR -----------------------------------------------
   try{localStorage.setItem('talentys_db',JSON.stringify({DB:DB,GLOBAL:GLOBAL,linea:'envia'}));}catch(e){}
   function guardarEnFirebase(){
@@ -5209,7 +6075,7 @@ function cargarDatosDemo(){
     var cv=document.getElementById('col-view');if(cv)cv.style.display='none';
     updateLineaBadge();renderAll();nav('dash');
   }
-  toast('Datos demo cargados: 10 colabs, 9 puestos, KPIs, Performance, SLAs, Evaluaciones.');
+  toast('Datos demo cargados: 10 colabs, P90 actividades, cambio de puesto, documentos, entrevistas de salida, evaluaciones 360/180, clima laboral y mas.');
 }
 
 
@@ -5638,6 +6504,1744 @@ function docsIrASubir(colabNombre){
 }
 
 function syncAllSelects(){syncSelects();}
+
+var _modEvalR={};
+function _modDbKey(mod){return mod==='cambio'?'cambioact':(mod==='des'?'desact':'p90act');}
+function _modEvalDbKey(mod){return mod==='cambio'?'cambioeval':(mod==='des'?'deseval':'p90eval');}
+function _modRender(mod){if(mod==='cambio')renderCambio();else if(mod==='des')renderDesActPanel();else renderP90();}
+function renderDesActPanel(){var ci=document.getElementById('des-eval-colab');if(ci&&ci.value)loadDesEvalForm(ci.value);}
+function modAddActModal(btn){
+  var mod=btn.dataset.mod;var key=btn.dataset.key;
+  var m=document.getElementById('m-modact');
+  if(!m){m=document.createElement('div');m.id='m-modact';m.className='overlay';document.body.appendChild(m);}
+  m.innerHTML='<div class="modal" style="width:400px">'
+    +'<div class="modal-hdr"><div class="modal-title">Agregar actividad</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-modact\')">&times;</button></div>'
+    +'<div class="fg"><label class="fl">Colaborador</label><div class="fw6 tsm" style="padding:4px 0">'+key+'</div></div>'
+    +'<div class="fg"><label class="fl">Descripcion *</label><input type="text" class="fc" id="modact-txt" placeholder="Ej. Sesion de coaching"></div>'
+    +'<div class="fg"><label class="fl">Fecha limite (opcional)</label><input type="date" class="fc" id="modact-fecha"></div>'
+    +'<div class="flex g8"><button class="btn btn-bl" data-mod="'+mod+'" data-key="'+key+'" onclick="modSaveAct(this)">Guardar</button>'
+    +'<button class="btn btn-gh" onclick="closeM(\'m-modact\')">Cancelar</button></div></div>';
+  openM('m-modact');
+  setTimeout(function(){var e=document.getElementById('modact-txt');if(e)e.focus();},100);
+}
+function modSaveAct(btn){
+  var mod=btn.dataset.mod;var key=btn.dataset.key;
+  var txt=(document.getElementById('modact-txt').value||''). trim();
+  if(!txt){toast('Escribe la descripcion.');return;}
+  var fecha=document.getElementById('modact-fecha').value||'';
+  var dbKey=_modDbKey(mod);
+  if(!DB[dbKey])DB[dbKey]={};
+  if(!Array.isArray(DB[dbKey][key]))DB[dbKey][key]=[];
+  DB[dbKey][key].push({texto:txt,fecha:fecha,done:false});
+  saveDB();closeM('m-modact');_modRender(mod);
+  toast('Actividad agregada.');
+}
+function modToggleAct(cb){
+  var mod=cb.dataset.mod;var key=cb.dataset.key;var ai=parseInt(cb.dataset.ai);
+  var dbKey=_modDbKey(mod);
+  if(!DB[dbKey]||!Array.isArray(DB[dbKey][key]))return;
+  DB[dbKey][key][ai].done=cb.checked;
+  saveDB();_modRender(mod);
+}
+function modDelAct(btn){
+  var mod=btn.dataset.mod;var key=btn.dataset.key;var ai=parseInt(btn.dataset.ai);
+  var dbKey=_modDbKey(mod);
+  if(!DB[dbKey]||!Array.isArray(DB[dbKey][key]))return;
+  DB[dbKey][key].splice(ai,1);
+  saveDB();_modRender(mod);
+}
+function modOpenEval(btn){
+  var mod=btn.dataset.mod;var key=btn.dataset.key;var dias=parseInt(btn.dataset.dias)||0;
+  _modEvalR={};
+  var QLDR=[{f:'lc1',l:'Cumplimiento de objetivos'},{f:'lc2',l:'Adaptacion al nuevo rol'},{f:'lc3',l:'Actitud y compromiso'}];
+  var QCOL=[{f:'cl1',l:'Claridad de expectativas'},{f:'cl2',l:'Apoyo en la transicion'},{f:'cl3',l:'Calidad del acompanamiento'}];
+  function rRow(p){return '<div class="fg"><label class="fl" style="font-size:10px">'+p.l+'</label>'
+    +'<div style="display:flex;gap:4px" id="modr-'+p.f+'">'
+    +[1,2,3,4,5].map(function(n){return '<button type="button" class="rBtn" data-f="'+p.f+'" data-v="'+n+'" onclick="modRate(this)">'+n+'</button>';}).join('')
+    +'</div></div>';}
+  var m=document.getElementById('m-modeval');
+  if(!m){m=document.createElement('div');m.id='m-modeval';m.className='overlay';document.body.appendChild(m);}
+  m.innerHTML='<div class="modal" style="width:500px">'
+    +'<div class="modal-hdr"><div class="modal-title">Evaluacion bidireccional &mdash; '+_esc(key)+'</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-modeval\')">&times;</button></div>'
+    +'<div class="th tsm" style="margin-bottom:12px">Dia '+dias+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">'
+      +'<div><div class="ctitle mb8">Lider &#8594; Colaborador</div>'+QLDR.map(rRow).join('')+'</div>'
+      +'<div><div class="ctitle mb8">Colaborador &#8594; Lider</div>'+QCOL.map(rRow).join('')+'</div>'
+    +'</div>'
+    +'<div class="fg"><label class="fl">Notas</label><textarea class="fc" id="modeval-nota" rows="2" placeholder="Observaciones..."></textarea></div>'
+    +'<div class="flex g8">'
+    +'<button class="btn btn-bl" data-mod="'+mod+'" data-key="'+key+'" data-dias="'+dias+'" onclick="modSaveEval(this)">Guardar</button>'
+    +'<button class="btn btn-gh" onclick="closeM(\'m-modeval\')">Cancelar</button></div></div>';
+  openM('m-modeval');
+}
+function modRate(btn){
+  var f=btn.dataset.f;var v=parseInt(btn.dataset.v);
+  _modEvalR[f]=v;
+  var row=document.getElementById('modr-'+f);
+  if(row)row.querySelectorAll('.rBtn').forEach(function(b){b.classList.toggle('sel',parseInt(b.dataset.v)===v);});
+}
+function modSaveEval(btn){
+  var mod=btn.dataset.mod;var key=btn.dataset.key;var dias=parseInt(btn.dataset.dias)||0;
+  var r=_modEvalR;
+  var lcS=(r.lc1||0)+(r.lc2||0)+(r.lc3||0);
+  var clS=(r.cl1||0)+(r.cl2||0)+(r.cl3||0);
+  var lcC=[r.lc1,r.lc2,r.lc3].filter(Boolean).length;
+  var clC=[r.cl1,r.cl2,r.cl3].filter(Boolean).length;
+  if(!lcS&&!clS){toast('Selecciona al menos una calificacion.');return;}
+  var lc=lcC?Math.round(lcS/lcC*10)/10:'-';
+  var cl=clC?Math.round(clS/clC*10)/10:'-';
+  var nota=(document.getElementById('modeval-nota').value||''). trim();
+  var eKey=_modEvalDbKey(mod)+'_'+key;
+  if(!DB.notas)DB.notas={};
+  if(!Array.isArray(DB.notas[eKey]))DB.notas[eKey]=[];
+  DB.notas[eKey].push({dia:dias,lc:lc,cl:cl,lc1:r.lc1||0,lc2:r.lc2||0,lc3:r.lc3||0,cl1:r.cl1||0,cl2:r.cl2||0,cl3:r.cl3||0,nota:nota,fecha:new Date().toISOString().slice(0,10)});
+  saveDB();closeM('m-modeval');_modRender(mod);
+  toast('Evaluacion guardada. L->C: '+lc+'/5  C->L: '+cl+'/5');
+}
+
+var SAL_PREGS=[
+  {id:'sal-q1',texto:'Como calificarias tu experiencia general en la empresa?'},
+  {id:'sal-q2',texto:'Como calificarias la relacion con tu lider directo?'},
+  {id:'sal-q3',texto:'Como calificarias el ambiente de trabajo con tu equipo?'},
+  {id:'sal-q4',texto:'Como calificarias las oportunidades de crecimiento?'},
+  {id:'sal-q5',texto:'Como calificarias la comunicacion interna y transparencia?'},
+  {id:'sal-q6',texto:'Como calificarias la carga de trabajo y balance vida-trabajo?'},
+  {id:'sal-q7',texto:'Recomendarias la empresa como lugar de trabajo?'}
+];
+var _salR={};
+function salInitPreguntas(){
+  var c=document.getElementById('sal-preguntas');if(!c)return;
+  c.innerHTML=SAL_PREGS.map(function(p){
+    return '<div class="fg"><label class="fl" style="font-size:11px">'+p.texto+'</label>'
+      +'<div style="display:flex;gap:4px" id="'+p.id+'">'
+      +[1,2,3,4,5].map(function(n){return '<button type="button" class="rBtn" data-id="'+p.id+'" data-v="'+n+'" onclick="salRate(this)">'+n+'</button>';}).join('')
+      +'</div><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--hnt);margin-top:2px"><span>Muy malo</span><span>Excelente</span></div>'
+      +'</div>';
+  }).join('');
+}
+function salRate(btn){
+  var id=btn.dataset.id;var v=parseInt(btn.dataset.v);
+  _salR[id]=v;
+  var row=document.getElementById(id);
+  if(row)row.querySelectorAll('.rBtn').forEach(function(b){b.classList.toggle('sel',parseInt(b.dataset.v)===v);});
+}
+function salLoadColab(){
+  var sel=document.getElementById('sal-colab');var idx=sel.value;
+  var info=document.getElementById('sal-colab-info');
+  if(!idx){info.style.display='none';return;}
+  var c=DB.colabs[parseInt(idx)];if(!c){info.style.display='none';return;}
+  document.getElementById('sali-puesto').textContent=c.puesto||'-';
+  document.getElementById('sali-area').textContent=c.area||'-';
+  document.getElementById('sali-lider').textContent=c.lider||'-';
+  document.getElementById('sali-pais').textContent=c.pais||'-';
+  document.getElementById('sali-ingreso').textContent=c.fecha||'-';
+  var dias=calcDias(c.fecha);var anios=Math.floor(dias/365);var meses=Math.floor((dias%365)/30);
+  document.getElementById('sali-ant').textContent=(anios>0?anios+' anios ':'')+meses+' meses';
+  info.style.display='block';
+  var fb=document.getElementById('sal-fecha-baja');
+  if(fb&&!fb.value)fb.value=new Date().toISOString().slice(0,10);
+}
+function salGuardar(){
+  var sel=document.getElementById('sal-colab');var ci=sel.value;
+  if(!ci){toast('Selecciona un colaborador.');return;}
+  var fb=(document.getElementById('sal-fecha-baja').value||'').trim();
+  if(!fb){toast('Indica la fecha de baja.');return;}
+  var mot=document.getElementById('sal-motivo').value;
+  if(!mot){toast('Selecciona el motivo.');return;}
+  var c=DB.colabs[parseInt(ci)];if(!c)return;
+  var sc={};var tot=0;var cnt=0;
+  SAL_PREGS.forEach(function(p){var v=_salR[p.id]||0;sc[p.id]=v;if(v>0){tot+=v;cnt++;}});
+  var pr=cnt?Math.round(tot/cnt*10)/10:0;
+  if(!Array.isArray(DB.salida))DB.salida=[];
+  DB.salida.push({
+    id:'sal'+Date.now(),ci:parseInt(ci),
+    nombre:c.nombre,puesto:c.puesto||'',area:c.area||'',lider:c.lider||'',
+    pais:c.pais||'',fecha:c.fecha||'',fechaBaja:fb,
+    motivo:mot,tipo:document.getElementById('sal-tipo').value||'Voluntaria',
+    recontrat:document.getElementById('sal-recontrat').value||'',
+    scores:sc,promedio:pr,
+    comentColab:(document.getElementById('sal-coment-colab').value||'').trim(),
+    notasAdmin:(document.getElementById('sal-notas-admin').value||'').trim(),
+    fecha_reg:new Date().toISOString().slice(0,10)
+  });
+  c.status='Baja';c.fechaBaja=fb;
+  saveDB();toast('Entrevista guardada.');salLimpiar();salRenderHistorial();salSyncFilters();
+}
+function salLimpiar(){
+  var s=document.getElementById('sal-colab');if(s)s.value='';
+  document.getElementById('sal-colab-info').style.display='none';
+  ['sal-fecha-baja','sal-coment-colab','sal-notas-admin'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  ['sal-motivo','sal-tipo','sal-recontrat'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  _salR={};
+  document.querySelectorAll('#sal-preguntas .rBtn').forEach(function(b){b.classList.remove('sel');});
+}
+function salSyncSelects(){
+  var sel=document.getElementById('sal-colab');
+  if(sel){
+    var v=sel.value;
+    sel.innerHTML='<option value="">-- Seleccionar --</option>'
+      +(DB.colabs||[]).map(function(c,i){return '<option value="'+i+'">'+_esc(c.nombre)+'</option>';}).join('');
+    if(v)sel.value=v;
+  }
+  salSyncFilters();
+  var sp=document.getElementById('sal-preguntas');
+  if(sp&&!sp.children.length)salInitPreguntas();
+}
+function salSyncFilters(){
+  var sa=DB.salida||[];
+  var areas=[...new Set(sa.map(function(s){return s.area;}).filter(Boolean))];
+  var lideres=[...new Set(sa.map(function(s){return s.lider;}).filter(Boolean))];
+  var puestos=[...new Set(sa.map(function(s){return s.puesto;}).filter(Boolean))];
+  var paises=[...new Set(sa.map(function(s){return s.pais;}).filter(Boolean))];
+  function fill(id,items,lbl){
+    var el=document.getElementById(id);if(!el)return;
+    var v=el.value;
+    el.innerHTML='<option value="">'+lbl+'</option>'+items.map(function(x){return '<option>'+_esc(x)+'</option>';}).join('');
+    if(v)el.value=v;
+  }
+  fill('sald-lider',lideres,'Todos los lideres');fill('sald-area',areas,'Todas las areas');
+  fill('sald-puesto',puestos,'Todos los puestos');fill('sald-pais',paises,'Todos los paises');
+  fill('salia-area',areas,'Todas las areas');fill('salia-lider',lideres,'Todos los lideres');
+}
+function salGetFiltered(){
+  var data=DB.salida||[];
+  var lider=((document.getElementById('sald-lider')||{}).value||'');
+  var area=((document.getElementById('sald-area')||{}).value||'');
+  var puesto=((document.getElementById('sald-puesto')||{}).value||'');
+  var pais=((document.getElementById('sald-pais')||{}).value||'');
+  var mes=parseInt(((document.getElementById('sald-mes')||{}).value||'0'));
+  var q=parseInt(((document.getElementById('sald-q')||{}).value||'0'));
+  return data.filter(function(s){
+    if(lider&&s.lider!==lider)return false;
+    if(area&&s.area!==area)return false;
+    if(puesto&&s.puesto!==puesto)return false;
+    if(pais&&s.pais!==pais)return false;
+    if(mes||q){
+      var d=new Date(s.fechaBaja||s.fecha_reg||'2024-01-01');
+      var m=d.getMonth()+1;
+      if(mes&&m!==mes)return false;
+      if(q&&Math.ceil(m/3)!==q)return false;
+    }
+    return true;
+  });
+}
+function salRenderHistorial(){
+  var list=document.getElementById('sal-historial-list');if(!list)return;
+  var data=DB.salida||[];
+  var buscar=((document.getElementById('sal-buscar')||{}).value||'').toLowerCase();
+  var fT=((document.getElementById('sal-fil-tipo')||{}).value||'');
+  var fM=((document.getElementById('sal-fil-motivo')||{}).value||'');
+  var fil=data.filter(function(s){
+    if(buscar&&s.nombre.toLowerCase().indexOf(buscar)<0)return false;
+    if(fT&&s.tipo!==fT)return false;
+    if(fM&&s.motivo!==fM)return false;
+    return true;
+  });
+  if(!fil.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">Sin entrevistas'+(data.length?' con estos filtros.':'.')+'</div>';return;}
+  var isAdm=currentUser&&(currentUser.rol==='Administrador'||currentUser.rol==='HRBP');
+  list.innerHTML=fil.slice().reverse().map(function(s){
+    var sc=s.promedio>=4?'var(--grn)':s.promedio>=3?'var(--amb)':'var(--red)';
+    var tc=s.tipo==='Voluntaria'?'b-am':s.tipo==='Involuntaria'?'b-red':'b-gy';
+    var inits=_esc(s.nombre).split(' ').map(function(x){return x[0]||'';}).join('').slice(0,2).toUpperCase();
+    return '<div class="card mb10">'
+      +'<div class="fr mb8">'
+        +'<div class="av av-am">'+inits+'</div>'
+        +'<div class="f1"><div class="fw6 tsm">'+_esc(s.nombre)+'</div>'
+        +'<div class="th" style="font-size:11px">'+_esc(s.puesto)+' &middot; '+_esc(s.area)+' &middot; Lider: '+_esc(s.lider)+'</div></div>'
+        +'<div style="text-align:right"><div style="font-size:20px;font-weight:700;color:'+sc+'">'+s.promedio+'/5</div><div class="th" style="font-size:10px">Promedio</div></div>'
+      +'</div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">'
+        +'<span class="bdg '+tc+'">'+s.tipo+'</span>'
+        +'<span class="bdg b-gy">'+_esc(s.motivo)+'</span>'
+        +'<span class="bdg b-gy">Baja: '+s.fechaBaja+'</span>'
+        +(s.recontrat?'<span class="bdg '+(s.recontrat.indexOf('Si')===0?'b-gn':s.recontrat.indexOf('No')===0?'b-red':'b-am')+'">'+_esc(s.recontrat)+'</span>':'')
+      +'</div>'
+      +(s.comentColab?'<div class="th tsm" style="margin-bottom:6px;padding:8px 10px;background:var(--s2);border-radius:6px;font-style:italic">&ldquo;'+_esc(s.comentColab)+'&rdquo;</div>':'')
+      +(isAdm&&s.notasAdmin?'<div style="padding:8px 10px;background:#FEF3E2;border-radius:6px;border-left:3px solid var(--amb);font-size:12px"><b>Nota Admin:</b> '+_esc(s.notasAdmin)+'</div>':'')
+      +'<div style="margin-top:8px;display:flex;gap:6px">'
+        +'<button class="btn btn-gh btn-sm" onclick="salVerDetalle(\''+s.id+'\')">Ver detalle</button>'
+        +(isAdm?'<button class="btn btn-gh btn-sm" style="color:var(--red)" onclick="salEliminar(\''+s.id+'\')">Eliminar</button>':'')
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+function salEliminar(id){
+  if(!confirm('Eliminar esta entrevista?'))return;
+  DB.salida=(DB.salida||[]).filter(function(s){return s.id!==id;});
+  saveDB();salRenderHistorial();toast('Eliminada.');
+}
+function salVerDetalle(id){
+  var s=(DB.salida||[]).find(function(x){return x.id===id;});if(!s)return;
+  var isAdm=currentUser&&(currentUser.rol==='Administrador'||currentUser.rol==='HRBP');
+  var sh=SAL_PREGS.map(function(p){
+    var v=s.scores&&s.scores[p.id]||0;
+    var col=v>=4?'var(--grn)':v>=3?'var(--amb)':v>0?'var(--red)':'var(--hnt)';
+    return '<div class="fr mb6"><div class="f1 tsm">'+p.texto+'</div>'
+      +'<div style="display:flex;gap:3px">'
+      +[1,2,3,4,5].map(function(n){return '<div style="width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:'+(n<=v?col:'var(--s2)')+';color:'+(n<=v?'#fff':'var(--hnt)')+'">' +n+'</div>';}).join('')
+      +'</div></div>';
+  }).join('');
+  var m=document.getElementById('m-sal-det');
+  if(!m){m=document.createElement('div');m.id='m-sal-det';m.className='overlay';document.body.appendChild(m);}
+  m.innerHTML='<div class="modal" style="width:520px">'
+    +'<div class="modal-hdr"><div class="modal-title">Entrevista &mdash; '+_esc(s.nombre)+'</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-sal-det\')">&times;</button></div>'
+    +'<div style="background:var(--s2);border-radius:8px;padding:10px 14px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">'
+      +'<div><span class="th">Puesto:</span> <b>'+_esc(s.puesto)+'</b></div>'
+      +'<div><span class="th">Area:</span> <b>'+_esc(s.area)+'</b></div>'
+      +'<div><span class="th">Lider:</span> <b>'+_esc(s.lider)+'</b></div>'
+      +'<div><span class="th">Pais:</span> <b>'+_esc(s.pais)+'</b></div>'
+      +'<div><span class="th">Motivo:</span> <b>'+_esc(s.motivo)+'</b></div>'
+      +'<div><span class="th">Tipo:</span> <b>'+_esc(s.tipo)+'</b></div>'
+      +'<div><span class="th">Baja:</span> <b>'+_esc(s.fechaBaja)+'</b></div>'
+      +'<div><span class="th">Recontrat.:</span> <b>'+(s.recontrat||'No indicado')+'</b></div>'
+    +'</div>'
+    +'<div class="ctitle mb8">Evaluacion (Promedio: '+s.promedio+'/5)</div>'
+    +sh
+    +(s.comentColab?'<div class="ctitle mt12 mb6">Comentarios del colaborador</div><div class="th tsm" style="padding:8px 10px;background:var(--s2);border-radius:6px;font-style:italic">&ldquo;'+_esc(s.comentColab)+'&rdquo;</div>':'')
+    +(isAdm&&s.notasAdmin?'<div class="ctitle mt12 mb6">Notas internas Admin</div><div style="padding:8px 10px;background:#FEF3E2;border-radius:6px;border-left:3px solid var(--amb);font-size:12px">'+_esc(s.notasAdmin)+'</div>':'')
+    +'<div class="flex g8" style="margin-top:14px">'
+      +(isAdm?'<button class="btn btn-bl btn-sm" onclick="salEditarNotas(\''+id+'\')">Editar nota admin</button>':'')
+      +'<button class="btn btn-gh btn-sm" onclick="closeM(\'m-sal-det\')">Cerrar</button>'
+    +'</div></div>';
+  openM('m-sal-det');
+}
+function salEditarNotas(id){
+  var s=(DB.salida||[]).find(function(x){return x.id===id;});if(!s)return;
+  var n=prompt('Editar notas internas:',s.notasAdmin||'');
+  if(n===null)return;
+  s.notasAdmin=n.trim();saveDB();closeM('m-sal-det');salRenderHistorial();toast('Notas actualizadas.');
+}
+function salRenderDash(){
+  var cont=document.getElementById('sal-dash-content');if(!cont)return;
+  var data=salGetFiltered();
+  if(!data.length){cont.innerHTML='<div class="th tsm" style="padding:40px;text-align:center">Sin datos con los filtros seleccionados.</div>';return;}
+  var total=data.length;
+  var vol=data.filter(function(s){return s.tipo==='Voluntaria';}).length;
+  var pr=Math.round(data.reduce(function(a,s){return a+(s.promedio||0);},0)/total*10)/10;
+  var mot={};data.forEach(function(s){mot[s.motivo]=(mot[s.motivo]||0)+1;});
+  var lid={};data.forEach(function(s){lid[s.lider]=(lid[s.lider]||0)+1;});
+  var ar={};data.forEach(function(s){ar[s.area]=(ar[s.area]||0)+1;});
+  var recon=data.filter(function(s){return s.recontrat&&s.recontrat.indexOf('Si')===0;}).length;
+  var noRec=data.filter(function(s){return s.recontrat&&s.recontrat.indexOf('No')===0;}).length;
+  var qp={};SAL_PREGS.forEach(function(p){
+    var v=data.map(function(s){return s.scores&&s.scores[p.id]||0;}).filter(Boolean);
+    qp[p.id]=v.length?Math.round(v.reduce(function(a,b){return a+b;},0)/v.length*10)/10:0;
+  });
+  cont.innerHTML=
+    '<div class="g2" style="grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Total bajas</div><div style="font-size:28px;font-weight:700">'+total+'</div></div>'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Voluntarias</div><div style="font-size:28px;font-weight:700;color:var(--amb)">'+vol+'</div><div class="th" style="font-size:10px">'+Math.round(vol/total*100)+'% del total</div></div>'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Promedio exp.</div><div style="font-size:28px;font-weight:700;color:'+(pr>=4?'var(--grn)':pr>=3?'var(--amb)':'var(--red)')+'">'+pr+'</div><div class="th" style="font-size:10px">de 5.0</div></div>'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Recontratables</div><div style="font-size:28px;font-weight:700;color:var(--grn)">'+recon+'</div><div class="th" style="font-size:10px">No recom: '+noRec+'</div></div>'
+    +'</div>'
+    +'<div class="g2" style="gap:14px;margin-bottom:14px">'
+      +'<div class="card"><div class="ctitle mb10">Motivos de salida</div>'
+        +Object.keys(mot).sort(function(a,b){return mot[b]-mot[a];}).map(function(m){
+          var p=Math.round(mot[m]/total*100);
+          return '<div class="fr mb6" style="gap:8px"><div class="f1 tsm">'+_esc(m)+'</div>'
+            +'<div style="width:100px;height:6px;background:var(--s2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+p+'%;background:var(--amb);border-radius:4px"></div></div>'
+            +'<span class="bdg b-gy" style="font-size:10px">'+mot[m]+'</span></div>';
+        }).join('')
+      +'</div>'
+      +'<div class="card"><div class="ctitle mb10">Bajas por lider</div>'
+        +Object.keys(lid).sort(function(a,b){return lid[b]-lid[a];}).slice(0,8).map(function(l){
+          var p=Math.round(lid[l]/total*100);
+          return '<div class="fr mb6" style="gap:8px"><div class="f1 tsm">'+_esc(l)+'</div>'
+            +'<div style="width:80px;height:6px;background:var(--s2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+p+'%;background:var(--red);border-radius:4px"></div></div>'
+            +'<span class="bdg b-gy" style="font-size:10px">'+lid[l]+'</span></div>';
+        }).join('')
+      +'</div>'
+    +'</div>'
+    +'<div class="card mb14"><div class="ctitle mb10">Promedio por dimension</div>'
+      +SAL_PREGS.map(function(p){
+        var v=qp[p.id];var pct=Math.round(v/5*100);
+        var col=v>=4?'var(--grn)':v>=3?'var(--amb)':'var(--red)';
+        return '<div class="fr mb8" style="gap:10px"><div class="f1 tsm" style="max-width:260px">'+p.texto+'</div>'
+          +'<div style="flex:1;height:8px;background:var(--s2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px"></div></div>'
+          +'<span style="font-size:13px;font-weight:600;color:'+col+';min-width:28px;text-align:right">'+v+'</span></div>';
+      }).join('')
+    +'</div>'
+    +'<div class="card"><div class="ctitle mb10">Bajas por area</div><div style="display:flex;flex-wrap:wrap;gap:8px">'
+      +Object.keys(ar).map(function(a){
+        return '<div style="background:var(--s2);border-radius:8px;padding:10px 14px;text-align:center"><div style="font-size:22px;font-weight:700">'+ar[a]+'</div><div class="th tsm">'+_esc(a)+'</div></div>';
+      }).join('')
+    +'</div></div>';
+}
+function salGenerarIA(){
+  var cont=document.getElementById('sal-ia-result');if(!cont)return;
+  var data=DB.salida||[];
+  if(!data.length){toast('No hay entrevistas registradas.');return;}
+  var fA=((document.getElementById('salia-area')||{}).value||'');
+  var fL=((document.getElementById('salia-lider')||{}).value||'');
+  var fQ=parseInt(((document.getElementById('salia-q')||{}).value||'0'));
+  var filt=data.filter(function(s){
+    if(fA&&s.area!==fA)return false;
+    if(fL&&s.lider!==fL)return false;
+    if(fQ){var m=new Date(s.fechaBaja||'2024-01-01').getMonth()+1;if(Math.ceil(m/3)!==fQ)return false;}
+    return true;
+  });
+  if(!filt.length){toast('Sin datos con estos filtros.');return;}
+  cont.innerHTML='<div style="padding:40px;text-align:center"><div class="th tsm">Analizando '+filt.length+' entrevistas con IA...</div></div>';
+  var mot={};filt.forEach(function(s){mot[s.motivo]=(mot[s.motivo]||0)+1;});
+  var lid={};filt.forEach(function(s){lid[s.lider]=(lid[s.lider]||0)+1;});
+  var ar={};filt.forEach(function(s){ar[s.area]=(ar[s.area]||0)+1;});
+  var pr=Math.round(filt.reduce(function(a,s){return a+(s.promedio||0);},0)/filt.length*10)/10;
+  var qp={};SAL_PREGS.forEach(function(p){
+    var v=filt.map(function(s){return s.scores&&s.scores[p.id]||0;}).filter(Boolean);
+    qp[p.texto]=v.length?Math.round(v.reduce(function(a,b){return a+b;},0)/v.length*10)/10:0;
+  });
+  var comts=filt.filter(function(s){return s.comentColab;}).map(function(s){return s.nombre+': '+s.comentColab;}).join('; ');
+  var notas=filt.filter(function(s){return s.notasAdmin;}).map(function(s){return s.nombre+': '+s.notasAdmin;}).join('; ');
+  var prompt='Eres analista de RRHH experto. Analiza datos de entrevistas de salida y genera reporte ejecutivo en espanol con: 1)Resumen ejecutivo 2)Principales hallazgos (5 puntos) 3)Factores de riesgo 4)Recomendaciones (minimo 4) 5)Alertas criticas.\n\nDATOS:\nTotal: '+filt.length+'\nPromedio: '+pr+'/5\nMotivos: '+JSON.stringify(mot)+'\nPor lider: '+JSON.stringify(lid)+'\nPor area: '+JSON.stringify(ar)+'\nDimensiones: '+JSON.stringify(qp)+(comts?'\nComentarios: '+comts:'')+(notas?'\nNotas RRHH: '+notas:'')+'\n\nUsa ## para secciones y - para bullets.';
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})
+  }).then(function(r){return r.json();})
+  .then(function(d){
+    var txt=(d.content&&d.content[0]&&d.content[0].text)||'Sin respuesta.';
+    var html=txt
+      .replace(/## (.+)/g,'<div class="ctitle" style="margin-top:14px;margin-bottom:6px">$1</div>')
+      .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+      .replace(/^- (.+)$/gm,'<div style="display:flex;gap:6px;margin-bottom:4px"><span style="color:var(--blu)">&#8226;</span><span>$1</span></div>')
+      .replace(/\n\n/g,'<br>').replace(/\n/g,'');
+    cont.innerHTML='<div class="card">'
+      +'<div class="sh mb12"><div><div class="fw6 tsm">Reporte IA &mdash; '+filt.length+' entrevistas</div>'
+      +'<div class="th" style="font-size:11px">Generado el '+new Date().toLocaleDateString('es-MX')+'</div></div></div>'
+      +'<div style="font-size:13px;line-height:1.7">'+html+'</div></div>';
+  }).catch(function(){
+    cont.innerHTML='<div class="card"><div class="th tsm" style="padding:20px;text-align:center">Error al conectar con la IA.</div></div>';
+  });
+}
+function renderSalida(){
+  salSyncSelects();salRenderHistorial();salSyncFilters();salRenderDash();
+}
+
+
+// ============================================================
+// MODULO EVALUACION 360 / 180 / 90
+// ============================================================
+
+// - Plantillas predefinidas -
+var E360_TEMPLATES = [
+  {nombre:'360 grados - Competencias clave', tipo:'360 grados', escala:'5',
+   preguntas:[
+     'Demuestra comunicacion efectiva con su equipo y stakeholders',
+     'Toma iniciativa y propone soluciones ante los problemas',
+     'Colabora y apoya a sus companeros de equipo',
+     'Cumple con los objetivos y plazos establecidos',
+     'Muestra disposicion para aprender y adaptarse al cambio',
+     'Lidera con el ejemplo y actua con integridad',
+     'Gestiona efectivamente su tiempo y prioridades'
+   ]},
+  {nombre:'180 grados - Lider / Colaborador', tipo:'180 grados', escala:'5',
+   preguntas:[
+     'Comunica claramente las expectativas y objetivos',
+     'Provee retroalimentacion constructiva y oportuna',
+     'Apoya el desarrollo profesional del equipo',
+     'Toma decisiones de manera efectiva',
+     'Crea un ambiente de trabajo positivo y motivador'
+   ]},
+  {nombre:'90 grados - Evaluacion directa', tipo:'90 grados', escala:'5',
+   preguntas:[
+     'Cumple con las responsabilidades asignadas a su puesto',
+     'Muestra actitud positiva y disposicion de trabajo',
+     'Colabora con el equipo y apoya a sus companeros',
+     'Demuestra los conocimientos necesarios para su rol',
+     'Identifica areas de mejora y trabaja en ellas'
+   ]}
+];
+
+var _e360Preguntas = [];
+
+function e360Init(){
+  // Render templates
+  var wrap = document.getElementById('e360-templates');
+  if(wrap){
+    wrap.innerHTML = E360_TEMPLATES.map(function(t,i){
+      return '<div class="card" style="margin-bottom:8px;padding:12px 14px;cursor:pointer;border:1px solid var(--bdr)" onclick="e360UsarTemplate('+i+')">'
+        +'<div class="fw6 tsm">'+t.nombre+'</div>'
+        +'<div class="th" style="font-size:11px;margin-top:3px">'+t.tipo+' &middot; '+t.preguntas.length+' preguntas &middot; Escala '+t.escala+'</div>'
+      +'</div>';
+    }).join('');
+  }
+  // Init preguntas if empty
+  if(_e360Preguntas.length===0) e360AddPregunta();
+  e360RenderPreguntas();
+  e360SyncSelects();
+}
+
+function e360AddPregunta(){
+  _e360Preguntas.push('');
+  e360RenderPreguntas();
+}
+
+function e360RenderPreguntas(){
+  var list = document.getElementById('e360-preguntas-list');
+  if(!list) return;
+  list.innerHTML = _e360Preguntas.map(function(p,i){
+    return '<div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">'
+      +'<span class="th tsm" style="min-width:20px;text-align:right">'+(i+1)+'.</span>'
+      +'<input type="text" class="fc" value="'+_esc(p)+'" placeholder="Escribe la pregunta..." '
+      +'onchange="_e360Preguntas['+i+']=this.value" style="flex:1">'
+      +'<button onclick="_e360Preguntas.splice('+i+',1);e360RenderPreguntas()" style="background:none;border:none;color:var(--hnt);cursor:pointer;font-size:16px;padding:0 4px">&times;</button>'
+    +'</div>';
+  }).join('');
+}
+
+function e360UsarTemplate(idx){
+  var t = E360_TEMPLATES[idx];
+  document.getElementById('e360-nombre').value = t.nombre;
+  document.getElementById('e360-tipo').value = t.tipo;
+  document.getElementById('e360-escala').value = t.escala;
+  _e360Preguntas = t.preguntas.slice();
+  e360RenderPreguntas();
+  stab(document.querySelector('#pg-eval360 .tab'), 't360-crear');
+}
+
+function e360Guardar(){
+  var nombre = (document.getElementById('e360-nombre').value||'').trim();
+  if(!nombre){toast('Escribe el nombre de la evaluacion.');return;}
+  var preguntas = _e360Preguntas.filter(function(p){return p.trim();});
+  if(!preguntas.length){toast('Agrega al menos una pregunta.');return;}
+  var deadline = document.getElementById('e360-deadline').value||'';
+  if(!deadline){toast('Selecciona la fecha limite.');return;}
+  if(!Array.isArray(DB.eval360)) DB.eval360=[];
+  var eval360 = {
+    id: 'ev360_'+Date.now(),
+    nombre: nombre,
+    tipo: document.getElementById('e360-tipo').value,
+    desc: (document.getElementById('e360-desc').value||'').trim(),
+    escala: document.getElementById('e360-escala').value,
+    preguntas: preguntas,
+    deadline: deadline,
+    creado: new Date().toISOString().slice(0,10),
+    asignaciones: [],
+    respuestas: []
+  };
+  DB.eval360.push(eval360);
+  saveDB();
+  // Reset form
+  document.getElementById('e360-nombre').value='';
+  document.getElementById('e360-desc').value='';
+  document.getElementById('e360-deadline').value='';
+  _e360Preguntas=[''];
+  e360RenderPreguntas();
+  e360SyncSelects();
+  toast('Evaluacion "'+nombre+'" guardada.');
+}
+
+function e360SyncSelects(){
+  var evals = DB.eval360||[];
+  var colabs = DB.colabs||[];
+  var areas = [...new Set(colabs.map(function(c){return c.area;}).filter(Boolean))];
+  var lideres = [...new Set(colabs.map(function(c){return c.lider;}).filter(Boolean))];
+
+  // Fill eval selects
+  ['e360-sel-eval','e360-tmpl-eval','e360-resp-fil','e360-res-eval'].forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    var v=el.value;
+    var empty = (id==='e360-resp-fil'||id==='e360-res-eval')
+      ? '<option value="">Todas las evaluaciones</option>'
+      : '<option value="">-- Seleccionar --</option>';
+    el.innerHTML=empty+evals.map(function(e){return '<option value="'+e.id+'">'+_esc(e.nombre)+'</option>';}).join('');
+    if(v)el.value=v;
+  });
+
+  // Fill colab selects
+  ['e360-man-evaluado','e360-res-colab'].forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    var v=el.value;
+    var empty=(id==='e360-res-colab')?'<option value="">Todos los colaboradores</option>':'<option value="">-- Seleccionar --</option>';
+    el.innerHTML=empty+colabs.map(function(c,i){return '<option value="'+i+'">'+_esc(c.nombre)+'</option>';}).join('');
+    if(v)el.value=v;
+  });
+
+  // Evaluadores checkboxes
+  var evWrap = document.getElementById('e360-man-evaluadores');
+  if(evWrap){
+    evWrap.innerHTML = colabs.map(function(c,i){
+      return '<label style="display:flex;gap:6px;align-items:center;margin-bottom:4px;font-size:12px;cursor:pointer">'
+        +'<input type="checkbox" value="'+i+'"> '+_esc(c.nombre)+' ('+_esc(c.puesto||'-')+')</label>';
+    }).join('');
+  }
+
+  // Area & lider filters
+  var areaEl=document.getElementById('e360-fil-area');
+  if(areaEl){areaEl.innerHTML='<option value="">Todas las areas</option>'+areas.map(function(a){return '<option>'+_esc(a)+'</option>';}).join('');}
+  var liderEl=document.getElementById('e360-fil-lider');
+  if(liderEl){liderEl.innerHTML='<option value="">Todos los lideres</option>'+lideres.map(function(l){return '<option>'+_esc(l)+'</option>';}).join('');}
+
+  e360RenderPendientes();
+  e360RenderResultados();
+}
+
+function e360OnSelEval(){
+  var evalId = (document.getElementById('e360-sel-eval')||{}).value||'';
+  var info = document.getElementById('e360-sel-info');
+  if(!info) return;
+  if(!evalId){info.style.display='none';return;}
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});
+  if(!ev){info.style.display='none';return;}
+  info.style.display='block';
+  info.innerHTML='<div style="display:flex;gap:16px;flex-wrap:wrap">'
+    +'<div><span class="th">Tipo:</span> <b>'+_esc(ev.tipo)+'</b></div>'
+    +'<div><span class="th">Preguntas:</span> <b>'+ev.preguntas.length+'</b></div>'
+    +'<div><span class="th">Escala:</span> <b>'+_esc(ev.escala)+'</b></div>'
+    +'<div><span class="th">Deadline:</span> <b>'+_esc(ev.deadline)+'</b></div>'
+    +'<div><span class="th">Asignaciones:</span> <b>'+ev.asignaciones.length+'</b></div>'
+    +'</div>';
+  e360PreviewColabs();
+}
+
+function e360PreviewColabs(){
+  var evalId = (document.getElementById('e360-sel-eval')||{}).value||'';
+  var fArea = (document.getElementById('e360-fil-area')||{}).value||'';
+  var fLider = (document.getElementById('e360-fil-lider')||{}).value||'';
+  var dir = (document.getElementById('e360-direccion')||{}).value||'360';
+  var colabs = (DB.colabs||[]).filter(function(c){
+    if(fArea && c.area!==fArea) return false;
+    if(fLider && c.lider!==fLider) return false;
+    return true;
+  });
+  var wrap = document.getElementById('e360-preview-colabs');
+  if(!wrap) return;
+  if(!evalId){wrap.innerHTML='<div class="th tsm" style="padding:8px 0;font-size:11px">Selecciona una evaluacion primero.</div>';return;}
+  if(!colabs.length){wrap.innerHTML='<div class="th tsm" style="padding:8px 0;font-size:11px">Sin colaboradores con estos filtros.</div>';return;}
+  wrap.innerHTML='<div class="th tsm mb6" style="font-size:11px">Se asignara a:</div>'
+    +colabs.map(function(c){
+      var ev=''; var label='';
+      if(dir==='360') ev='Autoevaluacion + Lider + Pares';
+      else if(dir==='180') ev='Autoevaluacion + Lider';
+      else ev='Evaluacion del lider';
+      return '<div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;font-size:11px">'
+        +'<span style="color:var(--grn)">&#10003;</span>'
+        +'<span class="fw6">'+_esc(c.nombre)+'</span>'
+        +'<span class="th">&mdash; '+ev+'</span>'
+      +'</div>';
+    }).join('');
+}
+
+function e360LanzarAuto(){
+  var evalId = (document.getElementById('e360-sel-eval')||{}).value||'';
+  if(!evalId){toast('Selecciona una evaluacion.');return;}
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});
+  if(!ev){return;}
+  var fArea = (document.getElementById('e360-fil-area')||{}).value||'';
+  var fLider = (document.getElementById('e360-fil-lider')||{}).value||'';
+  var dir = (document.getElementById('e360-direccion')||{}).value||'360';
+  var colabs = DB.colabs||[];
+  var targets = colabs.filter(function(c,i){
+    if(fArea && c.area!==fArea) return false;
+    if(fLider && c.lider!==fLider) return false;
+    return true;
+  });
+  if(!targets.length){toast('Sin colaboradores con estos filtros.');return;}
+  var creadas=0;
+  targets.forEach(function(c,relIdx){
+    var ci = colabs.indexOf(c);
+    var liderIdx = colabs.findIndex(function(x){return x.nombre===c.lider;});
+    // Build evaluators list
+    var evaluadores = [];
+    if(dir==='360'||dir==='180'){
+      evaluadores.push({ci:ci, rol:'autoevaluacion'});
+      if(liderIdx>=0) evaluadores.push({ci:liderIdx, rol:'lider'});
+    }
+    if(dir==='360'){
+      // Add peers (same area, different person)
+      colabs.forEach(function(p,pi){
+        if(pi!==ci && p.area===c.area && pi!==liderIdx){
+          evaluadores.push({ci:pi, rol:'par'});
+        }
+      });
+    }
+    if(dir==='90'){
+      if(liderIdx>=0) evaluadores.push({ci:liderIdx, rol:'lider'});
+    }
+    // Create assignment
+    var existing = ev.asignaciones.find(function(a){return a.evaluadoCi===ci;});
+    if(!existing){
+      ev.asignaciones.push({
+        evaluadoCi: ci,
+        evaluadores: evaluadores,
+        lanzado: new Date().toISOString().slice(0,10),
+        completado: false
+      });
+      creadas++;
+    }
+  });
+  saveDB();
+  toast('Evaluacion lanzada para '+creadas+' colaboradores.');
+  e360SyncSelects();
+  e360OnSelEval();
+}
+
+function e360LanzarManual(){
+  var evalId = (document.getElementById('e360-sel-eval')||{}).value||'';
+  if(!evalId){toast('Selecciona una evaluacion.');return;}
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});
+  if(!ev) return;
+  var evaluadoIdx = parseInt((document.getElementById('e360-man-evaluado')||{}).value||'');
+  if(isNaN(evaluadoIdx)){toast('Selecciona el colaborador a evaluar.');return;}
+  var checkboxes = document.querySelectorAll('#e360-man-evaluadores input[type=checkbox]:checked');
+  var evaluadores = Array.from(checkboxes).map(function(cb){
+    return {ci:parseInt(cb.value), rol:'evaluador'};
+  });
+  if(!evaluadores.length){toast('Selecciona al menos un evaluador.');return;}
+  evaluadores.unshift({ci:evaluadoIdx, rol:'autoevaluacion'});
+  var existing = ev.asignaciones.find(function(a){return a.evaluadoCi===evaluadoIdx;});
+  if(existing){
+    // Merge evaluadores
+    evaluadores.forEach(function(ev2){
+      if(!existing.evaluadores.find(function(e){return e.ci===ev2.ci;})){
+        existing.evaluadores.push(ev2);
+      }
+    });
+  } else {
+    ev.asignaciones.push({
+      evaluadoCi:evaluadoIdx, evaluadores:evaluadores,
+      lanzado:new Date().toISOString().slice(0,10), completado:false
+    });
+  }
+  saveDB();
+  toast('Evaluacion asignada manualmente.');
+  e360SyncSelects();
+}
+
+function e360RenderPendientes(){
+  var list = document.getElementById('e360-pendientes-list');if(!list)return;
+  var evals = DB.eval360||[];
+  var colabs = DB.colabs||[];
+  var filEval = (document.getElementById('e360-resp-fil')||{}).value||'';
+  var isAdmin = currentUser&&(currentUser.rol==='Administrador'||currentUser.rol==='HRBP');
+  var isLider = currentUser&&currentUser.rol==='Lider';
+  var myNombre = currentUser&&currentUser.nombre;
+  var myIdx = colabs.findIndex(function(c){return c.nombre===myNombre||c.email===(currentUser&&currentUser.email);});
+  
+  var pendientes = [];
+  evals.forEach(function(ev){
+    if(filEval && ev.id!==filEval) return;
+    ev.asignaciones.forEach(function(asgn){
+      asgn.evaluadores.forEach(function(evalr){
+        // Show if: admin sees all, lider sees their area, colab sees their own
+        var show = isAdmin || (isLider&&colabs[asgn.evaluadoCi]&&colabs[asgn.evaluadoCi].lider===myNombre) || evalr.ci===myIdx;
+        if(!show) return;
+        // Check if already answered
+        var answered = ev.respuestas.some(function(r){return r.evalId===ev.id&&r.evaluadoCi===asgn.evaluadoCi&&r.evaluadorCi===evalr.ci;});
+        if(!answered){
+          pendientes.push({ev:ev, asgn:asgn, evalr:evalr});
+        }
+      });
+    });
+  });
+
+  if(!pendientes.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">Sin evaluaciones pendientes.</div>';return;}
+  list.innerHTML=pendientes.map(function(item){
+    var evaluado = colabs[item.asgn.evaluadoCi];
+    var evaluador = colabs[item.evalr.ci];
+    if(!evaluado||!evaluador) return '';
+    return '<div class="card mb10">'
+      +'<div class="fr mb6">'
+        +'<div class="f1">'
+          +'<div class="fw6 tsm">'+_esc(item.ev.nombre)+'</div>'
+          +'<div class="th" style="font-size:11px">Evaluado: <b>'+_esc(evaluado.nombre)+'</b> &middot; Rol: '+_esc(item.evalr.rol)+'</div>'
+          +'<div class="th" style="font-size:11px">Evaluador: <b>'+_esc(evaluador.nombre)+'</b> &middot; Limite: '+_esc(item.ev.deadline)+'</div>'
+        +'</div>'
+        +'<span class="bdg b-am">Pendiente</span>'
+      +'</div>'
+      +'<button class="btn btn-bl btn-sm" onclick="e360AbrirFormResp(\''+item.ev.id+'\','+item.asgn.evaluadoCi+','+item.evalr.ci+')">Responder</button>'
+    +'</div>';
+  }).join('');
+}
+
+function e360AbrirFormResp(evalId, evaluadoCi, evaluadorCi){
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});
+  if(!ev) return;
+  var colabs=DB.colabs||[];
+  var evaluado=colabs[evaluadoCi];
+  var evaluador=colabs[evaluadorCi];
+  if(!evaluado||!evaluador) return;
+  var isNum = ev.escala!=='texto';
+  var m=document.getElementById('m-e360-resp');
+  if(!m){m=document.createElement('div');m.id='m-e360-resp';m.className='overlay';document.body.appendChild(m);}
+  m.innerHTML='<div class="modal" style="width:540px">'
+    +'<div class="modal-hdr"><div class="modal-title">'+_esc(ev.nombre)+'</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-e360-resp\')">&times;</button></div>'
+    +'<div style="background:var(--s2);border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:12px">'
+      +'<span class="th">Evaluando a:</span> <b>'+_esc(evaluado.nombre)+'</b>'
+      +' &middot; <span class="th">Tu rol:</span> <b>'+_esc(ev.asignaciones.find(function(a){return a.evaluadoCi===evaluadoCi;}).evaluadores.find(function(e){return e.ci===evaluadorCi;}).rol)+'</b>'
+    +'</div>'
+    +ev.preguntas.map(function(p,pi){
+      return '<div class="fg"><label class="fl" style="font-size:11px">'+(pi+1)+'. '+_esc(p)+'</label>'
+        +(ev.escala==='texto'
+          ?'<textarea class="fc" id="e360r-p-'+pi+'" rows="2" placeholder="Tu respuesta..."></textarea>'
+          :ev.escala==='mixto'
+            ?'<div style="display:flex;gap:4px;margin-bottom:4px" id="e360r-p-'+pi+'">'
+              +[1,2,3,4,5].map(function(n){return '<button type="button" class="rBtn" data-pi="'+pi+'" data-v="'+n+'" onclick="e360RateResp(this)">'+n+'</button>';}).join('')
+              +'</div><textarea class="fc" id="e360r-c-'+pi+'" rows="1" placeholder="Comentario (opcional)..."></textarea>'
+            :'<div style="display:flex;gap:4px" id="e360r-p-'+pi+'">'
+              +Array.from({length:parseInt(ev.escala)||5},function(_,i){var n=i+1;return '<button type="button" class="rBtn" data-pi="'+pi+'" data-v="'+n+'" onclick="e360RateResp(this)">'+n+'</button>';}).join('')
+            +'</div>'
+        )+'</div>';
+    }).join('')
+    +'<div class="fg"><label class="fl">Comentario general (opcional)</label>'
+    +'<textarea class="fc" id="e360r-coment" rows="2" placeholder="Observaciones adicionales..."></textarea></div>'
+    +'<div class="flex g8">'
+    +'<button class="btn btn-bl" data-eid="'+evalId+'" data-evc="'+evaluadoCi+'" data-erc="'+evaluadorCi+'" onclick="e360GuardarRespuesta(this)">Guardar respuesta</button>'
+    +'<button class="btn btn-gh" onclick="closeM(\'m-e360-resp\')">Cancelar</button>'
+    +'</div>'
+  +'</div>';
+  openM('m-e360-resp');
+}
+
+var _e360RespRatings={};
+function e360RateResp(btn){
+  var pi=parseInt(btn.dataset.pi);var v=parseInt(btn.dataset.v);
+  if(!_e360RespRatings) _e360RespRatings={};
+  _e360RespRatings[pi]=v;
+  var row=btn.parentElement;
+  if(row)row.querySelectorAll('.rBtn').forEach(function(b){b.classList.toggle('sel',parseInt(b.dataset.v)===v);});
+}
+
+function e360GuardarRespuesta(btn){
+  var evalId=btn.dataset.eid;
+  var evaluadoCi=parseInt(btn.dataset.evc);
+  var evaluadorCi=parseInt(btn.dataset.erc);
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});if(!ev)return;
+  var respuestas={};
+  var comentarios={};
+  ev.preguntas.forEach(function(p,pi){
+    if(ev.escala==='texto'){
+      var ta=document.getElementById('e360r-p-'+pi);
+      respuestas[pi]=(ta&&ta.value)||'';
+    } else {
+      respuestas[pi]=_e360RespRatings[pi]||0;
+      if(ev.escala==='mixto'){
+        var ta2=document.getElementById('e360r-c-'+pi);
+        comentarios[pi]=(ta2&&ta2.value)||'';
+      }
+    }
+  });
+  var coment=(document.getElementById('e360r-coment')||{}).value||'';
+  var hasData=Object.values(respuestas).some(function(v){return v;});
+  if(!hasData){toast('Completa al menos una respuesta.');return;}
+  ev.respuestas.push({
+    evalId:evalId, evaluadoCi:evaluadoCi, evaluadorCi:evaluadorCi,
+    respuestas:respuestas, comentarios:comentarios, coment:coment,
+    fecha:new Date().toISOString().slice(0,10)
+  });
+  _e360RespRatings={};
+  // Check if all evaluadores for this evaluado have responded
+  var asgn=ev.asignaciones.find(function(a){return a.evaluadoCi===evaluadoCi;});
+  if(asgn){
+    var allDone=asgn.evaluadores.every(function(evalr){
+      return ev.respuestas.some(function(r){return r.evalId===evalId&&r.evaluadoCi===evaluadoCi&&r.evaluadorCi===evalr.ci;});
+    });
+    if(allDone) asgn.completado=true;
+  }
+  saveDB();closeM('m-e360-resp');
+  toast('Respuesta guardada.');
+  e360RenderPendientes();e360RenderResultados();
+}
+
+function e360RenderResultados(){
+  var wrap=document.getElementById('e360-resultados-wrap');if(!wrap)return;
+  var evals=DB.eval360||[];
+  var colabs=DB.colabs||[];
+  var filEval=(document.getElementById('e360-res-eval')||{}).value||'';
+  var filColab=(document.getElementById('e360-res-colab')||{}).value||'';
+  var evalsFil=evals.filter(function(e){return !filEval||e.id===filEval;});
+  if(!evalsFil.length){wrap.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">Sin evaluaciones.</div>';return;}
+  var html='';
+  evalsFil.forEach(function(ev){
+    var asigns=ev.asignaciones.filter(function(a){return !filColab||String(a.evaluadoCi)===filColab;});
+    if(!asigns.length) return;
+    html+='<div class="ctitle mb8">'+_esc(ev.nombre)+' &mdash; '+_esc(ev.tipo)+'</div>';
+    asigns.forEach(function(asgn){
+      var evaluado=colabs[asgn.evaluadoCi];if(!evaluado)return;
+      var respCount=ev.respuestas.filter(function(r){return r.evalId===ev.id&&r.evaluadoCi===asgn.evaluadoCi;}).length;
+      var total=asgn.evaluadores.length;
+      html+='<div class="card mb10">'
+        +'<div class="fr mb10">'
+          +'<div class="av av-bl">'+(evaluado.initials||'??')+'</div>'
+          +'<div class="f1">'
+            +'<div class="fw6 tsm">'+_esc(evaluado.nombre)+'</div>'
+            +'<div class="th" style="font-size:11px">'+_esc(evaluado.puesto||'-')+' &middot; '+_esc(ev.tipo)+'</div>'
+          +'</div>'
+          +'<span class="bdg '+(asgn.completado?'b-gn':'b-am')+'">'+(asgn.completado?'Completo':''+respCount+'/'+total+' resp.')+'</span>'
+        +'</div>';
+      if(ev.escala!=='texto'){
+        // Per-question averages grouped by role
+        var byRol={};
+        ev.respuestas.filter(function(r){return r.evalId===ev.id&&r.evaluadoCi===asgn.evaluadoCi;}).forEach(function(r){
+          var evalrAsgn=asgn.evaluadores.find(function(e){return e.ci===r.evaluadorCi;});
+          var rol=evalrAsgn?evalrAsgn.rol:'evaluador';
+          if(!byRol[rol])byRol[rol]=[];
+          byRol[rol].push(r);
+        });
+        Object.keys(byRol).forEach(function(rol){
+          var resps=byRol[rol];
+          var maxScale=parseInt(ev.escala)||5;
+          html+='<div class="th tsm mb6" style="text-transform:capitalize">'+rol+' ('+resps.length+' respuesta'+( resps.length!==1?'s':'')+')</div>';
+          ev.preguntas.forEach(function(preg,pi){
+            var vals=resps.map(function(r){return Number(r.respuestas[pi])||0;}).filter(Boolean);
+            var avg=vals.length?Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length*10)/10:null;
+            var pct=avg?(avg/maxScale*100):0;
+            var col=pct>=80?'var(--grn)':pct>=60?'var(--amb)':'var(--red)';
+            html+='<div class="fr mb4" style="gap:8px">'
+              +'<div class="f1 tsm" style="max-width:260px;font-size:11px">'+_esc(preg)+'</div>'
+              +(avg!==null
+                ?'<div style="width:120px;height:6px;background:var(--s2);border-radius:4px;overflow:hidden">'
+                  +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px"></div></div>'
+                  +'<span style="font-size:12px;font-weight:600;color:'+col+';min-width:28px;text-align:right">'+avg+'</span>'
+                :'<span class="th" style="font-size:11px">Sin resp.</span>'
+              )
+            +'</div>';
+          });
+        });
+      } else {
+        // Text responses
+        ev.respuestas.filter(function(r){return r.evalId===ev.id&&r.evaluadoCi===asgn.evaluadoCi;}).forEach(function(r){
+          var evalrC=colabs[r.evaluadorCi];
+          html+='<div style="background:var(--s2);border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:12px">'
+            +'<div class="fw6 tsm mb4">'+(evalrC?_esc(evalrC.nombre):'?')+'</div>'
+            +ev.preguntas.map(function(p,pi){
+              return '<div class="th tsm mb2">'+_esc(p)+'</div><div class="mb4">'+_esc(r.respuestas[pi]||'-')+'</div>';
+            }).join('')
+          +'</div>';
+        });
+      }
+      // Comments
+      var comentsArr=ev.respuestas.filter(function(r){return r.evalId===ev.id&&r.evaluadoCi===asgn.evaluadoCi&&r.coment;});
+      if(comentsArr.length){
+        html+='<div class="th tsm mb4" style="margin-top:8px">Comentarios generales:</div>';
+        comentsArr.forEach(function(r){
+          var ec=colabs[r.evaluadorCi];
+          html+='<div class="th tsm" style="padding:6px 10px;background:var(--s2);border-radius:6px;margin-bottom:4px;font-style:italic">'
+            +(ec?'<b>'+_esc(ec.nombre)+':</b> ':'')+_esc(r.coment)
+          +'</div>';
+        });
+      }
+      html+='</div>';
+    });
+  });
+  wrap.innerHTML=html||'<div class="th tsm" style="padding:24px;text-align:center">Sin resultados aun.</div>';
+}
+
+// - CARGA MASIVA -
+function e360DescargarPlantilla(){
+  var evalId=(document.getElementById('e360-tmpl-eval')||{}).value||'';
+  if(!evalId){toast('Selecciona una evaluacion.');return;}
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});if(!ev)return;
+  var colabs=DB.colabs||[];
+  var headers=['evaluado','evaluador','relacion'].concat(ev.preguntas.map(function(_,i){return 'pregunta_'+(i+1);})).concat(['comentario']);
+  var exampleRows=[];
+  if(colabs.length>=2){
+    var c0=colabs[0];var c1=colabs[1];
+    var vals=ev.preguntas.map(function(){return ev.escala==='texto'?'Respuesta de ejemplo':'4';});
+    exampleRows.push([c0.nombre,c1.nombre,'lider'].concat(vals).concat(['Buen desempeno general']));
+    exampleRows.push([c0.nombre,c0.nombre,'autoevaluacion'].concat(vals).concat(['Mi propia perspectiva']));
+  }
+  var csv=headers.join(',')+'\n'+exampleRows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download='plantilla_eval360_'+ev.nombre.replace(/\s+/g,'_')+'.csv';
+  link.click();
+  toast('Plantilla descargada.');
+}
+
+function e360HandleDrop(e){
+  e.preventDefault();
+  document.getElementById('e360-upload-dz').style.background='var(--bg)';
+  var f=e.dataTransfer.files[0];
+  if(f){document.getElementById('e360-file-name').textContent=f.name;_e360ReadFile(f);}
+}
+function e360FileSelected(inp){
+  var f=inp.files[0];
+  if(f){document.getElementById('e360-file-name').textContent=f.name;_e360ReadFile(f);}
+}
+var _e360ParsedRows=[];
+function _e360ReadFile(file){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var rows=_parsePerfText(e.target.result);
+    if(!rows||!rows.length){toast('Archivo vacio o sin formato valido.');return;}
+    _e360ParsedRows=rows;
+    var prev=document.getElementById('e360-upload-preview');
+    if(prev){
+      var headers=rows[0];var data=rows.slice(1);
+      prev.innerHTML='<div class="th tsm mb6" style="font-size:11px">Vista previa ('+data.length+' filas):</div>'
+        +'<div style="overflow-x:auto"><table style="width:100%;font-size:11px;border-collapse:collapse">'
+          +'<tr>'+headers.map(function(h){return '<th style="background:var(--s2);padding:4px 8px;text-align:left;border:1px solid var(--bdr)">'+_esc(h)+'</th>';}).join('')+'</tr>'
+          +data.slice(0,5).map(function(r){return '<tr>'+r.map(function(v){return '<td style="padding:4px 8px;border:1px solid var(--bdr)">'+_esc(v)+'</td>';}).join('')+'</tr>';}).join('')
+        +'</table></div>'
+        +(data.length>5?'<div class="th tsm" style="font-size:10px;margin-top:4px">...y '+(data.length-5)+' filas mas</div>':'');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function e360ImportarCSV(){
+  var evalId=(document.getElementById('e360-tmpl-eval')||{}).value||'';
+  if(!evalId){toast('Selecciona la evaluacion a la que pertenece este archivo.');return;}
+  var ev=(DB.eval360||[]).find(function(e){return e.id===evalId;});if(!ev)return;
+  if(!_e360ParsedRows||_e360ParsedRows.length<2){toast('Carga un archivo primero.');return;}
+  var headers=_e360ParsedRows[0].map(function(h){return h.toLowerCase().trim();});
+  var data=_e360ParsedRows.slice(1);
+  var colabs=DB.colabs||[];
+  var imported=0;var skipped=0;
+  data.forEach(function(row){
+    var evaluadoNombre=(row[headers.indexOf('evaluado')]||'').trim();
+    var evaluadorNombre=(row[headers.indexOf('evaluador')]||'').trim();
+    var relacion=(row[headers.indexOf('relacion')]||'evaluador').trim();
+    var coment=(row[headers.indexOf('comentario')]||'').trim();
+    var evaluadoCi=colabs.findIndex(function(c){return c.nombre===evaluadoNombre;});
+    var evaluadorCi=colabs.findIndex(function(c){return c.nombre===evaluadorNombre;});
+    if(evaluadoCi<0||evaluadorCi<0){skipped++;return;}
+    var respuestas={};
+    ev.preguntas.forEach(function(p,pi){
+      var col='pregunta_'+(pi+1);
+      var colidx=headers.indexOf(col);
+      respuestas[pi]=colidx>=0?(row[colidx]||''):'';
+    });
+    // Ensure assignment exists
+    var asgn=ev.asignaciones.find(function(a){return a.evaluadoCi===evaluadoCi;});
+    if(!asgn){
+      asgn={evaluadoCi:evaluadoCi,evaluadores:[],lanzado:new Date().toISOString().slice(0,10),completado:false};
+      ev.asignaciones.push(asgn);
+    }
+    if(!asgn.evaluadores.find(function(e){return e.ci===evaluadorCi;})){
+      asgn.evaluadores.push({ci:evaluadorCi,rol:relacion});
+    }
+    // Check duplicate
+    var dup=ev.respuestas.some(function(r){return r.evalId===evalId&&r.evaluadoCi===evaluadoCi&&r.evaluadorCi===evaluadorCi;});
+    if(!dup){
+      ev.respuestas.push({evalId:evalId,evaluadoCi:evaluadoCi,evaluadorCi:evaluadorCi,respuestas:respuestas,comentarios:{},coment:coment,fecha:new Date().toISOString().slice(0,10)});
+      imported++;
+    } else skipped++;
+  });
+  saveDB();
+  toast('Importados: '+imported+' | Omitidos (duplicados o sin match): '+skipped);
+  _e360ParsedRows=[];
+  document.getElementById('e360-file-name').textContent='';
+  document.getElementById('e360-upload-preview').innerHTML='';
+  e360SyncSelects();e360RenderResultados();
+}
+
+function renderEval360(){
+  e360SyncSelects();
+  e360Init();
+}
+
+
+
+// ============================================================
+// MODULO CLIMA LABORAL
+// ============================================================
+var CLM_TEMPLATES = [
+  {nombre:'Clima general (15 preguntas)',periodo:'trimestral',preguntas:[
+    'Me siento valorado/a en mi trabajo',
+    'Mi lider me da retroalimentacion util y oportuna',
+    'Tengo claros mis objetivos y responsabilidades',
+    'El ambiente de trabajo en mi equipo es positivo',
+    'Cuento con las herramientas necesarias para hacer bien mi trabajo',
+    'Recomendaria esta empresa como buen lugar para trabajar',
+    'Me siento seguro/a para expresar mis ideas sin miedo a represalias',
+    'Existe una comunicacion efectiva entre los equipos',
+    'La empresa me ofrece oportunidades de crecimiento profesional',
+    'Me siento parte importante del equipo y la empresa',
+    'La carga de trabajo que tengo es razonable y manejable',
+    'Mi lider me apoya en mi desarrollo profesional',
+    'Los procesos de la empresa me permiten trabajar de forma eficiente',
+    'Me siento motivado/a para dar lo mejor de mi en mi trabajo',
+    'La empresa cumple con los compromisos que hace hacia sus colaboradores'
+  ]},
+  {nombre:'Liderazgo y comunicacion (8 preguntas)',periodo:'semestral',preguntas:[
+    'Mi lider es un buen ejemplo a seguir',
+    'Mi lider escucha mis opiniones e ideas',
+    'Mi lider me comunica claramente lo que espera de mi',
+    'Mi lider me reconoce cuando hago buen trabajo',
+    'La comunicacion entre departamentos es efectiva',
+    'Recibo informacion suficiente sobre lo que pasa en la empresa',
+    'Las decisiones importantes se comunican de manera transparente',
+    'Me siento incluido/a en las decisiones que afectan mi trabajo'
+  ]},
+  {nombre:'Bienestar y equilibrio (6 preguntas)',periodo:'mensual',preguntas:[
+    'Mi nivel de estres en el trabajo es manejable',
+    'Puedo mantener un buen equilibrio entre mi vida laboral y personal',
+    'La empresa se preocupa genuinamente por mi bienestar',
+    'Me siento fisicamente seguro/a en mi entorno de trabajo',
+    'Tengo flexibilidad cuando necesito atender asuntos personales urgentes',
+    'En general, me siento bien trabajando en esta empresa'
+  ]}
+];
+
+var _clmPregs = [];
+var _clmParsedRows = [];
+
+function clmInit(){
+  // Populate year selector
+  var anoEl = document.getElementById('clm-ano');
+  if(anoEl && !anoEl.options.length){
+    var y = new Date().getFullYear();
+    for(var i=y-2;i<=y+1;i++){
+      var opt=document.createElement('option');
+      opt.value=i;opt.textContent=i;
+      if(i===y)opt.selected=true;
+      anoEl.appendChild(opt);
+    }
+  }
+  // Render templates
+  var wrap=document.getElementById('clm-templates');
+  if(wrap){
+    wrap.innerHTML=CLM_TEMPLATES.map(function(t,i){
+      return '<div class="card" style="margin-bottom:6px;padding:10px 12px;cursor:pointer;border:1px solid var(--bdr)" onclick="clmUsarTemplate('+i+')">'
+        +'<div class="fw6 tsm">'+_esc(t.nombre)+'</div>'
+        +'<div class="th" style="font-size:11px;margin-top:2px">'+t.preguntas.length+' preguntas &middot; '+_esc(t.periodo)+'</div>'
+      +'</div>';
+    }).join('');
+  }
+  if(!_clmPregs.length){
+    _clmPregs=['Me siento valorado/a en mi trabajo','El ambiente de trabajo es positivo','Cuento con las herramientas para trabajar bien','Tengo claros mis objetivos','Recomendaria esta empresa como lugar de trabajo'];
+    clmRenderPregs();
+  }
+  clmRenderBanco();
+  clmSyncSelects();
+  clmRenderPendientes();
+}
+
+function clmUsarTemplate(idx){
+  var t=CLM_TEMPLATES[idx];
+  document.getElementById('clm-nombre').value=t.nombre;
+  document.getElementById('clm-periodo').value=t.periodo;
+  _clmPregs=t.preguntas.slice();
+  clmRenderPregs();
+  stab(document.querySelector('#pg-clima .tab'),'tclm-encuestas');
+  toast('Plantilla cargada. Personaliza y guarda.');
+}
+
+function clmAddPregunta(){
+  _clmPregs.push('');
+  clmRenderPregs();
+}
+
+function clmRenderPregs(){
+  var list=document.getElementById('clm-pregs-list');if(!list)return;
+  list.innerHTML=_clmPregs.map(function(p,i){
+    return '<div style="display:flex;gap:6px;margin-bottom:5px;align-items:center">'
+      +'<span class="th tsm" style="min-width:18px;text-align:right;flex-shrink:0">'+(i+1)+'.</span>'
+      +'<input type="text" class="fc" value="'+_esc(p)+'" placeholder="Escribe la pregunta..." '
+      +'onchange="_clmPregs['+i+']=this.value" style="flex:1;padding:5px 8px;font-size:12px">'
+      +'<button onclick="_clmPregs.splice('+i+',1);clmRenderPregs()" style="background:none;border:none;color:var(--hnt);cursor:pointer;font-size:16px;padding:0 3px">&times;</button>'
+    +'</div>';
+  }).join('');
+}
+
+function clmGuardar(){
+  var nombre=(document.getElementById('clm-nombre').value||'').trim();
+  if(!nombre){toast('Escribe el nombre de la encuesta.');return;}
+  var pregs=_clmPregs.filter(function(p){return p.trim();});
+  if(!pregs.length){toast('Agrega al menos una pregunta.');return;}
+  var deadline=document.getElementById('clm-deadline').value||'';
+  if(!deadline){toast('Selecciona la fecha limite.');return;}
+  if(!Array.isArray(DB.clima))DB.clima=[];
+  DB.clima.push({
+    id:'clm'+Date.now(),
+    nombre:nombre,
+    periodo:document.getElementById('clm-periodo').value,
+    ano:document.getElementById('clm-ano').value,
+    mes:document.getElementById('clm-mes').value,
+    anonima:document.getElementById('clm-anonima').value==='1',
+    deadline:deadline,
+    preguntas:pregs,
+    creado:new Date().toISOString().slice(0,10),
+    asignaciones:[],
+    respuestas:[]
+  });
+  saveDB();
+  document.getElementById('clm-nombre').value='';
+  document.getElementById('clm-deadline').value='';
+  _clmPregs=[];clmRenderPregs();
+  clmRenderBanco();clmSyncSelects();
+  toast('Encuesta guardada.');
+}
+
+function clmRenderBanco(){
+  var wrap=document.getElementById('clm-banco');if(!wrap)return;
+  var encs=DB.clima||[];
+  if(!encs.length){wrap.innerHTML='<div class="th tsm" style="padding:10px;font-size:11px">Sin encuestas guardadas.</div>';return;}
+  wrap.innerHTML=encs.slice().reverse().map(function(e){
+    var respCount=e.respuestas?e.respuestas.length:0;
+    var asigCount=e.asignaciones?e.asignaciones.length:0;
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:8px 10px;background:var(--s2);border-radius:6px">'
+      +'<div style="flex:1">'
+        +'<div class="fw6 tsm" style="font-size:12px">'+_esc(e.nombre)+'</div>'
+        +'<div class="th" style="font-size:10px">'+_esc(e.periodo)+' '+_esc(e.ano)+' '+_esc(e.mes)+' &middot; '+e.preguntas.length+' pregs &middot; '+respCount+' resp.</div>'
+      +'</div>'
+      +'<button class="btn btn-gh btn-sm" onclick="clmEliminar(\''+e.id+'\')">Eliminar</button>'
+    +'</div>';
+  }).join('');
+}
+
+function clmEliminar(id){
+  if(!confirm('Eliminar esta encuesta y todas sus respuestas?'))return;
+  DB.clima=(DB.clima||[]).filter(function(e){return e.id!==id;});
+  saveDB();clmRenderBanco();clmSyncSelects();toast('Encuesta eliminada.');
+}
+
+function clmSyncSelects(){
+  var encs=DB.clima||[];
+  var colabs=DB.colabs||[];
+  var areas=[...new Set(colabs.map(function(c){return c.area;}).filter(Boolean))];
+  var paises=[...new Set(colabs.map(function(c){return c.pais;}).filter(Boolean))];
+  var lideres=[...new Set(colabs.map(function(c){return c.lider;}).filter(Boolean))];
+  var anos=[...new Set(encs.map(function(e){return e.ano;}).filter(Boolean))].sort();
+
+  // Enc selects
+  ['clm-sel-enc','clm-tmpl-enc','clm-imp-enc','clm-resp-fil','clmd-enc'].forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    var v=el.value;
+    var empty=(id==='clm-resp-fil'||id==='clmd-enc')
+      ?'<option value="">Todas las encuestas</option>'
+      :'<option value="">-- Seleccionar --</option>';
+    el.innerHTML=empty+encs.map(function(e){return '<option value="'+e.id+'">'+_esc(e.nombre)+' ('+_esc(e.ano)+' '+_esc(e.mes)+')</option>';}).join('');
+    if(v)el.value=v;
+  });
+
+  // Area, pais, lider for lanzar
+  function fillSel(id,items,lbl){
+    var el=document.getElementById(id);if(!el)return;
+    var v=el.value;
+    el.innerHTML='<option value="">'+lbl+'</option>'+items.map(function(x){return '<option>'+_esc(x)+'</option>';}).join('');
+    if(v)el.value=v;
+  }
+  fillSel('clm-fil-area',areas,'Todas');
+  fillSel('clm-fil-pais',paises,'Todos');
+  fillSel('clm-fil-lider',lideres,'Todos');
+  fillSel('clmd-area',areas,'Todas');
+  fillSel('clmd-pais',paises,'Todos');
+  fillSel('clmd-lider',lideres,'Todos');
+
+  // Ano for dashboard
+  var anoEl=document.getElementById('clmd-ano');
+  if(anoEl){var v=anoEl.value;anoEl.innerHTML='<option value="">Todos</option>'+anos.map(function(a){return '<option>'+a+'</option>';}).join('');if(v)anoEl.value=v;}
+
+  // Colab checkboxes for manual assign
+  var manWrap=document.getElementById('clm-man-colabs');
+  if(manWrap){
+    manWrap.innerHTML=colabs.map(function(c,i){
+      return '<label style="display:flex;gap:6px;align-items:center;margin-bottom:3px;font-size:12px;cursor:pointer">'
+        +'<input type="checkbox" value="'+i+'"> '+_esc(c.nombre)+' &middot; '+_esc(c.area||'-')+' &middot; '+_esc(c.pais||'-')+'</label>';
+    }).join('');
+  }
+
+  clmUpdatePreview();
+}
+
+function clmOnSelEnc(){
+  var encId=(document.getElementById('clm-sel-enc')||{}).value||'';
+  var info=document.getElementById('clm-enc-info');if(!info)return;
+  if(!encId){info.style.display='none';return;}
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});
+  if(!enc){info.style.display='none';return;}
+  info.style.display='block';
+  info.innerHTML='<div style="display:flex;gap:16px;flex-wrap:wrap">'
+    +'<div><span class="th">Periodo:</span> <b>'+_esc(enc.periodo)+' '+_esc(enc.ano)+' '+_esc(enc.mes)+'</b></div>'
+    +'<div><span class="th">Preguntas:</span> <b>'+enc.preguntas.length+'</b></div>'
+    +'<div><span class="th">Anonima:</span> <b>'+(enc.anonima?'Si':'No')+'</b></div>'
+    +'<div><span class="th">Deadline:</span> <b>'+_esc(enc.deadline)+'</b></div>'
+    +'<div><span class="th">Asignados:</span> <b>'+enc.asignaciones.length+'</b></div>'
+    +'<div><span class="th">Respondidos:</span> <b>'+enc.respuestas.length+'</b></div>'
+  +'</div>';
+  clmUpdatePreview();
+}
+
+function clmUpdatePreview(){
+  var colabs=DB.colabs||[];
+  var fArea=(document.getElementById('clm-fil-area')||{}).value||'';
+  var fPais=(document.getElementById('clm-fil-pais')||{}).value||'';
+  var fLider=(document.getElementById('clm-fil-lider')||{}).value||'';
+  var fProc=(document.getElementById('clm-fil-proceso')||{}).value||'';
+  var filtered=colabs.filter(function(c){
+    if(fArea&&c.area!==fArea)return false;
+    if(fPais&&c.pais!==fPais)return false;
+    if(fLider&&c.lider!==fLider)return false;
+    if(fProc&&c.proceso!==fProc)return false;
+    return true;
+  });
+  var prev=document.getElementById('clm-preview-count');
+  if(prev)prev.textContent='Se enviara a '+filtered.length+' colaboradores'+(filtered.length?'':' (sin resultados con estos filtros).');
+}
+
+function clmLanzarAuto(){
+  var encId=(document.getElementById('clm-sel-enc')||{}).value||'';
+  if(!encId){toast('Selecciona una encuesta.');return;}
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});if(!enc)return;
+  var colabs=DB.colabs||[];
+  var fArea=(document.getElementById('clm-fil-area')||{}).value||'';
+  var fPais=(document.getElementById('clm-fil-pais')||{}).value||'';
+  var fLider=(document.getElementById('clm-fil-lider')||{}).value||'';
+  var fProc=(document.getElementById('clm-fil-proceso')||{}).value||'';
+  var targets=colabs.filter(function(c,i){
+    if(fArea&&c.area!==fArea)return false;
+    if(fPais&&c.pais!==fPais)return false;
+    if(fLider&&c.lider!==fLider)return false;
+    if(fProc&&c.proceso!==fProc)return false;
+    return true;
+  });
+  if(!targets.length){toast('Sin colaboradores con estos filtros.');return;}
+  var nuevos=0;
+  targets.forEach(function(c){
+    var ci=colabs.indexOf(c);
+    if(!enc.asignaciones.find(function(a){return a.ci===ci;})){
+      enc.asignaciones.push({ci:ci,lanzado:new Date().toISOString().slice(0,10)});
+      nuevos++;
+    }
+  });
+  saveDB();
+  toast('Encuesta lanzada a '+nuevos+' colaboradores ('+targets.length+' total, '+(targets.length-nuevos)+' ya asignados).');
+  clmOnSelEnc();clmRenderPendientes();clmSyncSelects();
+}
+
+function clmLanzarManual(){
+  var encId=(document.getElementById('clm-sel-enc')||{}).value||'';
+  if(!encId){toast('Selecciona una encuesta.');return;}
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});if(!enc)return;
+  var checks=document.querySelectorAll('#clm-man-colabs input[type=checkbox]:checked');
+  if(!checks.length){toast('Selecciona al menos un colaborador.');return;}
+  var nuevos=0;
+  Array.from(checks).forEach(function(cb){
+    var ci=parseInt(cb.value);
+    if(!enc.asignaciones.find(function(a){return a.ci===ci;})){
+      enc.asignaciones.push({ci:ci,lanzado:new Date().toISOString().slice(0,10)});
+      nuevos++;
+    }
+  });
+  saveDB();
+  toast('Encuesta asignada a '+nuevos+' colaboradores.');
+  clmOnSelEnc();clmRenderPendientes();
+}
+
+function clmRenderPendientes(){
+  var list=document.getElementById('clm-pendientes-list');if(!list)return;
+  var encs=DB.clima||[];var colabs=DB.colabs||[];
+  var isAdmin=currentUser&&(currentUser.rol==='Administrador'||currentUser.rol==='HRBP');
+  var isLider=currentUser&&currentUser.rol==='Lider';
+  var myNombre=currentUser&&currentUser.nombre;
+  var myIdx=colabs.findIndex(function(c){return c.nombre===myNombre||c.email===(currentUser&&currentUser.email);});
+  var filEnc=(document.getElementById('clm-resp-fil')||{}).value||'';
+  var pendientes=[];
+  encs.forEach(function(enc){
+    if(filEnc&&enc.id!==filEnc)return;
+    enc.asignaciones.forEach(function(asgn){
+      var show=isAdmin||(isLider&&colabs[asgn.ci]&&colabs[asgn.ci].lider===myNombre)||asgn.ci===myIdx;
+      if(!show)return;
+      var answered=enc.respuestas.some(function(r){return r.encId===enc.id&&r.ci===asgn.ci;});
+      if(!answered)pendientes.push({enc:enc,asgn:asgn});
+    });
+  });
+  if(!pendientes.length){list.innerHTML='<div class="th tsm" style="padding:24px;text-align:center">Sin encuestas pendientes.</div>';return;}
+  list.innerHTML=pendientes.map(function(item){
+    var c=colabs[item.asgn.ci];if(!c)return '';
+    return '<div class="card mb10">'
+      +'<div class="fr mb8">'
+        +'<div class="f1">'
+          +'<div class="fw6 tsm">'+_esc(item.enc.nombre)+'</div>'
+          +'<div class="th" style="font-size:11px">Colaborador: <b>'+_esc(c.nombre)+'</b> &middot; '+_esc(c.area||'-')+' &middot; Limite: '+_esc(item.enc.deadline)+'</div>'
+          +(item.enc.anonima?'<div class="th" style="font-size:10px;color:var(--grn)">Respuesta anonima</div>':'')
+        +'</div>'
+        +'<span class="bdg b-am">Pendiente</span>'
+      +'</div>'
+      +'<button class="btn btn-bl btn-sm" onclick="clmAbrirRespuesta(\''+item.enc.id+'\','+item.asgn.ci+')">Responder</button>'
+    +'</div>';
+  }).join('');
+}
+
+function clmAbrirRespuesta(encId,ci){
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});if(!enc)return;
+  var colabs=DB.colabs||[];var c=colabs[ci];if(!c)return;
+  var m=document.getElementById('m-clm-resp');
+  if(!m){m=document.createElement('div');m.id='m-clm-resp';m.className='overlay';document.body.appendChild(m);}
+  m.innerHTML='<div class="modal" style="width:560px">'
+    +'<div class="modal-hdr"><div class="modal-title">'+_esc(enc.nombre)+'</div>'
+    +'<button class="modal-close" onclick="closeM(\'m-clm-resp\')">&times;</button></div>'
+    +(enc.anonima?'<div class="th tsm" style="margin-bottom:10px;color:var(--grn);font-size:11px">Esta encuesta es anonima. Tu identidad no sera registrada.</div>'
+      :'<div style="background:var(--s2);border-radius:6px;padding:6px 10px;margin-bottom:10px;font-size:12px">Respondiendo como: <b>'+_esc(c.nombre)+'</b></div>')
+    +enc.preguntas.map(function(p,pi){
+      return '<div class="fg"><label class="fl" style="font-size:11px">'+(pi+1)+'. '+_esc(p)+'</label>'
+        +'<div style="display:flex;gap:4px" id="clmr-'+pi+'">'
+        +[1,2,3,4,5].map(function(n){
+          var labels={1:'Muy en desacuerdo',2:'En desacuerdo',3:'Neutral',4:'De acuerdo',5:'Muy de acuerdo'};
+          return '<button type="button" class="rBtn" title="'+labels[n]+'" data-pi="'+pi+'" data-v="'+n+'" onclick="clmRate(this)">'+n+'</button>';
+        }).join('')
+        +'</div>'
+        +'<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--hnt);margin-top:1px"><span>Muy en desacuerdo</span><span>Muy de acuerdo</span></div>'
+      +'</div>';
+    }).join('')
+    +'<div class="fg"><label class="fl">Comentarios adicionales (opcional)</label>'
+    +'<textarea class="fc" id="clmr-coment" rows="2" placeholder="Sugerencias, observaciones..."></textarea></div>'
+    +'<div class="flex g8">'
+    +'<button class="btn btn-bl" data-eid="'+encId+'" data-ci="'+ci+'" onclick="clmGuardarRespuesta(this)">Enviar respuesta</button>'
+    +'<button class="btn btn-gh" onclick="closeM(\'m-clm-resp\')">Cancelar</button>'
+    +'</div>'
+  +'</div>';
+  openM('m-clm-resp');
+}
+
+var _clmRatings={};
+function clmRate(btn){
+  var pi=parseInt(btn.dataset.pi);var v=parseInt(btn.dataset.v);
+  _clmRatings[pi]=v;
+  var row=document.getElementById('clmr-'+pi);
+  if(row)row.querySelectorAll('.rBtn').forEach(function(b){b.classList.toggle('sel',parseInt(b.dataset.v)===v);});
+}
+
+function clmGuardarRespuesta(btn){
+  var encId=btn.dataset.eid;var ci=parseInt(btn.dataset.ci);
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});if(!enc)return;
+  var hasData=Object.keys(_clmRatings).length>0;
+  if(!hasData){toast('Responde al menos una pregunta.');return;}
+  var coment=(document.getElementById('clmr-coment')||{}).value||'';
+  var colabs=DB.colabs||[];var c=colabs[ci];
+  enc.respuestas.push({
+    encId:encId,
+    ci:enc.anonima?-1:ci,
+    area:c?c.area:'',
+    pais:c?c.pais:'',
+    lider:c?c.lider:'',
+    respuestas:Object.assign({},_clmRatings),
+    coment:coment,
+    fecha:new Date().toISOString().slice(0,10)
+  });
+  _clmRatings={};
+  saveDB();closeM('m-clm-resp');clmRenderPendientes();
+  toast('Respuesta enviada. Gracias!');
+}
+
+// - DASHBOARD -
+function clmRenderDash(){
+  var cont=document.getElementById('clm-dash-content');if(!cont)return;
+  var encs=DB.clima||[];
+  var filEnc=(document.getElementById('clmd-enc')||{}).value||'';
+  var filAno=(document.getElementById('clmd-ano')||{}).value||'';
+  var filPeriodo=(document.getElementById('clmd-periodo')||{}).value||'';
+  var filArea=(document.getElementById('clmd-area')||{}).value||'';
+  var filPais=(document.getElementById('clmd-pais')||{}).value||'';
+  var filLider=(document.getElementById('clmd-lider')||{}).value||'';
+  var modo=(document.getElementById('clmd-modo')||{}).value||'resumen';
+
+  // Collect matching responses
+  var allResps=[];
+  encs.forEach(function(enc){
+    if(filEnc&&enc.id!==filEnc)return;
+    if(filAno&&enc.ano!==filAno)return;
+    if(filPeriodo&&enc.mes!==filPeriodo)return;
+    enc.respuestas.forEach(function(r){
+      if(filArea&&r.area!==filArea)return;
+      if(filPais&&r.pais!==filPais)return;
+      if(filLider&&r.lider!==filLider)return;
+      allResps.push({enc:enc,r:r});
+    });
+  });
+
+  if(!allResps.length){
+    cont.innerHTML='<div class="th tsm" style="padding:40px;text-align:center">Sin respuestas con los filtros seleccionados.</div>';
+    return;
+  }
+
+  if(modo==='resumen') clmDashResumen(cont,allResps,encs,filEnc);
+  else if(modo==='preguntas') clmDashPreguntas(cont,allResps,encs,filEnc);
+  else if(modo==='comparar') clmDashComparar(cont,encs,filArea,filPais,filLider);
+}
+
+function _clmCalcStats(resps){
+  var all=[];
+  resps.forEach(function(item){
+    Object.values(item.r.respuestas).forEach(function(v){if(v)all.push(Number(v));});
+  });
+  if(!all.length)return null;
+  var sum=all.reduce(function(a,b){return a+b;},0);
+  var avg=Math.round(sum/all.length*100)/100;
+  var dist={1:0,2:0,3:0,4:0,5:0};
+  all.forEach(function(v){dist[v]=(dist[v]||0)+1;});
+  var favorable=all.filter(function(v){return v>=4;}).length;
+  var neutral=all.filter(function(v){return v===3;}).length;
+  var unfavorable=all.filter(function(v){return v<=2;}).length;
+  return {avg:avg,total:all.length,dist:dist,
+    favorablePct:Math.round(favorable/all.length*100),
+    neutralPct:Math.round(neutral/all.length*100),
+    unfavorablePct:Math.round(unfavorable/all.length*100)};
+}
+
+function _clmScoreColor(avg){
+  return avg>=4?'var(--grn)':avg>=3?'var(--amb)':'var(--red)';
+}
+
+function clmDashResumen(cont,allResps,encs,filEnc){
+  var stats=_clmCalcStats(allResps);if(!stats)return;
+  var byArea={};var byPais={};var byLider={};
+  allResps.forEach(function(item){
+    var a=item.r.area||'Sin area';if(!byArea[a])byArea[a]=[];byArea[a].push(item);
+    var p=item.r.pais||'Sin pais';if(!byPais[p])byPais[p]=[];byPais[p].push(item);
+    var l=item.r.lider||'Sin lider';if(!byLider[l])byLider[l]=[];byLider[l].push(item);
+  });
+  var scoreColor=_clmScoreColor(stats.avg);
+
+  cont.innerHTML=
+    // KPIs
+    '<div class="g2" style="grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Promedio general</div>'
+        +'<div style="font-size:32px;font-weight:800;color:'+scoreColor+'">'+stats.avg.toFixed(1)+'</div>'
+        +'<div class="th" style="font-size:10px">de 5.0</div></div>'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Favorables</div>'
+        +'<div style="font-size:32px;font-weight:800;color:var(--grn)">'+stats.favorablePct+'%</div>'
+        +'<div class="th" style="font-size:10px">Respuestas 4 o 5</div></div>'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Neutrales</div>'
+        +'<div style="font-size:32px;font-weight:800;color:var(--amb)">'+stats.neutralPct+'%</div>'
+        +'<div class="th" style="font-size:10px">Respuesta 3</div></div>'
+      +'<div class="card" style="padding:14px 16px;text-align:center"><div class="th tsm mb4">Desfavorables</div>'
+        +'<div style="font-size:32px;font-weight:800;color:var(--red)">'+stats.unfavorablePct+'%</div>'
+        +'<div class="th" style="font-size:10px">Respuestas 1 o 2</div></div>'
+    +'</div>'
+    // Distribucion
+    +'<div class="card mb12"><div class="ctitle mb10">Distribucion de respuestas ('+allResps.length+' respondentes)</div>'
+      +'<div style="display:flex;gap:6px;align-items:flex-end;height:80px;margin-bottom:6px">'
+        +[1,2,3,4,5].map(function(n){
+          var count=stats.dist[n]||0;
+          var pct=stats.total?Math.round(count/stats.total*100):0;
+          var col=n>=4?'var(--grn)':n===3?'var(--amb)':'var(--red)';
+          return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">'
+            +'<div style="font-size:10px;color:var(--hnt)">'+pct+'%</div>'
+            +'<div style="width:100%;background:'+col+';border-radius:4px 4px 0 0;height:'+(pct*0.7+2)+'px;min-height:4px"></div>'
+            +'<div style="font-size:11px;font-weight:600">'+n+'</div>'
+          +'</div>';
+        }).join('')
+      +'</div>'
+      +'<div style="display:flex;gap:12px;font-size:11px;flex-wrap:wrap">'
+        +'<span style="color:var(--red)">1-2: Desfavorable</span>'
+        +'<span style="color:var(--amb)">3: Neutral</span>'
+        +'<span style="color:var(--grn)">4-5: Favorable</span>'
+      +'</div>'
+    +'</div>'
+    // By area
+    +'<div class="g2" style="gap:12px">'
+      +'<div class="card"><div class="ctitle mb10">Por area</div>'
+        +Object.keys(byArea).map(function(a){
+          var s=_clmCalcStats(byArea[a]);if(!s)return '';
+          var col=_clmScoreColor(s.avg);
+          return '<div class="fr mb6" style="gap:8px">'
+            +'<div class="f1 tsm">'+_esc(a)+'</div>'
+            +'<div style="width:100px;height:6px;background:var(--s2);border-radius:4px;overflow:hidden">'
+              +'<div style="height:100%;width:'+(s.avg/5*100)+'%;background:'+col+';border-radius:4px"></div></div>'
+            +'<span style="font-size:12px;font-weight:600;color:'+col+';min-width:28px">'+s.avg.toFixed(1)+'</span>'
+          +'</div>';
+        }).join('')
+      +'</div>'
+      +'<div class="card"><div class="ctitle mb10">Por lider</div>'
+        +Object.keys(byLider).map(function(l){
+          var s=_clmCalcStats(byLider[l]);if(!s)return '';
+          var col=_clmScoreColor(s.avg);
+          return '<div class="fr mb6" style="gap:8px">'
+            +'<div class="f1 tsm">'+_esc(l)+'</div>'
+            +'<div style="width:100px;height:6px;background:var(--s2);border-radius:4px;overflow:hidden">'
+              +'<div style="height:100%;width:'+(s.avg/5*100)+'%;background:'+col+';border-radius:4px"></div></div>'
+            +'<span style="font-size:12px;font-weight:600;color:'+col+';min-width:28px">'+s.avg.toFixed(1)+'</span>'
+          +'</div>';
+        }).join('')
+      +'</div>'
+    +'</div>';
+}
+
+function clmDashPreguntas(cont,allResps,encs,filEnc){
+  // Collect all unique questions from filtered encuestas
+  var encsFil=encs.filter(function(e){return !filEnc||e.id===filEnc;});
+  if(!encsFil.length){cont.innerHTML='<div class="th tsm" style="padding:40px;text-align:center">Sin encuestas.</div>';return;}
+
+  var html='<div class="card"><div class="ctitle mb12">Promedio por pregunta</div>';
+  encsFil.forEach(function(enc){
+    var encResps=allResps.filter(function(item){return item.enc.id===enc.id;});
+    if(!encResps.length)return;
+    html+='<div class="th tsm mb8" style="color:var(--blu)">'+_esc(enc.nombre)+'</div>';
+    enc.preguntas.forEach(function(preg,pi){
+      var vals=encResps.map(function(item){return Number(item.r.respuestas[pi])||0;}).filter(Boolean);
+      var avg=vals.length?Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length*100)/100:null;
+      var col=avg?_clmScoreColor(avg):'var(--hnt)';
+      var pct=avg?avg/5*100:0;
+      html+='<div class="fr mb8" style="gap:10px">'
+        +'<div style="flex:1;font-size:11px">'+_esc(preg)+'</div>'
+        +(avg!==null
+          ?'<div style="width:140px;height:8px;background:var(--s2);border-radius:4px;overflow:hidden">'
+            +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px"></div></div>'
+            +'<span style="font-size:13px;font-weight:700;color:'+col+';min-width:32px;text-align:right">'+avg.toFixed(1)+'</span>'
+          :'<span class="th tsm">Sin resp.</span>'
+        )
+      +'</div>';
+    });
+  });
+  html+='</div>';
+  cont.innerHTML=html;
+}
+
+function clmDashComparar(cont,encs,filArea,filPais,filLider){
+  // Compare all encuestas side by side
+  var encsFil=encs.filter(function(e){return e.respuestas&&e.respuestas.length>0;});
+  if(encsFil.length<2){
+    cont.innerHTML='<div class="th tsm" style="padding:40px;text-align:center">Necesitas al menos 2 encuestas con respuestas para comparar.</div>';
+    return;
+  }
+  var html='<div class="card"><div class="ctitle mb12">Comparacion entre encuestas</div>'
+    +'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">'
+    +'<thead><tr>'
+    +'<th style="background:var(--s2);padding:8px 10px;text-align:left;border:1px solid var(--bdr)">Encuesta</th>'
+    +'<th style="background:var(--s2);padding:8px 10px;text-align:center;border:1px solid var(--bdr)">Periodo</th>'
+    +'<th style="background:var(--s2);padding:8px 10px;text-align:center;border:1px solid var(--bdr)">Resp.</th>'
+    +'<th style="background:var(--s2);padding:8px 10px;text-align:center;border:1px solid var(--bdr)">Promedio</th>'
+    +'<th style="background:var(--s2);padding:8px 10px;text-align:center;border:1px solid var(--bdr)">Favorables</th>'
+    +'<th style="background:var(--s2);padding:8px 10px;text-align:center;border:1px solid var(--bdr)">Tendencia</th>'
+    +'</tr></thead><tbody>';
+
+  var prevAvg=null;
+  encsFil.forEach(function(enc,idx){
+    var resps=enc.respuestas.filter(function(r){
+      if(filArea&&r.area!==filArea)return false;
+      if(filPais&&r.pais!==filPais)return false;
+      if(filLider&&r.lider!==filLider)return false;
+      return true;
+    });
+    var items=resps.map(function(r){return {r:r};});
+    var stats=_clmCalcStats(items);
+    var col=stats?_clmScoreColor(stats.avg):'var(--hnt)';
+    var tendencia='';
+    if(stats&&prevAvg!==null){
+      var diff=stats.avg-prevAvg;
+      if(diff>0.1)tendencia='<span style="color:var(--grn)">&#8593; +'+diff.toFixed(1)+'</span>';
+      else if(diff<-0.1)tendencia='<span style="color:var(--red)">&#8595; '+diff.toFixed(1)+'</span>';
+      else tendencia='<span style="color:var(--hnt)">&#8596; Sin cambio</span>';
+    }
+    if(stats)prevAvg=stats.avg;
+    html+='<tr style="border-bottom:1px solid var(--bdr)">'
+      +'<td style="padding:8px 10px;font-weight:500">'+_esc(enc.nombre)+'</td>'
+      +'<td style="padding:8px 10px;text-align:center">'+_esc(enc.ano)+' '+_esc(enc.mes)+'</td>'
+      +'<td style="padding:8px 10px;text-align:center">'+resps.length+'</td>'
+      +'<td style="padding:8px 10px;text-align:center"><span style="font-weight:700;color:'+col+'">'+(stats?stats.avg.toFixed(1):'-')+'</span></td>'
+      +'<td style="padding:8px 10px;text-align:center">'+(stats?stats.favorablePct+'%':'-')+'</td>'
+      +'<td style="padding:8px 10px;text-align:center">'+(tendencia||'<span class="th tsm">--</span>')+'</td>'
+    +'</tr>';
+  });
+  html+='</tbody></table></div></div>';
+  cont.innerHTML=html;
+}
+
+// - CARGA MASIVA -
+function clmDescargarPlantilla(){
+  var encId=(document.getElementById('clm-tmpl-enc')||{}).value||'';
+  if(!encId){toast('Selecciona una encuesta.');return;}
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});if(!enc)return;
+  var colabs=DB.colabs||[];
+  var headers=['colaborador','area','pais','lider'].concat(enc.preguntas.map(function(_,i){return 'pregunta_'+(i+1);})).concat(['comentario']);
+  var rows=[];
+  if(colabs.length){
+    var ex=colabs[0];
+    rows.push([ex.nombre,ex.area||'',ex.pais||'',ex.lider||''].concat(enc.preguntas.map(function(){return '4';})).concat(['Ejemplo de comentario']));
+  }
+  var csv=headers.join(',')+'\n'+rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='plantilla_clima_'+enc.nombre.replace(/\s+/g,'_')+'.csv';
+  a.click();
+  toast('Plantilla descargada.');
+}
+
+function clmHandleDrop(e){
+  e.preventDefault();
+  document.getElementById('clm-dz').style.background='var(--bg)';
+  var f=e.dataTransfer.files[0];
+  if(f){document.getElementById('clm-file-name').textContent=f.name;_clmReadFile(f);}
+}
+function clmFileSelected(inp){
+  var f=inp.files[0];
+  if(f){document.getElementById('clm-file-name').textContent=f.name;_clmReadFile(f);}
+}
+function _clmReadFile(file){
+  var r=new FileReader();
+  r.onload=function(e){
+    var rows=_parsePerfText(e.target.result);
+    if(!rows||!rows.length){toast('Archivo sin datos.');return;}
+    _clmParsedRows=rows;
+    var prev=document.getElementById('clm-upload-preview');
+    if(prev){
+      var hdrs=rows[0];var data=rows.slice(1);
+      prev.innerHTML='<div class="th tsm mb4" style="font-size:11px">'+data.length+' filas detectadas</div>'
+        +'<div style="overflow-x:auto"><table style="width:100%;font-size:10px;border-collapse:collapse">'
+          +'<tr>'+hdrs.map(function(h){return '<th style="background:var(--s2);padding:3px 6px;border:1px solid var(--bdr)">'+_esc(h)+'</th>';}).join('')+'</tr>'
+          +data.slice(0,4).map(function(row){return '<tr>'+row.map(function(v){return '<td style="padding:3px 6px;border:1px solid var(--bdr)">'+_esc(v)+'</td>';}).join('')+'</tr>';}).join('')
+        +'</table></div>'
+        +(data.length>4?'<div class="th" style="font-size:10px;margin-top:3px">...y '+(data.length-4)+' filas mas</div>':'');
+    }
+  };
+  r.readAsText(file);
+}
+function clmImportarCSV(){
+  var encId=(document.getElementById('clm-imp-enc')||{}).value||'';
+  if(!encId){toast('Selecciona la encuesta destino.');return;}
+  var enc=(DB.clima||[]).find(function(e){return e.id===encId;});if(!enc)return;
+  if(!_clmParsedRows||_clmParsedRows.length<2){toast('Carga un archivo primero.');return;}
+  var hdrs=_clmParsedRows[0].map(function(h){return h.toLowerCase().trim();});
+  var data=_clmParsedRows.slice(1);
+  var colabs=DB.colabs||[];
+  var imported=0;var skipped=0;
+  data.forEach(function(row){
+    var nombre=(row[hdrs.indexOf('colaborador')]||'').trim();
+    var area=(row[hdrs.indexOf('area')]||'').trim();
+    var pais=(row[hdrs.indexOf('pais')]||'').trim();
+    var lider=(row[hdrs.indexOf('lider')]||'').trim();
+    var coment=(row[hdrs.indexOf('comentario')]||'').trim();
+    var ci=colabs.findIndex(function(c){return c.nombre===nombre;});
+    if(!nombre){skipped++;return;}
+    var respuestas={};
+    enc.preguntas.forEach(function(p,pi){
+      var col='pregunta_'+(pi+1);
+      var idx=hdrs.indexOf(col);
+      if(idx>=0)respuestas[pi]=Number(row[idx])||0;
+    });
+    if(ci>=0&&!enc.asignaciones.find(function(a){return a.ci===ci;})){
+      enc.asignaciones.push({ci:ci,lanzado:new Date().toISOString().slice(0,10)});
+    }
+    enc.respuestas.push({
+      encId:encId,ci:enc.anonima?-1:ci,
+      area:area||( ci>=0?colabs[ci].area||'':''),
+      pais:pais||(ci>=0?colabs[ci].pais||'':''),
+      lider:lider||(ci>=0?colabs[ci].lider||'':''),
+      respuestas:respuestas,coment:coment,
+      fecha:new Date().toISOString().slice(0,10)
+    });
+    imported++;
+  });
+  saveDB();
+  _clmParsedRows=[];
+  document.getElementById('clm-file-name').textContent='';
+  document.getElementById('clm-upload-preview').innerHTML='';
+  toast('Importadas: '+imported+' | Omitidas: '+skipped);
+  clmSyncSelects();clmRenderDash();
+}
+
+function renderClima(){
+  clmSyncSelects();
+  clmInit();
+  clmRenderPendientes();
+}
+
+
+function _fillConfigForm(){
+  var e=document.getElementById('cfg-empresa');
+  var a=document.getElementById('cfg-alerta');
+  if(e&&DB.config&&DB.config.empresa)e.value=DB.config.empresa;
+  if(a&&DB.config&&DB.config.alerta)a.value=DB.config.alerta;
+}
 </script>
 <div id="toast"></div>
 <div id="sla-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto">
