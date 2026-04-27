@@ -477,13 +477,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
     <div class="tab" onclick="stab(this,'ta-config')">Configuracion</div>
     <div class="tab" onclick="stab(this,'ta-carga');stabCFirst('ta-carga')">Carga masiva</div>
   </div>
-  <!-- COLABS TAB -->
-  <div id="ta-colabs" class="tc on">
+<div id="ta-colabs" class="tc on">
     <div class="ai"><div class="ai-h"><span class="ai-b">INFO</span><span class="ai-t">Gestion de colaboradores</span></div><div class="ai-d">Cada colaborador puede tener usuario y contrasena para acceder a su vista personal.</div></div>
     <div id="colabs-admin-list"><div class="th tsm" style="padding:20px;text-align:center">No hay colaboradores.</div></div>
   </div>
-  <!-- AREAS TAB -->
-  <div id="ta-areas" class="tc">
+<div id="ta-areas" class="tc">
     <div class="g2">
       <div class="card">
         <div class="ctitle mb10">Nueva area</div>
@@ -495,8 +493,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       <div class="card"><div class="ctitle mb10">Areas configuradas</div><div id="areas-list"></div></div>
     </div>
   </div>
-  <!-- PUESTOS TAB -->
-  <div id="ta-puestos" class="tc">
+<div id="ta-puestos" class="tc">
     <div class="g2">
       <div class="card">
         <div class="ctitle mb10">Nuevo puesto</div>
@@ -510,8 +507,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       <div class="card"><div class="ctitle mb10">Puestos configurados</div><div id="puestos-list"></div></div>
     </div>
   </div>
-  <!-- LIDERES TAB -->
-  <div id="ta-lideres" class="tc">
+<div id="ta-lideres" class="tc">
     <div class="g2">
       <div class="card">
         <div class="ctitle mb10">Nuevo lider</div>
@@ -526,8 +522,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       <div class="card"><div class="ctitle mb10">Lideres configurados</div><div id="lideres-list"></div></div>
     </div>
   </div>
-  <!-- CONFIG TAB -->
-  <div id="ta-config" class="tc">
+<div id="ta-config" class="tc">
     <div class="g2">
       <div class="card">
         <div class="ctitle mb10">Configuracion general</div>
@@ -538,8 +533,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
         <div class="ctitle mb8">Datos demo</div>
 </div>
 </div>
-</div>
-</div>
+
+
+
 
         <p class="th tsm mb10">Carga datos de muestra para explorar todas las funciones, o borra todo para empezar desde cero.</p>
         <div id="pg-admin-demobtn2" style="display:flex;gap:10px;flex-wrap:wrap">
@@ -565,10 +561,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
         <div class="th tsm mb10">Los usuarios se crean automaticamente al registrar lideres y colaboradores con usuario y contrasena.</div>
         <div id="usuarios-linea-list"><div class="th tsm" style="padding:12px;text-align:center">No hay usuarios en esta linea.</div></div>
       </div>
-    </div>
 
-    </div>
-  <div id="ta-carga" class="tc">
+<div id="ta-carga" class="tc">
       <div class="ai"><div class="ai-h"><span class="ai-b">SHEETS</span><span class="ai-t">Carga masiva desde Google Sheets</span></div>
         <div class="ai-d">Importa areas, puestos, lideres o colaboradores desde una hoja de Google Sheets publica. Previsualiza antes de importar. O descarga la plantilla CSV de ejemplo.</div>
       </div>
@@ -716,10 +710,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
       <div class="card" style="margin-top:16px">
         <div class="ctitle mb10">Historial de importaciones</div>
         <div id="import-log"><div class="th tsm" style="padding:12px 0;text-align:center">No hay importaciones registradas.</div>
-      
-    
-  
-
+      </div>
+      </div>
+  </div>
+</div>
 
 <!-- ENTREVISTA DE SALIDA -->
 <div id="pg-salida" class="pg">
@@ -1127,9 +1121,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--txt);font
     <div id="tperf-carga-wrap"><div class="th tsm" style="padding:32px;text-align:center">Cargando...</div></div>
   </div>
 </div>
-
-    </div><!-- end content -->
-  </div><!-- end main-wrap -->
+<!-- end main-wrap -->
 </div><!-- end app-layout -->
 
 <!-- VISTA COLABORADOR -->
@@ -2686,17 +2678,17 @@ function nav(id){
   if(id==='cambio')renderCambio();
   if(id==='carrera')renderCarrera();
   if(id==='performance'){renderPerformance();renderPerfDash();}
-  if(id==='desempeno')renderDesempeno();
+  if(id==='desempeno'){renderDesempeno();renderDesResultados();stab(document.querySelectorAll('#pg-desempeno .tab')[3],'tdes-resultados');}
   if(id==='docs'){renderDocs();}
   if(id==='salida'){renderSalida();}
-  if(id==='clima'){renderClima();if(DB.clima&&DB.clima.length){stab(document.querySelector('#pg-clima .tabs .tab:nth-child(4)'),'tclm-dashboard');clmRenderDash();}}
-  if(id==='eval360'){renderEval360();}
+  if(id==='clima'){renderClima();if(DB.clima&&DB.clima.length){var ct=document.querySelector('#pg-clima .tabs');if(ct){var tabs=ct.querySelectorAll('.tab');if(tabs[3]){tabs.forEach(function(t){t.classList.remove('on');});tabs[3].classList.add('on');document.querySelectorAll('#pg-clima .tc').forEach(function(t){t.classList.remove('on');});var dc=document.getElementById('tclm-dashboard');if(dc)dc.classList.add('on');}}clmRenderDash();}}
+  if(id==='eval360'){renderEval360();stab(document.querySelectorAll('#pg-eval360 .tab')[3],'t360-resultados');e360RenderResultados();}
   if(id==='eval')renderEvalBanco();
-  if(id==='feedback')renderFeedbackList();
-  if(id==='reportes')renderReportes();
+  if(id==='feedback'){syncSelects();renderFeedbackList();}
+  if(id==='reportes'){renderReportes();renderDesResultados();}
   if(id==='admin'){renderColabsAdmin();renderAreas();renderPuestos();renderLideres();renderUsuariosLinea();renderDemoReset();_fillConfigForm();}
   if(id==='lineas')renderLineasAdmin();
-  if(id==='sla')renderSLA();
+  if(id==='sla'){slaApply();renderSLA();}
 }
 
 
@@ -3047,23 +3039,24 @@ function syncSelects(){
 }
 
 function renderAll(){
+  syncSelects();
   renderDocs();
   renderSalida();
   renderClima();
   renderEval360();
-  syncSelects();
   renderDash();
   renderP90();
   renderCambio();
   renderCarrera();
   renderPerformance();
   renderPerfDash();
-  renderSLA();
+  slaApply();renderSLA();
   renderEvalBanco();
   renderFeedbackList();
   renderColabsAdmin();renderAreas();renderPuestos();renderLideres();
-  renderDesResultados();
+  renderDesempeno();renderDesResultados();
   renderReportes();
+  _fillConfigForm();
 }
 
 // ============================================================
@@ -5758,6 +5751,17 @@ function cargarDatosDemo(){
   SLA_DB.periods['2026_Enero']  =mkSLAPer(slaCfgEne);
   SLA_DB.periods['2026_Febrero']=mkSLAPer(slaCfgFeb);
   SLA_DB.periods['2026_Marzo']  =mkSLAPer(slaCfgMar);
+  var slaCfgAbr={
+    'Finanzas':        {st:'enviado',  by:'Maria Garcia',    pct:[96,90,100,94,98,88,92,100,97,100,90,95,91]},
+    'Operaciones':     {st:'aprobado', by:'Carlos Perez',    pct:[98,96,91,94,97,92]},
+    'IT':              {st:'pendiente',by:'',                pct:[]},
+    'LTL':             {st:'aprobado', by:'Ivan Gallegos',   pct:[88,91,85,87,83,80,90]},
+    'Marketing':       {st:'aprobado', by:'Sofia Mendez',    pct:[92,97,89,93,87]},
+    'Recursos Humanos':{st:'aprobado', by:'Ana Ramirez',     pct:[100,96,92,88,90,94,100]},
+    'Legal':           {st:'enviado',  by:'',                pct:[]},
+    'Tecnologia':      {st:'pendiente',by:'',                pct:[]}
+  };
+  SLA_DB.periods['2026_Abril'] =mkSLAPer(slaCfgAbr);
   SLA_OK=true;SLA_LOADED=true;try{localStorage.setItem('talentys_sla',JSON.stringify(SLA_DB));}catch(e){}
 
 
@@ -6036,6 +6040,11 @@ function cargarDatosDemo(){
     }
   ];
 
+
+
+  // -- CONFIG -----------------------------------------------
+  DB.config={empresa:'envia.com',alerta:7};
+  lineaActual={id:'envia',nombre:'envia.com',color:'#0A2035'};
 
   // -- GUARDAR -----------------------------------------------
   try{localStorage.setItem('talentys_db',JSON.stringify({DB:DB,GLOBAL:GLOBAL,linea:'envia'}));}catch(e){}
@@ -8252,3 +8261,4 @@ function _fillConfigForm(){
 </div>
 </body>
 </html>
+
